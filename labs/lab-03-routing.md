@@ -8,113 +8,141 @@ git checkout lab-03-routing-start
 git pull
 ```
 
-If not running, start the `gulp watch:dev` and `gulp serve:dev` tasks.  Otherwise, restart the running tasks to pick up any changes in the lab-03-routing-start branch.
+If not running, start the `npm start` task.  Otherwise, restart the running task to pick up any changes in the lab-03-routing-start branch.
 
 ### Check it out!
 
 - Before doing anything, let's look at the progress that has already been completed on the application by the rest of the team.
-  - Peruse the **client/src/components** directory and notice that the **Projects** and **Timesheets** modules have been implemented by the team.
-  - You will be building out the **Employees** module and adding a **Navbar** to the app to enable navigation.
+  - Peruse the **src/components** directory and notice that the **Projects** and **Timesheets** modules have been implemented by the team.
+  - You will be building out the **Employees** module and adding **Navigation** to the app.
   - The module files have been stubbed out for you, we just need to add the codez.
 
 &nbsp;
 ## Creating our Application's Routes
 
-- Open **client/src/routes.jsx**
+- Open **src/app.js**
 - Let's start by importing the component classes that we're going to use as the **Handlers** for our routes:
 
 ```javascript
-var App = require('./components/app');
-
-var Projects = require('./components/projects/projects');
-var Employees = require('./components/employees/employees');
-var Timesheets = require('./components/timesheets/timesheets');
+import Projects from './components/projects/Projects';
+import Employees from './components/employees/Employees';
+import Timesheets from './components/timesheets/Timesheets';
 ```
+- Next we'll import the BrowserRouter and Route from the react router
 
+```javascript
+import {BrowserRouter, Route, Switch, Redirect} from 'react-router-dom';
+```
 - Next let's configure our routes:
-  - We need a container route `app` to contain our application skeleton.
-  - We need separate sibling routes for **Projects**, **Employees**, and **Timesheets** that will populate the `<RouteHandler />` inside the **App** component.
+  - We to wrap the routes in a **BrowserRouter** to handle the routes
+  - We need separate sibling routes for **Projects**, **Employees**, and **Timesheets**.
   - Even though **Timesheets** content is a sibling to **Employees**, we want the route to behave as if it is a child. That way, we'll have access to the `user_id` from the route's params.
   - If we can't match a route, we want to redirect the user to the **Employees** component.
 
-> Note: You will notice below that we are exporting `JSX` which is wrapped in parens `()`, not curlies `{}`.
+```javascript
+  render() {
+    return (
+      <BrowserRouter>
+        <div className="App">
+          <Route path={"/"}>
+            <Switch>
+              <Route path="/projects" component={Projects}/>
+              <Route exact path="/employees" component={Employees}/>
+              <Route path="/employees/:user_id/timesheets" component={Timesheets}/>
+              <Redirect to="/employees"/>
+            </Switch>
+          </Route>
+
+        </div>
+      </BrowserRouter>
+    );
+  }
+```
+- Finally, let's add the Navigation component while we're here.  
+	- Let's import the **Navigation** component
+	- Then add the component in side the "App" div
 
 ```javascript
-module.exports = (
-  <Route name='app' path="/" handler={App}>
+import React, { Component } from 'react';
+import './App.css';
+import Projects from './components/projects/Projects';
+import Employees from './components/employees/Employees';
+import Timesheets from './components/timesheets/Timesheets';
+import Navigation from './components/nav/Navigation';
+import {BrowserRouter, Route, Switch, Redirect} from 'react-router-dom';
 
-    <Route name='projects'   path='/projects'  handler={Projects} />
-    <Route name='employees'  path='/employees' handler={Employees} />
-    <Route name='timesheets' path='/employees/:user_id/timesheets' handler={Timesheets} />
+class App extends Component {
+  render() {
+    return (
+      <BrowserRouter>
+        <div className="App">
+          <Navigation/>
+          <Route path={"/"}>
+            <Switch>
+              <Route path="/projects" component={Projects}/>
+              <Route exact path="/employees" component={Employees}/>
+              <Route path="/employees/:user_id/timesheets" component={Timesheets}/>
+              <Redirect to="/employees"/>
+            </Switch>
+          </Route>
 
-    <Redirect to="employees" />
-  </Route>
-);
+        </div>
+      </BrowserRouter>
+    );
+  }
+}
+
+export default App;
 ```
 
 &nbsp;
 ## Add the Navbar to our Application
 
-- Open **client/src/components/common/navigation/navbar.jsx**
+- Open **src/components/nav/Navigation.js**
 
-- We first need to mixin the extra functionality that we want our component to have. We do this by adding an array of our mixins to the **mixins** property on the React class:
-  - **Router.State** gives us the `getRoutes()` method which we'll use to set the active class on the correct navbar link.
-
-- Add the mixins to the **Navbar** component definition:  
+- We first need to import the Bootstrap components that we are going to use 
+- Also the **LinkContainer** from the react-router-bootstrap library that helps us integrate the router with bootstrap
 
 ```javascript
-  mixins: [
-    Router.State
-  ],
+import {Navbar, Nav, NavItem} from 'react-bootstrap';
+import {LinkContainer} from 'react-router-bootstrap';
 ```
 - Now we can implement our `render()` method:
-  - We first do a little lodash gymnastics to determine if the current route matches any of the routes registered in **routes.js**.
-    - If there is a match, we add the **active** class to the corresponding **Link**.
-
-  - We use **react-router**'s **Link** component to attach our navbar's buttons to the router's routes.
-    - Notice the Timesheet's Link.  We are adding an extra prop, **params** so that the user's ID is reflected in the application's url.
-
 
 ```javascript
-render : function () {
-  var activeRoutes = _.pluck(this.getRoutes(), 'name').join('.').split('.');
-
-  var projectsClasses = classNames('item', {
-    active: _.contains(activeRoutes, 'projects')
-  });
-
-  var employeesClasses = classNames('item', {
-    active: _.contains(activeRoutes, 'employees')
-  });
-
-  var timesheetsClasses = classNames('item', {
-    active: _.contains(activeRoutes, 'timesheets')
-  });
-
-  return (
-    <div className="ui fixed menu fluid">
-      <a className="header item" href="#">
-        <i className="fa fa-clock-o fa-lg"/> {this.state.title}
-      </a>
-
-      <Link className={projectsClasses} to="projects">Projects</Link>
-      <Link className={employeesClasses} to="employees">Employees</Link>
-      <Link className={timesheetsClasses} to="timesheets" params={{user_id: this.state.user._id}}>Timesheets</Link>
-
-    </div>
-  );
-}
+  render() {
+    return (
+      <Navbar>
+        <Navbar.Header>
+          <Navbar.Brand>
+            Timesheetz
+          </Navbar.Brand>
+        </Navbar.Header>
+        <Nav>
+          <LinkContainer to="/projects">
+            <NavItem eventKey={1}>Projects</NavItem>
+          </LinkContainer>
+          <LinkContainer exact to="/employees">
+            <NavItem eventKey={3}>Employees</NavItem>
+          </LinkContainer>
+          <LinkContainer to={`/employees/${this.state.user._id}/timesheets`}>
+            <NavItem eventKey={2}>Timesheets</NavItem>
+          </LinkContainer>
+        </Nav>
+      </Navbar>
+    );
+  }
 ```
 
-- Now, all we need do is to set up the initial state to be used within the `render()` method we just implemented:
+- Now, all we need do is add a constructor to set up the initial state to be used within the `render()` method we just implemented:
 
 ```javascript
-getInitialState: function () {
-  return {
-    title: 'Timesheetz',
-    user: {_id: 'all'}
-  };
-},
+  constructor(props) {
+    super(props);
+    this.state = {
+      user: {_id: 'all'}
+    };
+  }
 ```
 
 &nbsp;
@@ -161,110 +189,14 @@ it('should instantiate the Navbar', function () {
 &nbsp;
 ## Run the tests
 
-- Run `gulp test` and verify that all the tests pass.
+- Run `npm test` and verify that all the tests pass.
   - Since the rest of your team has already implemented a bunch of tests, you may have to do a little searching to find the tests you just wrote.
-
-&nbsp;
-## Test that the active class gets set on the correct Link
-
-- Now that we've verified that the component can be compiled, let's test that the `active` class gets set on the appropriate `Link`.
-- Add the test below under the previous test.
-
-> Note: With Mocha (and other test suites) you can nest **describe** blocks within each other to make your test descriptions more specific.
-
-```javascript
-describe('when navigating between routes', function () {
-  it('should set the appropriate active class', function () {
-
-    // find all of the Links that are rendered inside of the element
-    var Links = TestUtils.scryRenderedComponentsWithType(element, proxies['react-router'].Link);
-
-    // find the item with the active class
-    var projectLink = TestUtils.findRenderedDOMComponentWithClass(element, 'active');
-
-    // make sure that it is the projects link
-    expect(projectLink.getDOMNode().innerText).to.equal('Projects');
-  });
-});
-```
-
-- Run the tests. Did your new one pass?
-- Note that we use the `getDOMNode()` method on the component to get its vanilla DOM object from the browser.
-
-> Yeah, I know. We didn't even use the line of code that found all of the **Links** rendered within **element**, but I thought it would be cool to demonstrate that method. Try adding a breakpoint and stepping through your test in Chrome Dev Tools and inspect each object.
-
-&nbsp;
-## Implement the Application's container
-
-- Now that we have our routes configured and a navbar that triggers those routes, we need a container for the navbar and an entry point for the route handlers.
-
-- Open **client/src/components/app.jsx**
-- Implement the `render()` method:
-
-```javascript
-render : function () {
-  return (
-    <div>
-      <NavBar />
-      <div className="container">
-        <SectionHeader />
-        <div className="row">
-          <RouteHandler />
-        </div>
-      </div>
-    </div>
-  );
-}
-```
-
-- Open **client/src/components/app.spec.js**
-- Now, test the render method:
-
-```javascript
-beforeEach(function () {
-  React = require('react/addons');
-  TestUtils = React.addons.TestUtils;
-});
-
-beforeEach(function () {
-  proxies = {
-    './common/navigation/navbar': mockComponent('Navbar'),
-    './common/section': mockComponent('SectionHeader'),
-    'react-router': {
-      RouteHandler: mockComponent('RouteHandler')
-    }
-  };
-
-  App = proxyquire('./app', proxies);
-  element = TestUtils.renderIntoDocument(<App />);
-});
-
-it('should instantiate the App', function () {
-  expect(TestUtils.isCompositeComponent(element)).to.be.true;
-});
-```
-
-- Run the tests. Did your new one pass?
-
-&nbsp;
-## Bootstrap the Router
-
-- Now all we have to do is wrap our `React.render()` method within the callback for the `Router.run()` method. This will boostrap the application and hand control over to the **React Router**.
-- Open our application entry point: **client/src/main.jsx**
-- Add the following:
-
-```javascript
-Router.run(routes, function (Handler) {
-  React.render(<Handler />, document.getElementById('app'));
-});
-```
 
 &nbsp;
 ## Run the application and see your work.
 
 If you haven't already done so,
-- In a terminal window run: `gulp watch:dev` to fire off the build.
-- In a separate terminal run: `gulp serve:dev` to serve the index.html.
+- In a terminal window run: `npm start` to fire off the build.
 - Navigate to [http://localhost:3000](http://localhost:3000) in your favorite browser.
 - You should be able to click around the navbar and see the routes change.
   - I'm sure it worked fine for **Timesheets** and **Projects**, but we still need to implement **Employees**.
@@ -283,7 +215,7 @@ If you haven't already done so,
 &nbsp;
 ## Create the EmployeeRow Component
 
-- Open **client/src/components/employees/employee.row.jsx**
+- Open **src/components/employees/Employee.row.js**
 - We need to create a component that accepts an employee property (which is an object).
 - We will expose a reference (ref) to the row via that employee's `_id` property.
 - The row should contain `<td/>`'s for each of the employee's properties.
