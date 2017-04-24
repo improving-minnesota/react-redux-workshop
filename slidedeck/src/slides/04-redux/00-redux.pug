@@ -1,0 +1,192 @@
+section
+  h1 Flux
+
+section
+  h3.lower Three major parts
+  ul
+    li the dispatcher
+    li the stores
+    li the views (React components)
+
+section
+  ul
+    li Not MVC
+    li Controllers do exist in a Flux application, but they are controller-views
+
+section
+  h3 Controller Components
+  ul
+    li Views at the top of the hierarchy that retrieve data from the stores
+    li These views pass data down to their children
+
+section
+  h3 Action creators
+  ul
+    li Dispatcher helper methods
+    li Support a semantic API that describes all changes that are possible in the application
+
+section
+  ul
+    li Unidirectional data flow
+    li When a user interacts with a React view, the view propagates an action
+    li The stores react and fire an event
+    li All interested other views update accordingly
+
+section
+  //img(src="/react-workshop/assets/img/lecture-04/flux.diagram.png")
+
+section
+  h2 Dispatcher
+
+section
+  ul
+    li Singleton
+    li Central hub of data flow in a Flux application
+
+section
+  ul
+    li Essentially a registry of callbacks
+    li Can invoke these callbacks in order
+
+section
+  ul
+    li Each store registers a callback with the dispatcher
+    li When new data comes into the dispatcher, it then uses these callbacks to propagate that data to all of the stores
+
+section
+  ul
+    li Initiated through the dispatch() method
+    li Takes a data payload object as its sole argument
+    li This payload is typically synonymous with an action
+
+section
+  h3.lower dispatch()
+  ul
+    li Provides a simple, synchronous iteration through the callbacks
+
+section
+  pre.
+    <code class="javascript" data-trim>
+    var dispatcher = _.extend(new Dispatcher(), {
+      handleViewAction: function(action) {
+        this.dispatch({
+          source: 'VIEW_ACTION',
+          action: action
+        });
+      }
+    });
+
+    </code>
+
+section
+  h2 Actions
+
+section
+  ul
+    li Used to update data via user interaction or other changes in the UI
+    li Data is packaged into an action
+      ul
+        li Object literal containing the new fields of data
+        li Specific action type
+
+section
+  ul
+    li Identified by a type attribute
+    li Stores typically use this attribute to determine if and how they should respond to it
+
+section
+  ul
+    li Stores and views control themselves
+    li They are not acted upon by external objects
+    li Actions flow into the stores through the callbacks they define and register
+
+section
+  pre.
+    <code class="javascript" data-trim>
+    list: function (query) {
+      dispatcher.handleViewAction({
+        actionType: 'list',
+        query: query
+      });
+    }
+
+    </code>
+
+section
+  h2 Stores
+
+section
+  ul
+    li Contain the application state and logic
+    li Somewhat similar to a model in a traditional MVC
+    li They manage the state of many objects
+    li They do not represent a single record of data like ORM models do
+
+section
+  ul
+    li Registers itself with the dispatcher and provides it with a callback
+    li The callback receives the action as a parameter
+    li The dispatcher interprets the action and provides the proper hooks into the store's internal methods
+    li This allows an action to result in an update to the state of the store, via the dispatcher
+
+section
+  ul
+    li After the stores are updated, they broadcast an event and declare that their state has changed
+    li Views query the new state and update themselves
+
+section
+  p Let's look at the base Store that others extend
+
+section
+  pre.
+    <code class="javascript" data-trim>
+    // The initialize function of an extended Store
+    initialize: function () {
+      var events = {};
+      events['list']    = this.list;
+      events['get']     = this.get;
+      events['update']  = this.update;
+      this.register(events);
+      return this;
+    }
+
+    </code>
+
+section
+  pre.
+    <code class="javascript" data-trim>
+    register: function (events) {
+      var self = this;
+
+      // calling the dispatcher's register method
+      dispatcher.register(function (payload) {
+        var action = payload.action;
+        var promise = events[action.actionType];
+
+        if (!_.isUndefined(promise)) {
+          promise.apply(self, [payload])
+            .then(function () {
+              self.emitChange();
+            });
+        }
+        return true;
+      });
+    }
+
+    </code>
+
+section
+  ul
+    li Notice that the callback is expecting the Store's method to return a promise so that it knows how to emit a change
+
+section
+  h2 axios
+  ul
+    li Cool library to simplify HTTP calls
+    li
+      a(href="https://github.com/mzabriskie/axios") API on Github
+
+section
+  h1 Lab 04
+  h2 Adding Flux to Timesheetz
+

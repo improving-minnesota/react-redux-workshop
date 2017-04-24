@@ -1,0 +1,9 @@
+.dog-list {
+  list-style-type: none;
+  padding: 0;
+  display: block;
+  margin: 0;
+  .dog {
+    text-align: left;
+  }
+}

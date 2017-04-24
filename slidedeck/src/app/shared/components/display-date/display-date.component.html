@@ -1,0 +1,19 @@
+<span>{{now | date:format}}</span>
+
+<div class="buttons">
+  <opi-button>
+    <button (click)="setFormat('short')">short</button>
+  </opi-button>
+  <opi-button>
+    <button (click)="setFormat('shortTime')">shortTime</button>
+  </opi-button>
+  <opi-button>
+    <button (click)="setFormat('shortDate')">shortDate</button>
+  </opi-button>
+  <opi-button>
+    <button (click)="setFormat('fullDate')">fullDate</button>
+  </opi-button>
+  <opi-button>
+    <button (click)="setFormat('medium')">medium</button>
+  </opi-button>
+</div>

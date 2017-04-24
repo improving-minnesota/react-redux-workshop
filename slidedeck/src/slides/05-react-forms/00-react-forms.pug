@@ -1,0 +1,96 @@
+section
+  h1 React Forms
+
+section
+  ul
+    li &lt;input&gt;, &lt;textarea&gt;, and &lt;option&gt; differ from other native components since they are mutated via user interactions
+    li They provide interfaces to manage forms in response to user interactions
+
+section
+  h2 Interactive Props
+
+section
+  p Props affected via user interactions:
+  ul
+    li value:     supported by input and textarea
+    li checked:   supported checkbox or radio
+    li selected:  supported by option
+
+section
+  ul
+    li Form components allow listening for changes
+    li Set a callback to the onChange prop
+    li The callback fires when:
+      ul
+        li The value changes
+        li Checked state changes
+        li Selected state changes
+
+section
+  h2 Controlled Components
+
+section
+  ul
+    li Any &lt;input&gt; with value set is a controlled component
+    li Value of the rendered element will always reflect the value prop
+
+section
+  h2 Uncontrolled Components
+
+section
+  ul
+    li Any &lt;input&gt; that does not supply a value (or sets it to null)
+    li Value of the rendered element will reflect the user's input
+
+section
+  h2 Validation
+
+section
+  ul
+    li We can now use controlled components in our form to enforce validation
+
+section
+  pre.
+    <code class="javascript" data-trim>
+    (&lt;form name="employeeForm"&gt;
+      &lt;input name="username"
+        value={this.props.employee.username}
+        onChange={this.props.validate} /&gt;
+    &lt;/form&gt;)
+
+    </code>
+
+section
+  pre.
+    <code class="javascript" data-trim>
+    validate: function (event) {
+      var field = event.target.name;
+      var value = event.target.value;
+
+      // min length 1
+      if (!value || value.length &lt; 1) {
+        this.state.errors[field] =
+          'You must provide a username.';
+      }
+      // max length 40
+      else if (value.length &gt; 40) {
+        this.state.errors[field] =
+          'Username can only be 40 characters long.';
+      }
+
+      this.props.employee[field] = value;
+      return this.setState({
+        employee: this.state.employee,
+        errors: this.state.errors
+      });
+    }
+
+    </code>
+
+section
+  h1 lab prep
+  p LoginStore and LoginActions
+
+section
+  h1 Lab 5
+  h2 React Form Validation

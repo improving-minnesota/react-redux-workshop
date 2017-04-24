@@ -1,6 +1,8 @@
 React Redux Workshop Labs and Slides
 ================
 
+Slides and labs for the accompanying workshop demo repo https://github.com/objectpartners/react-redux-timesheet/
+
 ## Labs ##
 Lab markdown files are located in the labs folder
 
