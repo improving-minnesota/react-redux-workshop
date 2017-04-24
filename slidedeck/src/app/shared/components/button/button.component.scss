@@ -1,0 +1,18 @@
+$opi-red: #c82506;
+
+/*
+ * Unfortunately /deep/ selector is required to style ng-content
+ */
+:host {
+  width: 100%;
+  /deep/ button {
+    width: 100%;
+    display: block;
+    height: 40px;
+    background-color: $opi-red;
+    border: 1px solid mix(black, $opi-red, 25%);
+    border-radius: 8px;
+    font-size: 30px;
+    color: white;
+  }
+} 

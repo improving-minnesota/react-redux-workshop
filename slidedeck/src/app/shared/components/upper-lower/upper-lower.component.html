@@ -1,0 +1,17 @@
+<span [ngSwitch]="pipe">
+  <span *ngSwitchCase="'uppercase'">{{strValue | uppercase}}</span>
+  <span *ngSwitchCase="'lowercase'">{{strValue | lowercase}}</span>
+  <span *ngSwitchDefault>{{strValue}}</span>
+</span>
+
+<div class="buttons">
+  <opi-button>
+    <button (click)="setPipe('uppercase')">uppercase</button>
+  </opi-button>
+  <opi-button>
+    <button (click)="setPipe('lowercase')">lowercase</button>
+  </opi-button>
+  <opi-button>
+    <button (click)="setPipe('')">original</button>
+  </opi-button>
+</div>
