@@ -1,12 +1,14 @@
 {
-  "name": "angular2-slides",
+  "name": "react-redux-slides",
   "version": "1.0.0",
   "main": "dist/index.js",
-  "repository": "git@github.com:objectpartners/angular2-slides.git",
-  "author": "Jon DeJong",
   "contributors": [
-    "Michael Cacek <michael.cacek@objectpartners.com",
-    "Dustin Schau <dustin.schau@objectpartners.com>"
+    "Scott Bock",
+    "Derek Eskens",
+    "Sean Lomax",
+    "Mike Hostetler",
+    "Justin Perinovic",
+    "Jeff Sheets"
   ],
   "license": "MIT",
   "scripts": {

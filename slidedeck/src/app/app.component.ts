@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-const context = require.context('../slides', true, /\.md|markdown$/);
+const context = require.context('../slides', true, /\.md|markdown|\.pug$/);
 
 const slides: any[][] = context.keys()
   .sort((a: string, b: string) => {
@@ -38,7 +38,16 @@ const slides: any[][] = context.keys()
     if ( !newSlides[index] ) {
       newSlides[index] = [];
     }
-    newSlides[index].push(context(key));
+
+    //To help with reworking React Workshop, allow for single file with multiple slides
+    const slide: string = context(key) as string;
+    if (slide.indexOf('<section>') !== -1) {
+        const sections = slide.replace(/\<section\>/g, '').split('</section>').filter(it=>it.length > 0);
+        Array.prototype.push.apply(newSlides[index], sections);
+    } else {
+        newSlides[index].push(slide);
+    }
+
     return newSlides;
   }, []);
 
