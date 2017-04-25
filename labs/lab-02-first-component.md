@@ -134,11 +134,31 @@ describe('Hello World:', function () {
 - Now we need to set up our components that we'll be testing.
 
 ```javascript
-  let hello;
+    it('should render with default text', function () {
 
-  beforeEach(() =>{
-    hello = ReactTestUtils.renderIntoDocument(<Hello/>);
-  });
+        const component = renderer.create(
+                <Hello/>
+        );
+
+        let stringVal = JSON.stringify(component);
+        expect(stringVal).toMatch(/Howdy/);
+        expect(stringVal).toMatch(/Partner/);
+   
+    });
+
+    it('should render with our props', function () {
+
+        const component = renderer.create(
+                <Hello friend="Fred"/>
+        );
+
+        let stringVal = JSON.stringify(component);
+        expect(stringVal).toMatch(/Howdy/);
+        expect(stringVal).toMatch(/Fred/);
+
+    });
+
+
 ```
 > What is happening here? We use React's **ReactTestUtils** to render the component into a sandboxed "document" so that we can perform inquiries. Notice that we are using `JSX` in the `ReactTestUtils.renderIntoDocument()` method.
 
@@ -158,19 +178,34 @@ describe('Hello World:', function () {
 import React from 'react';
 import Hello from './Hello';
 import ReactTestUtils from 'react-dom/test-utils';
-
+import renderer from 'react-test-renderer';
 
 describe('Hello World:', function () {
 
-  let hello;
 
-  beforeEach(() =>{
-    hello = ReactTestUtils.renderIntoDocument(<Hello/>);
-  });
+    it('should render with default text', function () {
 
-  it('should instantiate the Hello World', function () {
-    expect(ReactTestUtils.isCompositeComponent(hello)).toBe(true);
-  });
+        const component = renderer.create(
+                <Hello/>
+        );
+
+        let stringVal = JSON.stringify(component);
+        expect(stringVal).toMatch(/Howdy/);
+        expect(stringVal).toMatch(/Partner/);
+   
+    });
+
+    it('should render with our props', function () {
+
+        const component = renderer.create(
+                <Hello friend="Fred"/>
+        );
+
+        let stringVal = JSON.stringify(component);
+        expect(stringVal).toMatch(/Howdy/);
+        expect(stringVal).toMatch(/Fred/);
+
+    });
 
 });
 
