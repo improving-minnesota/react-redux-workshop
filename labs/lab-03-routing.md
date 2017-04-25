@@ -149,41 +149,21 @@ import {LinkContainer} from 'react-router-bootstrap';
 ## Test the Navbar
 
 - Just like in lab 2, we need to test that our component will render without errors.
-- Open **client/src/components/common/navigation/navbar.spec.js** and add the test suite.
-
-&nbsp;
-#### What's different?
-  - You'll notice that we are using **proxyquire** to mock our our component imports for **react-router**. This is because we don't want the router to actually change the browser url during our tests.
-  - We are also using a very simple `mockComponent()` that you can find in **src/components/mock.jsx**. This mock component just returns a plain `div`.
-  - Finally, we are using **sinon** to stub the `getRoutes()` method so that we can control what it returns and track when it has been called.
+- Open **src/components/nav/Navigation.test.js** and add the test suite.
 
 - Add the below code to the **navbar.spec.js**
+> Note that we need to wrap the Navigation in a **BrowserRouter**
 
 ```javascript
-beforeEach(function () {
-  React = require('react/addons');
-  TestUtils = React.addons.TestUtils;
-});
+  let nav;
 
-beforeEach(function () {
-  proxies = {
-    'react-router': {
-      RouteHandler: mockComponent('RouteHandler'),
-      Link: mockComponent('Link'),
-      State: {
-        getRoutes: sinon.stub().returns([{name: 'projects'}])
-      }
-    },
-    '@noCallThru': true
-  };
+  beforeEach(() =>{
+    nav = ReactTestUtils.renderIntoDocument(<BrowserRouter><Navigation /></BrowserRouter>);
+  });
 
-  Navbar = proxyquire('./navbar', proxies);
-  element = TestUtils.renderIntoDocument(<Navbar />);
-});
-
-it('should instantiate the Navbar', function () {
-  expect(TestUtils.isCompositeComponent(element)).to.be.true;
-});
+  it('should instantiate the Navigation Component', function () {
+    expect(ReactTestUtils.isCompositeComponent(nav)).toBe(true);
+  });
 ```
 
 &nbsp;
@@ -217,57 +197,40 @@ If you haven't already done so,
 
 - Open **src/components/employees/Employee.row.js**
 - We need to create a component that accepts an employee property (which is an object).
-- We will expose a reference (ref) to the row via that employee's `_id` property.
 - The row should contain `<td/>`'s for each of the employee's properties.
 - Add the following to your EmployeeRow React class
 
 ```javascript
-mixins: [
-  Router.Navigation,
-  Router.State
-],
+  render() {
+    const employee = this.props.employee;
 
-propTypes: {
-  employee: React.PropTypes.object
-},
-
-render: function () {
-  var employee = this.props.employee;
-
-  var rowClasses = classNames('repeated-item fadeable-row', {
-    'faded': employee.deleted
-  });
-
-  return (
-    <tr className={rowClasses} ref={employee._id}>
-      <td>{employee.username}</td>
-      <td>{employee.email}</td>
-      <td>{employee.firstName}</td>
-      <td>{employee.lastName}</td>
-      <td>{employee.admin ? 'Yes' : 'No'}</td>
-    </tr>
-  );
-}
+    return (
+      <tr>
+        <td>{employee.username}</td>
+        <td>{employee.email}</td>
+        <td>{employee.firstName}</td>
+        <td>{employee.lastName}</td>
+        <td>{employee.admin ? 'Yes' : 'No'}</td>
+      </tr>
+    );
+  }
 ```
 
 - Now, we need to test that our component renders correctly.
-- Open **client/src/components/employees/employee.row.spec.js** and add the tests below.
+- Open **src/components/employees/EmployeeRow.test.js** and add the tests below.
   - Feel free to add actual properties to the employee object and test for their existence in a `<td/>`.
 
 ```javascript
-beforeEach(function () {
-  React = require('react/addons');
-  TestUtils = React.addons.TestUtils;
-});
+  let employeeRow;
 
-beforeEach(function () {
-  EmployeeRow = require('./employee.row');
-});
+  beforeEach(() =>{
+    const employee = {};
+    employeeRow = ReactTestUtils.renderIntoDocument(<EmployeeRow employee={employee} />);
+  });
 
-it('should instantiate the EmployeeRow', function () {
-  element = TestUtils.renderIntoDocument(<EmployeeRow employee={{_id: 1}} />);
-  expect(TestUtils.isCompositeComponent(element)).to.be.true;
-});
+  it('should instantiate the Employee Component', function () {
+    expect(ReactTestUtils.isCompositeComponent(employeeRow)).toBe(true);
+  });
 ```
 
 - Run the tests. Did your new one pass?
@@ -275,39 +238,25 @@ it('should instantiate the EmployeeRow', function () {
 ## Create the EmployeesTable Component
 
 - Our next move is to create the table that will contain our **EmployeeRow**s.
-- Open **client/src/components/employees/employee.table.jsx**
-
-- We need to declare that the **employees** property should be an array of objects and that it is required.
-
-```javascript
-propTypes: {
-  employees: React.PropTypes.arrayOf(React.PropTypes.object).isRequired
-},
-```
-
-- Now we need to implement our `render()` method that:
+- Open **src/components/employees/EmployeeTable.js**
+- First we need to implement our `render()` method that:
   - Iterates through the list of employees and instantiates a new **EmployeeRow** for each employee.
   - Collect all the rows into a variable and add that variable to the table body.
 
-> Remember JSX is just Javascript when it compiles so you can pass variables to other JSX elements so that it's included in our component's DOM.
-
-- Add the render method below to the React class.
-
 ```javascript
-render: function () {
-  var key = 1;
+  render() {
+    let key = 1;
 
-  var employeeRows = this.props.employees.map(function (employee) {
-    employee.id = key;
+    let employeeRows = this.props.employees.map(function (employee) {
+      debugger;
+      return (
+        <EmployeeRow employee={employee} key={++key} />
+      );
+    });
 
     return (
-      <EmployeeRow employee={employee} key={++key} />
-    );
-  });
-
-  return (
-    <table className="ui celled table tsz-table-row-cursor">
-      <thead>
+      <Table striped bordered condensed hover>
+        <thead>
         <tr>
           <th>Username</th>
           <th>Email</th>
@@ -315,38 +264,44 @@ render: function () {
           <th>Last Name</th>
           <th>Admin</th>
         </tr>
-      </thead>
-      <tbody>
-        {employeeRows}
-      </tbody>
-    </table>
-  );
-}
+        </thead>
+        <tbody>
+          {employeeRows}
+        </tbody>
+      </Table>
+    );
+  }
+```
+  
+- We need to declare that the **employees** property should be an array of objects and that it is required.
+- We'll also set the default value to an empty array
+
+```javascript
+EmployeeTable.defaultProps = {
+  employees: []
+};
+
+EmployeeTable.propTypes = {
+  employees: React.PropTypes.array.isRequired
+};
 ```
 
 - Now let's test that our employee table renders correctly.
 - Can you write a test to check the number of **EmployeeRows** added to our table?
-- Open **components/employees/employee.table.spec.js**
+- Open **components/employees/EmployeeTable.test.js**
 - Add the following to the **Employee Table Component** suite:
 
 ```javascript
-beforeEach(function () {
-  React = require('react/addons');
-  TestUtils = React.addons.TestUtils;
-});
+  let employeeTable;
 
-beforeEach(function () {
-  employees = [{}, {}];
+  beforeEach(() =>{
+    const employees = [{}, {}];
+    employeeTable = ReactTestUtils.renderIntoDocument(<EmployeeTable employees={employees} />);
+  });
 
-  EmployeeTable = require('./employee.table');
-  element = TestUtils.renderIntoDocument(
-    <EmployeeTable employees={employees} />
-  );
-});
-
-it('should instantiate the EmployeeTable', function () {
-  expect(TestUtils.isCompositeComponent(element)).to.be.true;
-});
+  it('should instantiate the Employee Component', function () {
+    expect(ReactTestUtils.isCompositeComponent(employeeTable)).toBe(true);
+  });
 ```
 
 - Run the tests. Did your new one pass?
@@ -355,41 +310,48 @@ it('should instantiate the EmployeeTable', function () {
 ## Create Employees Component
 
 - Last, we need to add the table to our handler for the `/employees` route.
-- Open **client/src/components/employees/employees.jsx**
-- Add the render method below to the React class
-
-> The component's `getInitialState()` has been implemented for you so that you'll have mock data.
+- Open **src/components/employees/Employees.js**
+- Add the imports for the **EmployeeTable** as well as the **PageHeader, Grid, Row, and Col** from react-bootstrap
 
 ```javascript
-render: function () {
-  return (
-    <div>
-      <div className="row">
-        <EmployeeTable employees={this.state.pageConfig.data} />
-      </div>
-    </div>
-  );
-}
+import EmployeeTable from './EmployeeTable';
+import {PageHeader, Grid, Row, Col} from 'react-bootstrap';
 ```
 
-- Open **client/src/components/employees/employees.spec.js**
+- Add the render method below to the React class
+
+> The component's `constructor` has been implemented for you so that you'll have mock data.
+
+```javascript
+  render() {
+    return (
+      <Grid>
+        <Row>
+          <PageHeader>Employees</PageHeader>
+        </Row>
+        <Row>
+          <EmployeeTable employees={this.state.pageConfig.data}/>
+        </Row>
+      </Grid>
+    );
+  }
+```
+
+- Open **src/components/employees/Employees.test.js**
 - Test that our component renders as expected.
 - Add the code below to the **Employees Component** suite
 
 ```javascript
-beforeEach(function () {
-  React = require('react/addons');
-  TestUtils = React.addons.TestUtils;
-});
+  let employees;
 
-beforeEach(function () {
-  Employees = require('./employees');
-  element = TestUtils.renderIntoDocument(<Employees />);
-});
+  beforeEach(() =>{
+    employees = ReactTestUtils.renderIntoDocument(<Employees/>);
+  });
 
-it('should instantiate the Employees', function () {
-  expect(TestUtils.isCompositeComponent(element)).to.be.true;
-});
+  it('should instantiate the Employee Component', function () {
+    expect(ReactTestUtils.isCompositeComponent(employees)).toBe(true);
+  });
+
 ```
 
 - Run the tests. Did your new one pass?
@@ -398,8 +360,7 @@ it('should instantiate the Employees', function () {
 ## Run the application and see your work.
 
 If you haven't already done so,
-- In a terminal windows run: `gulp watch:dev` to fire off the build.
-- In a separate terminal run: `gulp serve:dev` to serve the index.html.
+- In a terminal windows run: `npm start` to fire off the build.
 - Navigate to [http://localhost:3000](http://localhost:3000) in your favorite browser.
 
 - Click around and enjoy the result of your hard work during this lab.
