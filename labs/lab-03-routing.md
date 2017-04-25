@@ -196,7 +196,7 @@ If you haven't already done so,
 &nbsp;
 ## Create the EmployeeRow Component
 
-- Open **src/components/employees/Employee.row.js**
+- Open **src/components/employees/EmployeeRow.js**
 - We need to create a component that accepts an employee property (which is an object).
 - The row should contain `<td/>`'s for each of the employee's properties.
 - Add the following to your EmployeeRow React class
@@ -249,7 +249,6 @@ If you haven't already done so,
     let key = 1;
 
     let employeeRows = this.props.employees.map(function (employee) {
-      debugger;
       return (
         <EmployeeRow employee={employee} key={++key} />
       );
