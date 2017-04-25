@@ -1,41 +1,55 @@
 # Lab one - Setup and install dependencies
 
-### Git and Node
+## Git
+Atlassian has a great tutorial for [installing git](https://www.atlassian.com/git/tutorials/install-git) 
+in various environments. Below are the quick and easy ways.
 #### Windows
-* Install GitBash using the installer http://git-scm.com/downloads
-* Install Node using the installer https://nodejs.org/download/
-* Install Python 2.7.x using the installer https://www.python.org/downloads/
-  * This is needed to build node native libraries  
-* Install Microsoft Visual Studio using the installer https://www.visualstudio.com/downloads/download-visual-studio-vs
-  * This is needed to build node native libraries 
-* Restart
-* Open a GitBash terminal
+Install GitBash using the installer [http://git-scm.com/downloads](http://git-scm.com/downloads) 
+or for more full fledged solution, [git for Windows](https://git-for-windows.github.io/) comes with a GUI 
+and Windows Explorer integration.
 
 #### Mac
-* Install Homebrew http://brew.sh (if you haven't already done so)
-* In a terminal
-  * brew install node
+It's probably already installed.
+```
+$ git --version
+git version 2.9.1
+```
 
-### Ensure all global dependencies have been installed
+## Node
+Check if you have node installed. `$ node --version`
+#### Windows
+* Install Node using the installer [https://nodejs.org/download/](https://nodejs.org/download/)
+* You may need to install Python 2.7.x+ and Microsoft Visual Studio to build node native libraries. 
+    * [https://www.python.org/downloads/](https://www.python.org/downloads/)
+    * [https://www.visualstudio.com/downloads/](https://www.visualstudio.com/downloads/)
+* Restart
+* Open a GitBash terminal
+* Update the npm CLI client  ```$ npm install npm --global```
 
-* [Gulp](http://gulpjs.com/) `npm install -g gulp`
-* [Nodemon](https://github.com/remy/nodemon/) `npm install -g nodemon`
+#### Mac
+* Install via Homebrew
+    * Check for existing install. `$ brew --version`
+    * Install Hombrew as needed [http://brew.sh](http://brew.sh)
+    * Install Node w/ Hombrew. `$ brew install node`
+
+## Ensure all global dependencies have been installed
+
+* [Gulp](http://gulpjs.com/) `$ npm install -g gulp`
+* [Nodemon](https://github.com/remy/nodemon/) `$ npm install -g nodemon`
 
 **NOTE:** If you have errors, try running this first:
 ```
-npm config set strict-ssl false
+$ npm config set strict-ssl false
 ```
 
-### Checkout the Github repository
+## Checkout the Github repository
 
-- Checkout project from Github
-
+Checkout project from Github
 ```
-git clone https://github.com/objectpartners/react-redux-timesheet.git
+$ git clone https://github.com/objectpartners/react-redux-timesheet.git
 ```
 
-- You should get output similar to below:
-
+You should get output similar to below:
 ```javascript
 Cloning into 'react-redux-timesheet'...
 remote: Counting objects: 3003, done.
@@ -46,32 +60,28 @@ Resolving deltas: 100% (1413/1413), done.
 Checking connectivity... done.
 ```
 
-- Change directories to the lab main directory.
-
+Change directories to the lab main directory.
 ```
-cd react-redux-timesheet
-```
-
-- Now let's checkout the `lab-01-setup-start` branch.
-
-```
-git checkout lab-01-project-setup-start
+$ cd react-redux-timesheet
 ```
 
-### Install the application dependencies
-
-- Install the NPM dependencies
-
+Now let's checkout the `lab-01-setup-start` branch.
 ```
-npm install
+$ git checkout lab-01-project-setup-start
 ```
 
-### Start the server
+## Install the application dependencies
 
-- Run the start script
-
+Install the NPM dependencies
 ```
-npm start
+$ npm install
+```
+
+## Start the server
+
+Run the start script
+```
+$ npm start
 ```
 ![](img/lab01/npm.start.png)
 
@@ -85,4 +95,4 @@ npm start
 
 ![](img/lab01/welcome.png)
 
-##### Now let's check out our project's structure so we know what goes where.
+#### Now let's check out our project's structure so we know what goes where.
