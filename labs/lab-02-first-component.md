@@ -50,7 +50,7 @@ export default Hello;
 ```
 
 - Let's look at what we just did:
-  - We've supplied a `JSX` template that creates a **Semantic UI** message and adds a couple of headers along with a paragraph.
+  - We've supplied a `JSX` template that adds a couple of headers along with a paragraph.
   - The h1 header is going to display the `greeting` value on the component's state.
   - The h2 header is going to display the value of the `friend` "prop" or attribute passed in by the parent component rendering this component.
 

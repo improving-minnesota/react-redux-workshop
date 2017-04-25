@@ -28,7 +28,7 @@ import Projects from './components/projects/Projects';
 import Employees from './components/employees/Employees';
 import Timesheets from './components/timesheets/Timesheets';
 ```
-- Next we'll import the BrowserRouter and Route from the react router
+- Next we'll import the some the classes from the react router
 
 ```javascript
 import {BrowserRouter, Route, Switch, Redirect} from 'react-router-dom';
@@ -61,6 +61,7 @@ import {BrowserRouter, Route, Switch, Redirect} from 'react-router-dom';
 - Finally, let's add the Navigation component while we're here.  
 	- Let's import the **Navigation** component
 	- Then add the component in side the "App" div
+- The final class should look like this.
 
 ```javascript
 import React, { Component } from 'react';
@@ -151,7 +152,7 @@ import {LinkContainer} from 'react-router-bootstrap';
 - Just like in lab 2, we need to test that our component will render without errors.
 - Open **src/components/nav/Navigation.test.js** and add the test suite.
 
-- Add the below code to the **navbar.spec.js**
+- Add the below code to the **Navigation.test.js**
 > Note that we need to wrap the Navigation in a **BrowserRouter**
 
 ```javascript

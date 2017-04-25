@@ -52,7 +52,7 @@ Checking connectivity... done.
 cd react-redux-timesheet
 ```
 
-- Now let's checkout the `lab-1-setup` branch.
+- Now let's checkout the `lab-01-setup-start` branch.
 
 ```
 git checkout lab-01-project-setup-start
