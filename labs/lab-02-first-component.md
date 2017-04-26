@@ -115,7 +115,7 @@ export default Hello;
 - Now that we've created our first component, let's test it to make sure that React can initialize and render it to the DOM.
 
 - Open **/src/hello/Hello.test.js**
-- First, let's import our libraries for `React` `Hello` and `ReactTestUtils`
+- First, let's import our libraries for `React` `Hello` and `react-test-renderer`
 - Then, let's set up the Hello World test by adding a suite (describe block):
 
 
