@@ -122,7 +122,7 @@ export default Hello;
 ```javascript
 import React from 'react';
 import Hello from './Hello';
-import ReactTestUtils from 'react-dom/test-utils';
+import renderer from 'react-test-renderer';
 
 
 describe('Hello World:', function () {
@@ -177,7 +177,6 @@ describe('Hello World:', function () {
 ```javascript
 import React from 'react';
 import Hello from './Hello';
-import ReactTestUtils from 'react-dom/test-utils';
 import renderer from 'react-test-renderer';
 
 describe('Hello World:', function () {
