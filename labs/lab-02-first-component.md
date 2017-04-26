@@ -6,6 +6,7 @@
 ```
 git checkout lab-02-first-component-start
 git pull
+npm install
 ```
 
 If not running, start the `npm start` task.  Otherwise, restart the running tasks to pick up any changes in the lab-02-first-component-start branch.
