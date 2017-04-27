@@ -222,16 +222,28 @@ If you haven't already done so,
   - Feel free to add actual properties to the employee object and test for their existence in a `<td/>`.
 
 ```javascript
-  let employeeRow;
+    it('should instantiate the Employee Row Component', function () {
 
-  beforeEach(() =>{
-    const employee = {};
-    employeeRow = ReactTestUtils.renderIntoDocument(<EmployeeRow employee={employee} />);
-  });
+        const employee = {username:'fflintstone',
+                          'email':'fred.flintstone@slatequarry.com',
+                          'firstName':'Fred',
+                          'lastName':'Flintstone',
+                          'admin':true
+                         }
 
-  it('should instantiate the Employee Component', function () {
-    expect(ReactTestUtils.isCompositeComponent(employeeRow)).toBe(true);
-  });
+        const component = renderer.create(
+                <EmployeeRow employee={employee}/>
+        );
+
+        let stringVal = JSON.stringify(component);
+        expect(stringVal).toMatch(/td/);
+        expect(stringVal).toMatch(/Flintstone/);
+        expect(stringVal).toMatch(/fflintstone/);
+        expect(stringVal).toMatch(/Yes/);
+
+
+    });
+
 ```
 
 - Run the tests. Did your new one pass?
@@ -292,16 +304,31 @@ EmployeeTable.propTypes = {
 - Add the following to the **Employee Table Component** suite:
 
 ```javascript
-  let employeeTable;
 
-  beforeEach(() =>{
-    const employees = [{}, {}];
-    employeeTable = ReactTestUtils.renderIntoDocument(<EmployeeTable employees={employees} />);
+    it('should instantiate the Employee Table', function () {
+
+        
+        const employees = [{username:'fflintstone',
+                          'email':'fred.flintstone@slatequarry.com',
+                          'firstName':'Fred',
+                          'lastName':'Flintstone',
+                          'admin':true
+                         }]
+
+
+
+        const component = renderer.create(
+                <EmployeeTable employess={employees}/>
+        );
+
+        let stringVal = JSON.stringify(component);
+        expect(stringVal).toMatch(/table/);
+        expect(stringVal).toMatch(/Admin/);
+
+
   });
 
-  it('should instantiate the Employee Component', function () {
-    expect(ReactTestUtils.isCompositeComponent(employeeTable)).toBe(true);
-  });
+
 ```
 
 - Run the tests. Did your new one pass?
@@ -342,16 +369,15 @@ import {PageHeader, Grid, Row, Col} from 'react-bootstrap';
 - Add the code below to the **Employees Component** suite
 
 ```javascript
-  let employees;
-
-  beforeEach(() =>{
-    employees = ReactTestUtils.renderIntoDocument(<Employees/>);
-  });
-
   it('should instantiate the Employee Component', function () {
-    expect(ReactTestUtils.isCompositeComponent(employees)).toBe(true);
-  });
+      const component = renderer.create(
+              <Employees/>
+      );
 
+      let stringVal = JSON.stringify(component);
+      expect(stringVal).toMatch(/Employees/);
+
+  });
 ```
 
 - Run the tests. Did your new one pass?
