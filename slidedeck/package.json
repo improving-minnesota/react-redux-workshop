@@ -20,32 +20,23 @@
     "test": "echo \"We should probably write some tests huh\""
   },
   "devDependencies": {
-    "@angular/cli": "~1.0.0",
     "@types/node": "~7.0.12",
+    "@types/react": "~15.0.23",
+    "@types/react-dom": "~15.5.0",
     "@types/webpack-env": "~1.13.0",
     "copy-webpack-plugin": "~4.0.1",
     "del-cli": "~0.2.1",
     "ghpages": "~0.0.10",
-    "object-partners-presentation": "github:objectpartners/object-partners-presentation-config#1.0.0",
+    "object-partners-presentation": "github:objectpartners/object-partners-presentation-config#0645684",
     "webpack": "~2.3.3",
-    "webpack-copy-plugin": "~0.0.4",
-    "webpack-dev-server": "~2.4.2"
+    "webpack-dev-server": "~2.4.5"
   },
   "dependencies": {
-    "@angular/common": "~4.0.2",
-    "@angular/compiler": "~4.0.2",
-    "@angular/core": "~4.0.2",
-    "@angular/http": "~4.0.2",
-    "@angular/platform-browser": "~4.0.2",
-    "@angular/platform-browser-dynamic": "~4.0.2",
-    "@angular/router": "~4.0.2",
-    "core-js": "~2.4.1",
     "highlight.js": "~9.10.0",
-    "ng-dynamic": "~3.0.0",
     "object-partners-revealjs-theme": "ObjectPartners/object-partners-revealjs-theme#1.0.1",
-    "reflect-metadata": "~0.1.10",
-    "reveal.js": "~3.4.1",
-    "rxjs": "~5.3.0",
-    "zone.js": "~0.8.5"
+    "react": "~15.5.4",
+    "react-dom": "~15.5.4",
+    "react-render-html": "~0.1.6",
+    "reveal.js": "~3.4.1"
   }
 }
