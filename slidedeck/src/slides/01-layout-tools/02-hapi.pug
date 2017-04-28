@@ -1,0 +1,169 @@
+section
+  h1 Hapi
+  p
+    a(href="http://hapijs.com/") hapijs.com
+
+section
+  ul
+    li A rich framework for building applications and services
+    li Created by smart people at Walmart Labs
+    li Focuses on configuration
+    li Provides us with a complete backend for our lab project
+
+section
+  h1 Mocha
+  p
+    a(href="http://mochajs.org/") mochajs.org
+
+section
+  ul
+    li Feature-rich JavaScript test framework running on node.js and in the browser
+
+section
+  p BDD-style (Behavior Driven Development)
+
+section
+  pre.
+    <code class="javascript" data-trim>
+    describe('when there is no message', function () {
+      beforeEach(function () {
+        Snackbar = require('./snackbar');
+        element = TestUtils.renderIntoDocument(&lt;Snackbar /&gt;);
+      });
+
+      it('should hide the snackbar', function () {
+        var div = TestUtils.findRenderedDOMComponentWithTag(element, 'div');
+        expect(div.props.className).contains('hide');
+      });
+    });
+
+    </code>
+
+section
+  p Reporter in Terminal
+  //img(src="/react-workshop/assets/img/lecture-01/gulp.test.png")
+
+section
+  p HTML Reporter
+  //img(src="/react-workshop/assets/img/lecture-01/mocha.htmlreporter.png")
+
+section
+  h1 Chai
+  p
+    a(href="http://chaijs.com/") chaijs.com
+
+section
+  ul
+    li Assertion library for node and the browser that can be delightfully paired with any JavaScript testing framework
+
+section
+  h1 Sinon
+  p
+    a(href="http://sinonjs.org/") sinonjs.org
+
+section
+  ul
+    li Standalone test spies, stubs and mocks for JavaScript
+    li No dependencies - works with any unit testing framework
+
+section
+  p.centered Used with sinon-chai
+  pre.
+    <code class="javascript" data-trim>
+    spies.transitionTo = sinon.stub(element, 'transitionTo');
+
+    expect(spies.transitionTo).to.have.been.calledWith('employees.create');
+
+    </code>
+
+section
+  h1 Proxyquire
+  p
+    a(href="https://github.com/thlorenz/proxyquire") Proxyquire Github repo
+
+section
+  ul
+    li Proxies Node's require so we can provide mock dependencies during testing while staying totally unobtrusive
+
+section
+  pre.
+    <code class="javascript" data-trim>
+    proxies = {
+      './employee.form': mockComponent('EmployeeForm'),
+      '../../actions/employee.actions': {
+        get: sinon.stub(),
+        update: sinon.stub()
+      },
+      'react-router': {
+        RouteHandler: mockComponent('RouteHandler'),
+        Link: mockComponent('Link'),
+        State: {
+          getParams: function () {return {_id: 'abc123'}}
+        }
+      }
+    };
+
+    EmployeeDetail = proxyquire('./employee.detail', proxies);
+
+    </code>
+
+section
+  ul
+    li Actually using Proxiquireify to work with Browserify
+    li
+      a(href="https://github.com/thlorenz/proxyquireify") Proxyquireify Github repo
+
+section
+  h1 Karma
+  p
+    a(href="http://karma-runner.github.io/0.12/index.html") karma-runner.github.io
+
+section
+  ul
+    li Test runner orginally built for Angular.js
+    li Runs tests in multiple browsers
+
+section
+  ul
+    li Source maps!
+    li Browserify and Reactify plugins
+    li Let's look at the Karma configuration
+
+section
+  h1 Semantic UI
+  p
+    a(href="http://semantic-ui.com/kitchen-sink.html") kitchen sink
+
+section
+  ul
+    li Emphasizes concise HTML
+    li CSS is code
+
+section
+  h1 Less
+  p
+    a(href="http://lesscss.org/") lesscss.org
+
+section
+  ul
+    li Less is a CSS pre-processor, meaning that it extends the CSS language
+    li It provides features that allow variables, mixins, and functions
+    li Allows you to make CSS that is more maintainable, themeable and extendable
+
+section
+  p Styles written in Less will be provided for you during the labs, but feel free to tinker as you please
+
+section
+  h1 Project Layout
+
+section
+  ul
+    li In this training class, you'll be building a React application that tracks employee timesheets across different projects
+    li To help speed things along so we can focus on the really important parts (like React/Flux), we've created the base project structure for you
+
+section
+  p Let's take a look
+
+section
+  h1 Lab 01
+  h2.plain Application Setup
