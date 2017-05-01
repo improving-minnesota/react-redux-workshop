@@ -28,7 +28,7 @@ import Projects from './components/projects/Projects';
 import Employees from './components/employees/Employees';
 import Timesheets from './components/timesheets/Timesheets';
 ```
-- Next we'll import the some the classes from the react router
+- Next we'll import some classes from the react router
 
 ```javascript
 import {BrowserRouter, Route, Switch, Redirect} from 'react-router-dom';
