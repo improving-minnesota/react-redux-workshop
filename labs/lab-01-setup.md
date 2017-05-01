@@ -32,11 +32,6 @@ Check if you have node installed. `$ node --version`
     * Install Hombrew as needed [http://brew.sh](http://brew.sh)
     * Install Node w/ Hombrew. `$ brew install node`
 
-## Ensure all global dependencies have been installed
-
-* [Gulp](http://gulpjs.com/) `$ npm install -g gulp`
-* [Nodemon](https://github.com/remy/nodemon/) `$ npm install -g nodemon`
-
 **NOTE:** If you have errors, try running this first:
 ```
 $ npm config set strict-ssl false
