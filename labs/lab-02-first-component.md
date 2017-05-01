@@ -161,17 +161,7 @@ describe('Hello World:', function () {
 
 
 ```
-> What is happening here? We use React's **ReactTestUtils** to render the component into a sandboxed "document" so that we can perform inquiries. Notice that we are using `JSX` in the `ReactTestUtils.renderIntoDocument()` method.
-
-- Now that the component has been rendered into our test document and assigned to the `hello` variable, we can perform tests on it.  Create the spec below:
-
-```javascript
-  it('should instantiate the Hello World', function () {
-    expect(ReactTestUtils.isCompositeComponent(hello)).toBe(true);
-  });
-```
-
-- Above, we just used the `ReactTestUtils.isCompositeComponent()` to determine if the `Hello` component successfully rendered to our mock document.
+> What is happening here? We use React's [test renderer](https://github.com/facebook/react/tree/master/packages/react-test-renderer) to render the component into a sandboxed "document" so that we can perform inquiries. Notice that we are using `JSX` in the `renderer.create()` method.
 
 - When finished, your suite should look similar to the one below:
 
