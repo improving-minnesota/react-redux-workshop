@@ -34,7 +34,7 @@ import Timesheets from './components/timesheets/Timesheets';
 import {BrowserRouter, Route, Switch, Redirect} from 'react-router-dom';
 ```
 - Next let's configure our routes:
-  - We to wrap the routes in a **BrowserRouter** to handle the routes
+  - We need to wrap the routes in a **BrowserRouter** to handle the routes
   - We need separate sibling routes for **Projects**, **Employees**, and **Timesheets**.
   - Even though **Timesheets** content is a sibling to **Employees**, we want the route to behave as if it is a child. That way, we'll have access to the `user_id` from the route's params.
   - If we can't match a route, we want to redirect the user to the **Employees** component.
