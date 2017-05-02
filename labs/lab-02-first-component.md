@@ -281,8 +281,7 @@ Try creating a Snapshot test inside Hello.test.js, or:
 ```
 
 </p></details>
-
-
+<br/>
 Now take a look at the generated \_\_snapshots\_\_/Hello.test.js.snap file to see what the rendered Hello component looks like
 - Modify the test to render `<Hello friend="Leia"/>`
 - Now update the snapshot to match the updated test, re-run the tests, and see that they are all passing
