@@ -495,6 +495,48 @@ If you haven't already done so,
 - In a terminal windows run: `npm start` to fire off the build.
 - Navigate to [http://localhost:3000](http://localhost:3000) in your favorite browser.
 
+Did your application display any data? Look at your console to see the reported "Proxy error". This gives us a clue that we need to start our backend server to start supplying the data to our application.
+
+## Checkout the API repository
+
+- Keep your `npm start` frontend running, but now open a 2nd console window
+- Change directories to a folder separate from the existing project. The parent directory above the react-redux-timesheet project would work nicely
+
+Checkout the backend API server project from Github.
+```
+$ git clone https://github.com/objectpartners/react-redux-api.git
+```
+
+You should get output similar to below:
+```javascript
+Cloning into 'react-redux-api'...
+remote: Counting objects: 6272, done.
+remote: Compressing objects: 100% (2493/2493), done.
+remote: Total 6272 (delta 3534), reused 6260 (delta 3523), pack-reused 0
+Receiving objects: 100% (6272/6272), 2.31 MiB | 4.05 MiB/s, done.
+Resolving deltas: 100% (3534/3534), done.
+Checking connectivity... done.
+```
+
+Change directories into the API main directory.
+```
+$ cd react-redux-api
+```
+
+Install the backend API NPM dependencies
+```
+$ npm install
+```
+
+Run the backend API server
+```
+$ npm start
+```
+
+## See the results
+
+- You may need to restart the frontend process in your frontend terminal console
+- Navigate to [http://localhost:3000](http://localhost:3000) in your favorite browser.
 - Click around and enjoy the result of your hard work during this lab.
 
 ![](img/lab04/employees.png)
