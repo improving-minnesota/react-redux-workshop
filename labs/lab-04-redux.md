@@ -393,11 +393,13 @@ export default connect(
 )(Employees);
 ```
 
-- Next, we can replace the constructor with the hardcoded data with one that call the **listEmployees** action.
+- Next, we can replace previously hard-coded state data in the constructor with a call to the **listEmployees** action to retrieve the employees from the server.
 
 ```javascript
   constructor(props) {
     super(props);
+    
+    //Replaces the previously hard-coded state assignment
     props.actions.listEmployees();
   }
 ```  
