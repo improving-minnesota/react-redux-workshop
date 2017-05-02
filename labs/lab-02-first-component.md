@@ -254,6 +254,14 @@ import Hello from './hello/Hello';
 ![](img/lab02/woohoo.png)
 
 &nbsp;
+
+### Commit your changes to Git and get ready for the next lab.
+
+```
+git add .
+git commit -m 'Lab 2 completed successfully'
+```
+
 ## Extra Credit
 If you're looking for an extra challenge, take a look at [Jest Snapshot testing](http://facebook.github.io/jest/blog/2016/07/27/jest-14.html). On first run, jest will generate a snapshot file that represents the rendered react component in a \__snapshots\__ folder. On subsequent runs it will compare the test result to the previous snapshot file. On a failure you will have to decide whether to fix the code, modify the test, or press 'u' to update the snapshot file with the new rendering.
 
@@ -270,9 +278,4 @@ Here is a Snapshot test for Hello.test.js:
     });
 ```
 
-### Commit your changes to Git and get ready for the next lab.
-
-```
-git add .
-git commit -m 'Lab 2 completed successfully'
-```
+Don't forget to `git add .` and `git commit -m "extra credit"` when you are done
