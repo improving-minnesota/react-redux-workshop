@@ -369,7 +369,7 @@ import {PageHeader, Grid, Row, Col} from 'react-bootstrap';
               <Employees/>
       );
 
-      let stringVal = JSON.stringify(component);
+      const stringVal = JSON.stringify(component);
       expect(stringVal).toMatch(/Employees/);
 
   });
@@ -379,7 +379,7 @@ import {PageHeader, Grid, Row, Col} from 'react-bootstrap';
         <Employees/>
     );
 
-    let stringVal = JSON.stringify(component);
+    const stringVal = JSON.stringify(component);
     expect(stringVal).toMatch(/admin@mixtape.com/);
   });
 ```
