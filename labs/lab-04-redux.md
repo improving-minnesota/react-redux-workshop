@@ -8,7 +8,7 @@ git checkout lab-04-redux-start
 git pull
 ```
 
-If not running, start the `npm start` tasks.  Otherwise, restart the running task to pick up any changes in the lab-04-redux-start branch.
+If not running, start the `npm start` task.  Otherwise, restart the running task to pick up any changes in the lab-04-redux-start branch.
 
 &nbsp;
 ### Check it out!
