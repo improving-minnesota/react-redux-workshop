@@ -39,7 +39,7 @@ export const GET = "GET_EMPLOYEE";
 &nbsp;
 ### Create the Employee Actions
 - Now open **src/actions/EmployeeActionCreator.js** so we can create the actions.
-- We'll import the types we just created, and the Axios library to handle our http requests.
+- We'll import the types we just created, and the [Axios](https://github.com/mzabriskie/axios) library to handle our http requests.
 
 ```javascript
 import * as EmployeeActionTypes from './EmployeeActionTypes';
