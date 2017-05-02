@@ -425,7 +425,7 @@ export default connect(
 ```javascript
 <th>Delete</th>
 ```
-- Now let's open the **src/components/employees/EmployeeRow.js** and the delete functionality by
+- Now let's open the **src/components/employees/EmployeeRow.js** and add the delete functionality by
 	- Importing the bootstrap **Button** component
 	- Styling the deleted rows
 	- Building the button
