@@ -368,7 +368,7 @@ import { connect } from 'react-redux';
 import * as EmployeeActions from '../../actions/EmployeeActionCreator';
 ```
 
-- Next lets add the **mapStateToProps** and **mapDispatchToProps** methods between the componenet and the export.
+- Next lets add the **mapStateToProps** and **mapDispatchToProps** methods between the component and the export.
 
 ```javascript
 function mapStateToProps(state) {
