@@ -309,7 +309,7 @@ describe('async actions', () => {
 - Let's take a look at what we are doing here.
 	- First we're testing that the synchronous actions are creating packets of type LIST and GET.
 	- Then in the asynchronous tests we are using **moxios** to http response for our **axois** requests, and we're using the **redux-mock-store**'s **configureMockStore** to mock our redux store so we can dispatch or actions and test them.
-	- Finally, we are using those mocks to see that the asynch actions generate the packets we expect when dispatched.
+	- Finally, we are using those mocks to see that the async actions generate the packets we expect when dispatched.
 
 - Make sure the tests pass and move on to the next section.
 
