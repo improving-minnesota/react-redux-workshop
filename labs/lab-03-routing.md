@@ -222,27 +222,22 @@ If you haven't already done so,
   - Feel free to add actual properties to the employee object and test for their existence in a `<td/>`.
 
 ```javascript
-    it('should instantiate the Employee Row Component', function () {
+  it('should instantiate the Employee Table', function () {
+    const employees = [{username:'fflintstone',
+      'email':'fred.flintstone@slatequarry.com',
+      'firstName':'Fred',
+      'lastName':'Flintstone',
+      'admin':true
+    }]
+    
+    const component = renderer.create(
+        <EmployeeTable employees={employees}/>
+    );
 
-        const employee = {username:'fflintstone',
-                          'email':'fred.flintstone@slatequarry.com',
-                          'firstName':'Fred',
-                          'lastName':'Flintstone',
-                          'admin':true
-                         }
-
-        const component = renderer.create(
-                <EmployeeRow employee={employee}/>
-        );
-
-        let stringVal = JSON.stringify(component);
-        expect(stringVal).toMatch(/td/);
-        expect(stringVal).toMatch(/Flintstone/);
-        expect(stringVal).toMatch(/fflintstone/);
-        expect(stringVal).toMatch(/Yes/);
-
-
-    });
+    let stringVal = JSON.stringify(component);
+    expect(stringVal).toMatch(/table/);
+    expect(stringVal).toMatch(/Flintstone/);
+  });
 
 ```
 
