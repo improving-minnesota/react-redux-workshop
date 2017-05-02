@@ -265,7 +265,8 @@ git commit -m 'Lab 2 completed successfully'
 ## Extra Credit
 If you're looking for an extra challenge, take a look at [Jest Snapshot testing](http://facebook.github.io/jest/blog/2016/07/27/jest-14.html). On first run, jest will generate a snapshot file that represents the rendered react component in a \_\_snapshots\_\_ folder. On subsequent runs it will compare the test result to the previous snapshot file. On a failure you will have to decide whether to fix the code, modify the test, or press 'u' to update the snapshot file with the new rendering.
 
-Try creating a Snapshot test inside Hello.test.js, or:<details><summary>Click here for an example</summary><p>
+Try creating a Snapshot test inside Hello.test.js, or:
+<details><summary>Click here for an example Hello.test.js test</summary><p>
 
 ```
     it('should render to match the snapshot', function () {
@@ -280,6 +281,7 @@ Try creating a Snapshot test inside Hello.test.js, or:<details><summary>Click he
 ```
 
 </p></details>
+
 
 Now take a look at the generated \_\_snapshots\_\_/Hello.test.js.snap file to see what the rendered Hello component looks like
 - Modify the test to render `<Hello friend="Leia"/>`
