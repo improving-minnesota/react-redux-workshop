@@ -384,7 +384,7 @@ function mapDispatchToProps(dispatch) {
 }
 ```
 
-- Then we'll replace the export with one that **connect** those methods to the componenet using the **redux** method we imported above
+- Then we'll modify the export to **connect** the methods to the component using the **redux** connect() method we imported above
 
 ```javascript
 export default connect(
