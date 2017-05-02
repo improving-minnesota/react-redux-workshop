@@ -267,6 +267,7 @@ If you're looking for an extra challenge, take a look at [Jest Snapshot testing]
 
 Try it out yourself, or:
 <details><summary>Click here for a Snapshot test for Hello.test.js:</summary><p>
+
 ```
     it('should render to match the snapshot', function () {
 
@@ -278,9 +279,10 @@ Try it out yourself, or:
         expect(json).toMatchSnapshot();
     });
 ```
+
 </p></details>
 
-- Now take a look at the generated \_\_snapshots\_\_/Hello.test.js.snap file to see what the rendered Hello component looks like
+Now take a look at the generated \_\_snapshots\_\_/Hello.test.js.snap file to see what the rendered Hello component looks like
 - Modify the test to render `<Hello friend="Leia"/>`
 - Now update the snapshot to match the updated test, re-run the tests, and see that they are all passing
 
