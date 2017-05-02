@@ -270,12 +270,16 @@ Here is a Snapshot test for Hello.test.js:
     it('should render to match the snapshot', function () {
 
         const component = renderer.create(
-            <Hello friend="Snappy"/>
+            <Hello friend="Luke"/>
         );
 
         const json = component.toJSON();
         expect(json).toMatchSnapshot();
     });
 ```
+
+- Now take a look at the generated \_\_snapshots\_\_/Hello.test.js.snap file to see what the rendered Hello component looks like
+- Modify the test to render `<Hello friend="Leia"/>`
+- Now update the snapshot to match the updated test, re-run the tests, and see that they are all passing
 
 Don't forget to `git add .` and `git commit -m "extra credit"` when you are done
