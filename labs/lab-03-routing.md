@@ -373,6 +373,15 @@ import {PageHeader, Grid, Row, Col} from 'react-bootstrap';
       expect(stringVal).toMatch(/Employees/);
 
   });
+
+  it('should contain a correct employee', function () {
+    const component = renderer.create(
+        <Employees/>
+    );
+
+    let stringVal = JSON.stringify(component);
+    expect(stringVal).toMatch(/admin@mixtape.com/);
+  });
 ```
 
 - Run the tests. Did your new one pass?
