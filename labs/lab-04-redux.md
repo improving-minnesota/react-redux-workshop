@@ -1,4 +1,4 @@
-# Lab Four - Adding Flux to the Application
+# Lab Four - Adding Redux to the Application
 
 ## Checkout the Lab Branch
 - In a terminal:
