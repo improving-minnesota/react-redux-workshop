@@ -20,7 +20,7 @@ If not running, start the `npm start` task.  Otherwise, restart the running task
 &nbsp;
 ## Creating our Application's Routes
 
-- Open **src/app.js**
+- Open **src/App.js**
 - Let's start by importing the component classes that we're going to use as the **Handlers** for our routes:
 
 ```javascript
