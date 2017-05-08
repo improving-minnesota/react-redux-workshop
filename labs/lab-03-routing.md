@@ -243,7 +243,7 @@ If you haven't already done so,
 
 - Run the tests. Did your new one pass?
 
-## Create the EmployeesTable Component
+## Create the EmployeeTable Component
 
 - Our next move is to create the table that will contain our **EmployeeRow**s.
 - Open **src/components/employees/EmployeeTable.js**
