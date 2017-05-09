@@ -15,7 +15,6 @@ If not running, start the `npm start` task.  Otherwise, restart the running task
 ### Check it out!
 
 - Let's look at the progress that has already been completed on the application by the rest of the team.
-  - The biggest change is that our server team has added cookie-based security.  We need to create a login form and all the flux components needed for that.
   - The component files needed to create and edit an employee have been created for you.  You will need to implement them.
   - You'll also notice that **React Router** mixins have been added to some of our previous components. More on that later.
 
