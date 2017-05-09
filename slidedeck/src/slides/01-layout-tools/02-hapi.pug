@@ -1,5 +1,6 @@
 section
   h1 Hapi
+  p Framework for building REST API services
   p
     a(href="http://hapijs.com/") hapijs.com
 
@@ -11,20 +12,22 @@ section
     li Provides us with a complete backend for our lab project
 
 section
-  h1 Mocha
+  h1 Jest
+  p Zero config, parallelized, snapshot testing framework for JS & React
   p
-    a(href="http://mochajs.org/") mochajs.org
+    a(href="https://facebook.github.io/jest/") facebook.github.io/jest
 
 section
   ul
-    li Feature-rich JavaScript test framework running on node.js and in the browser
+    li Fast. Run only for related changes. Run in parallel.
+    li Built in assertion matchers, mocking library and code coverage
+    li Snapshots for better React component verifications
+    li Works with TypeScript, Angular, Vue.js
 
 section
   p BDD-style (Behavior Driven Development)
-
-section
-  pre.
-    <code class="javascript" data-trim>
+  pre(style="width:100%").
+    <code class="javascript" data-trim style="overflow:visible;">
     describe('when there is no message', function () {
       beforeEach(function () {
         Snackbar = require('./snackbar');
@@ -40,118 +43,24 @@ section
     </code>
 
 section
-  p Reporter in Terminal
-  //img(src="/react-workshop/assets/img/lecture-01/gulp.test.png")
-
-section
-  p HTML Reporter
-  //img(src="/react-workshop/assets/img/lecture-01/mocha.htmlreporter.png")
-
-section
-  h1 Chai
-  p
-    a(href="http://chaijs.com/") chaijs.com
-
-section
+  h1 axios / moxios
   ul
-    li Assertion library for node and the browser that can be delightfully paired with any JavaScript testing framework
+    li axios is a promise based HTTP client for the browser and node.js
+    li moxios is for mocking axios requests while testing
 
 section
-  h1 Sinon
-  p
-    a(href="http://sinonjs.org/") sinonjs.org
-
-section
-  ul
-    li Standalone test spies, stubs and mocks for JavaScript
-    li No dependencies - works with any unit testing framework
-
-section
-  p.centered Used with sinon-chai
+  p Stubbing a request
   pre.
     <code class="javascript" data-trim>
-    spies.transitionTo = sinon.stub(element, 'transitionTo');
-
-    expect(spies.transitionTo).to.have.been.calledWith('employees.create');
-
-    </code>
-
-section
-  h1 Proxyquire
-  p
-    a(href="https://github.com/thlorenz/proxyquire") Proxyquire Github repo
-
-section
-  ul
-    li Proxies Node's require so we can provide mock dependencies during testing while staying totally unobtrusive
-
-section
-  pre.
-    <code class="javascript" data-trim>
-    proxies = {
-      './employee.form': mockComponent('EmployeeForm'),
-      '../../actions/employee.actions': {
-        get: sinon.stub(),
-        update: sinon.stub()
-      },
-      'react-router': {
-        RouteHandler: mockComponent('RouteHandler'),
-        Link: mockComponent('Link'),
-        State: {
-          getParams: function () {return {_id: 'abc123'}}
-        }
-      }
-    };
-
-    EmployeeDetail = proxyquire('./employee.detail', proxies);
+        moxios.stubRequest('/api/users', {
+          status: 200,
+          response: [
+            { id: 1, firstName: 'Fred', lastName: 'Flintstone' },
+            { id: 2, firstName: 'Wilma', lastName: 'Flintstone' }
+          ]
+        });
 
     </code>
-
-section
-  ul
-    li Actually using Proxiquireify to work with Browserify
-    li
-      a(href="https://github.com/thlorenz/proxyquireify") Proxyquireify Github repo
-
-section
-  h1 Karma
-  p
-    a(href="http://karma-runner.github.io/0.12/index.html") karma-runner.github.io
-
-section
-  ul
-    li Test runner orginally built for Angular.js
-    li Runs tests in multiple browsers
-
-section
-  ul
-    li Source maps!
-    li Browserify and Reactify plugins
-    li Let's look at the Karma configuration
-
-section
-  h1 Semantic UI
-  p
-    a(href="http://semantic-ui.com/kitchen-sink.html") kitchen sink
-
-section
-  ul
-    li Emphasizes concise HTML
-    li CSS is code
-
-section
-  h1 Less
-  p
-    a(href="http://lesscss.org/") lesscss.org
-
-section
-  ul
-    li Less is a CSS pre-processor, meaning that it extends the CSS language
-    li It provides features that allow variables, mixins, and functions
-    li Allows you to make CSS that is more maintainable, themeable and extendable
-
-section
-  p Styles written in Less will be provided for you during the labs, but feel free to tinker as you please
 
 section
   h1 Project Layout
@@ -159,7 +68,7 @@ section
 section
   ul
     li In this training class, you'll be building a React application that tracks employee timesheets across different projects
-    li To help speed things along so we can focus on the really important parts (like React/Flux), we've created the base project structure for you
+    li To help speed things along so we can focus on the really important parts (like React/Redux), we've created the base project structure for you
 
 section
   p Let's take a look
