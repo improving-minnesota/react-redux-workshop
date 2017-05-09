@@ -84,7 +84,7 @@ $ npm start
 
 - This is a long running process..it only ends on an error.
 
-- Open your browser and navigate to http://localhost:3000.
+- Open your browser and navigate to [http://localhost:3000](http://localhost:3000)
 
 - Verify that you see the welcome page.
 
