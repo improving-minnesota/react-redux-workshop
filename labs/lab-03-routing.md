@@ -289,7 +289,7 @@ EmployeeTable.defaultProps = {
 };
 
 EmployeeTable.propTypes = {
-  employees: React.PropTypes.array.isRequired
+  employees: PropTypes.array.isRequired
 };
 ```
 
@@ -313,7 +313,7 @@ EmployeeTable.propTypes = {
 
 
         const component = renderer.create(
-                <EmployeeTable employess={employees}/>
+                <EmployeeTable employees={employees}/>
         );
 
         let stringVal = JSON.stringify(component);
@@ -333,11 +333,11 @@ EmployeeTable.propTypes = {
 
 - Last, we need to add the table to our handler for the `/employees` route.
 - Open **src/components/employees/Employees.js**
-- Add the imports for the **EmployeeTable** as well as the **PageHeader, Grid, Row, and Col** from react-bootstrap
+- Add the imports for the **EmployeeTable** as well as the **PageHeader, Grid, and Row** from react-bootstrap
 
 ```javascript
 import EmployeeTable from './EmployeeTable';
-import {PageHeader, Grid, Row, Col} from 'react-bootstrap';
+import {PageHeader, Grid, Row} from 'react-bootstrap';
 ```
 
 - Add the render method below to the React class
