@@ -15,11 +15,11 @@
   }
 
   .monospace {
-    font-family: monospace; 
+    font-family: monospace;
   }
 
   .component {
-    @extend .monospace
+    @extend .monospace;
     text-align: center;
     box-shadow: initial;
   }
