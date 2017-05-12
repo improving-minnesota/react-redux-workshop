@@ -22,7 +22,7 @@ If not running, start the `npm start` task.  Otherwise, restart the running task
 ### Add the Routes for Creating and Updating
 
 - Before we can do anything, we need to add more routes to our application and tie them together with the appropriate handlers.
-- Open **client/src/routes.jsx** and add the routes below under the 'index' route:
+- Open **src/App.js** and add the routes below under the 'index' route:
 
 
 ```javascript
@@ -56,10 +56,10 @@ If not running, start the `npm start` task.  Otherwise, restart the running task
 ###### Before we get started, take the time to look at the custom form components already implemented for us.
 
 - The first component we need is a form to contain all of our employee's properties.
-- Open **client/src/components/employees.form.jsx**.
+- Open **src/components/employees/EmployeeForm.js**.
 
 - This form has more props than any component we've made so far, so let's review them:
-  - employee : the employee we will be editing
+  - employee: the employee we will be editing
   - errors: an object containing validation errors
   - validate: the function to be called upon a form input value change
   - validateAll: the function to validate the entire form
