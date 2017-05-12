@@ -6,11 +6,20 @@
   left: 0;
 }
 
-.reveal .component {
-  font-family: monospace;
-  text-align: center;
-  box-shadow: initial;
+.reveal {
+
+  .monospace {
+    font-family: monospace; 
+  }
+
+  .component {
+    @extend .monospace
+    text-align: center;
+    box-shadow: initial;
+  }
+
 }
+
 
 pre code {
   position: absolute;
