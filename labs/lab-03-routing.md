@@ -20,7 +20,7 @@ If not running, start the `npm start` task.  Otherwise, restart the running task
 &nbsp;
 ## Creating our Application's Routes
 
-- Open **src/app.js**
+- Open **src/App.js**
 - Let's start by importing the component classes that we're going to use as the **Handlers** for our routes:
 
 ```javascript
@@ -28,13 +28,13 @@ import Projects from './components/projects/Projects';
 import Employees from './components/employees/Employees';
 import Timesheets from './components/timesheets/Timesheets';
 ```
-- Next we'll import the some the classes from the react router
+- Next we'll import some classes from the react router
 
 ```javascript
 import {BrowserRouter, Route, Switch, Redirect} from 'react-router-dom';
 ```
 - Next let's configure our routes:
-  - We to wrap the routes in a **BrowserRouter** to handle the routes
+  - We need to wrap the routes in a **BrowserRouter** to handle the routes
   - We need separate sibling routes for **Projects**, **Employees**, and **Timesheets**.
   - Even though **Timesheets** content is a sibling to **Employees**, we want the route to behave as if it is a child. That way, we'll have access to the `user_id` from the route's params.
   - If we can't match a route, we want to redirect the user to the **Employees** component.
@@ -222,33 +222,28 @@ If you haven't already done so,
   - Feel free to add actual properties to the employee object and test for their existence in a `<td/>`.
 
 ```javascript
-    it('should instantiate the Employee Row Component', function () {
+  it('should instantiate the Employee Table', function () {
+    const employees = [{username:'fflintstone',
+      'email':'fred.flintstone@slatequarry.com',
+      'firstName':'Fred',
+      'lastName':'Flintstone',
+      'admin':true
+    }]
+    
+    const component = renderer.create(
+        <EmployeeTable employees={employees}/>
+    );
 
-        const employee = {username:'fflintstone',
-                          'email':'fred.flintstone@slatequarry.com',
-                          'firstName':'Fred',
-                          'lastName':'Flintstone',
-                          'admin':true
-                         }
-
-        const component = renderer.create(
-                <EmployeeRow employee={employee}/>
-        );
-
-        let stringVal = JSON.stringify(component);
-        expect(stringVal).toMatch(/td/);
-        expect(stringVal).toMatch(/Flintstone/);
-        expect(stringVal).toMatch(/fflintstone/);
-        expect(stringVal).toMatch(/Yes/);
-
-
-    });
+    let stringVal = JSON.stringify(component);
+    expect(stringVal).toMatch(/table/);
+    expect(stringVal).toMatch(/Flintstone/);
+  });
 
 ```
 
 - Run the tests. Did your new one pass?
 
-## Create the EmployeesTable Component
+## Create the EmployeeTable Component
 
 - Our next move is to create the table that will contain our **EmployeeRow**s.
 - Open **src/components/employees/EmployeeTable.js**
@@ -294,7 +289,7 @@ EmployeeTable.defaultProps = {
 };
 
 EmployeeTable.propTypes = {
-  employees: React.PropTypes.array.isRequired
+  employees: PropTypes.array.isRequired
 };
 ```
 
@@ -318,7 +313,7 @@ EmployeeTable.propTypes = {
 
 
         const component = renderer.create(
-                <EmployeeTable employess={employees}/>
+                <EmployeeTable employees={employees}/>
         );
 
         let stringVal = JSON.stringify(component);
@@ -338,11 +333,11 @@ EmployeeTable.propTypes = {
 
 - Last, we need to add the table to our handler for the `/employees` route.
 - Open **src/components/employees/Employees.js**
-- Add the imports for the **EmployeeTable** as well as the **PageHeader, Grid, Row, and Col** from react-bootstrap
+- Add the imports for the **EmployeeTable** as well as the **PageHeader, Grid, and Row** from react-bootstrap
 
 ```javascript
 import EmployeeTable from './EmployeeTable';
-import {PageHeader, Grid, Row, Col} from 'react-bootstrap';
+import {PageHeader, Grid, Row} from 'react-bootstrap';
 ```
 
 - Add the render method below to the React class
@@ -374,9 +369,18 @@ import {PageHeader, Grid, Row, Col} from 'react-bootstrap';
               <Employees/>
       );
 
-      let stringVal = JSON.stringify(component);
+      const stringVal = JSON.stringify(component);
       expect(stringVal).toMatch(/Employees/);
 
+  });
+
+  it('should contain a correct employee', function () {
+    const component = renderer.create(
+        <Employees/>
+    );
+
+    const stringVal = JSON.stringify(component);
+    expect(stringVal).toMatch(/admin@mixtape.com/);
   });
 ```
 

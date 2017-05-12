@@ -9,13 +9,12 @@ git checkout lab-05-form-validation-start
 git pull
 ```
 
-If not running, start the `gulp watch:dev` and `gulp serve:dev` tasks.  Otherwise, restart the running tasks to pick up any changes in the lab-05-form-validation-start branch.
+If not running, start the `npm start` task.  Otherwise, restart the running tasks to pick up any changes in the lab-05-form-validation-start branch.
 
 &nbsp;
 ### Check it out!
 
 - Let's look at the progress that has already been completed on the application by the rest of the team.
-  - The biggest change is that our server team has added cookie-based security.  We need to create a login form and all the flux components needed for that.
   - The component files needed to create and edit an employee have been created for you.  You will need to implement them.
   - You'll also notice that **React Router** mixins have been added to some of our previous components. More on that later.
 
@@ -23,219 +22,30 @@ If not running, start the `gulp watch:dev` and `gulp serve:dev` tasks.  Otherwis
 ### Add the Routes for Creating and Updating
 
 - Before we can do anything, we need to add more routes to our application and tie them together with the appropriate handlers.
-- Open **client/src/routes.jsx** and add the routes below under the 'index' route:
+- Open **src/App.js** and add the routes below under the 'index' route:
 
 
 ```javascript
-<Route name='login' path='/login' handler={Login} />
+    <Route exact path="/projects" component={Projects}/>
+    <Route path='/projects/detail/:_id' component={ProjectsDetail} />
+    <Route path='/projects/create' component={ProjectsCreate} />
 
-<Route name='app' path="/" handler={App}>
+    <Route exact path="/employees" component={Employees}/>
+    <Route path='/employees/detail/:_id' component={EmployeesDetail} />
+    <Route path='/employees/create' component={EmployeesCreate} />
 
-  <Route name='projects'          path='/projects'              handler={Projects} />
-  <Route name='projects.detail'   path='/projects/detail/:_id'  handler={ProjectsDetail} />
-  <Route name='projects.create'   path='/projects/create'       handler={ProjectsCreate} />
+    <Route exact path="/employees/:user_id/timesheets" component={Timesheets}/>
+    <Route exact path='/employees/:user_id/timesheets/detail/:_id' component={TimesheetsDetail} />
 
-  <Route name='employees'         path='/employees'             handler={Employees} />
-  <Route name='employees.detail'  path='/employees/detail/:_id' handler={EmployeesDetail} />
-  <Route name='employees.create'  path='/employees/create'      handler={EmployeesCreate} />
+    <Route path='/timesheets/create' component={TimesheetsCreate} />
 
-  <Route name='timesheets'        path='/employees/:user_id/timesheets'             handler={Timesheets} />
-  <Route name='timesheets.create' path='/employees/:user_id/timesheets/create'      handler={TimesheetsCreate} />
-  <Route name='timesheets.detail' path='/employees/:user_id/timesheets/detail/:_id' handler={TimesheetsDetail} />
+    <Route path='/employees/:user_id/timesheets/detail/:timesheet_id/timeunits/create' component={TimeunitsCreate} />
+    <Route path='/employees/:user_id/timesheets/detail/:timesheet_id/timeunits/detail/:_id' component={TimeunitsDetail} />
 
-  <Route name='timesheets.detail.timeunits.create' path='/employees/:user_id/timesheets/detail/:_id/timeunits/create'            handler={TimeunitsCreate} />
-  <Route name='timesheets.detail.timeunits.detail'   path='/employees/:user_id/timesheets/detail/:_id/timeunits/edit/:timeunit_id' handler={TimeunitsEdit} />
-
-  <Redirect to="employees" />
-</Route>
+    <Redirect to="/employees"/>
 ```
 
 > Take the time to check out the path declarations and how they are adding route params that are dynamically replaced.
-
-
-&nbsp;
-### Adding Login and Logout Functionality
-
-- The **LoginStore** and **LoginActions** classes have been implemented for you.
-
-- Open the **LoginStore** and review the `current()` method.
-  - Notice that the method returns a **Promise**
-  - We can use this to effectively block (or redirect) an unauthorized user by wrapping the app bootstrap inside the resolve of the promise.
-  - This is handy because it prevents the bootstrap process from running until the promise resolves without error.
-
-
-- Let's implement that right now:
-  - Open **client/src/main.jsx**
-  - Add the call to the `LoginStore.current()` to our bootstrap process.
-
-```javascript
-// Attempt to get a current user session
-LoginStore.current()
-  .then(function () {
-
-    // initialize the router and its routes
-    Router.run(routes, function (Handler) {
-      React.render(<Handler />, document.getElementById('app'));
-    });
-  });
-```
-
-- Another way we can secure the application is by using **react-router**'s `willTransitionTo()` static method.  This method adds components that are used as handlers.
-  - The `willTransitionTo()` method is expecting a **Promise** to be returned in its implementation.
-  - It will block the transition until the promise has been resolved.
-
-- The **LoginStore** also has a `requireAuthenticatedUser()` method that returns a **Promise** which resolves on successful authentication.
-
-- Let's implement `willTransitionTo()` in our **App** component.
-- Open **client/src/components/app.jsx** and add the statics array block:
-
-```javascript
-statics: {
-  willTransitionTo: function (transition, params) {
-    return LoginStore.requireAuthenticatedUser(transition);
-  }
-},
-```
-
-- Now, let's test that it is working.
-- Open **client/src/components/app.spec.js** and add the suite below:
-
-```javascript
-describe('during the will transition to lifecyle', function () {
-  it('should require an authenticated user from the login store', function () {
-    App.willTransitionTo('transitionArg', 'paramsArg');
-    expect(proxies['../stores/login.store'].requireAuthenticatedUser).to.have.been.calledWith('transitionArg');
-  });
-});
-```
-- Run the tests and make sure the all pass before moving on.
-
-&nbsp;
-## Add a Login Form Component
-
-- Now that we have the app secured, we need to provide a way for our users to login.
-- Open **client/src/components/login/login.jsx**
-
-- Start by hooking up the **Login** component to our **LoginStore** by adding:
-
-```javascript
-store: LoginStore,
-
-getInitialState: function () {
-  return this.store.getState();
-},
-
-onChange: function () {
-  this.setState(this.store.getState());
-},
-
-componentWillMount: function () {
-  this.store.addChangeListener(this.onChange);
-},
-
-componentWillUnmount: function () {
-  this.store.removeChangeListener(this.onChange);
-},
-```
-
-- Next, let's create the JSX to display a login form: (yeah..you can copy/paste this)
-
-```javascript
-render: function () {
-  return (
-    <div className="ui padded page grid">
-      <div className="two column centered row">
-        <div className="left aligned column">
-          <h4>Welcome to Timesheetz</h4>
-        </div>
-        <div className="right aligned column">
-          <h5>Please Login</h5>
-        </div>
-      </div>
-
-      <hr/>
-
-      <div className="centered row">
-        <div className="center aligned eight wide column">
-          <form className="ui form" name="loginForm" onSubmit={this.handleSubmit}>
-            <div className="inline field">
-              <label htmlFor="login">Username</label>
-              <input type="text"
-                name="username" ref="login"
-                value={this.state.credentials.username}
-                onChange={this.validate} required />
-            </div>
-            <div className="inline field">
-              <label htmlFor="pass">Password</label>
-              <input type="password"
-                name="password" ref="password"
-                value={this.state.credentials.password}
-                onChange={this.validate} required />
-            </div>
-            <div className="ui right aligned column">
-              <button className="ui primary login button">Login</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  );
-}
-```
-
-###### There are 2 items in the above JSX that I want you to notice:
-
-- The form is specifying to call the `handleSubmit()` callback on submit.
-
-```javascript
-<form className="ui form" name="loginForm" onSubmit={this.handleSubmit}>
-```
-
-- The `username` and `password` inputs are calling the `validate()` callback on change.
-
-```javascript
-onChange={this.validate}
-```
-
-- We need to implement these two callbacks.
-
-- Since inputs are controlled components, they will not automatically update themselves when the user types into them.
-- Controlled components force you to deliberately handle changes to the input. This makes it very easy to write custom validation for any of your form inputs.
-
-- We don't really need to validate either form inputs, so we can just update our store and component state with the value:
-
-```javascript
-validate: function (event) {
-  this.state.credentials[event.target.name] = event.target.value;
-  this.setState(this.state.credentials);
-},
-```
-
-- When the user submits the form, we just want to fire off a login action:
-
-```javascript
-handleSubmit: function (event) {
-  event.preventDefault();
-  LoginActions.login(this.state.credentials);
-},
-```
-
-> Note that we needed to prevent the default behavior of the submit event.  That way, the browser doesn't try to do a traditional form submit. Remember, this is just Javascript. **React** is not doing any magic for us under the covers to override the default behavior of the browser.
-
-
-&nbsp;
-## Run the application and see your work.
-
-If you haven't already done so,
-- In a terminal windows run: `gulp watch:dev` to fire off the build.
-- In a separate terminal run: `gulp serve:dev` to serve the index.html.
-- Navigate to [http://localhost:3000](http://localhost:3000) in your favorite browser.
-
-- Login with username: **admin** and password: **password** (should have been 'guest').
-- Did it work?
-
-![](img/lab05/login.form.png)
-
 
 &nbsp;
 ### Add Edit Employee Functionality
@@ -246,10 +56,10 @@ If you haven't already done so,
 ###### Before we get started, take the time to look at the custom form components already implemented for us.
 
 - The first component we need is a form to contain all of our employee's properties.
-- Open **client/src/components/employees.form.jsx**.
+- Open **src/components/employees/EmployeeForm.js**.
 
 - This form has more props than any component we've made so far, so let's review them:
-  - employee : the employee we will be editing
+  - employee: the employee we will be editing
   - errors: an object containing validation errors
   - validate: the function to be called upon a form input value change
   - validateAll: the function to validate the entire form

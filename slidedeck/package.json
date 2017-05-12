@@ -27,7 +27,7 @@
     "copy-webpack-plugin": "~4.0.1",
     "del-cli": "~0.2.1",
     "ghpages": "~0.0.10",
-    "object-partners-presentation": "github:objectpartners/object-partners-presentation-config#0645684",
+    "object-partners-presentation": "objectpartners/object-partners-presentation-config#1.0.1",
     "webpack": "~2.3.3",
     "webpack-dev-server": "~2.4.5"
   },

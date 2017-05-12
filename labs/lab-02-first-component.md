@@ -161,17 +161,7 @@ describe('Hello World:', function () {
 
 
 ```
-> What is happening here? We use React's **ReactTestUtils** to render the component into a sandboxed "document" so that we can perform inquiries. Notice that we are using `JSX` in the `ReactTestUtils.renderIntoDocument()` method.
-
-- Now that the component has been rendered into our test document and assigned to the `hello` variable, we can perform tests on it.  Create the spec below:
-
-```javascript
-  it('should instantiate the Hello World', function () {
-    expect(ReactTestUtils.isCompositeComponent(hello)).toBe(true);
-  });
-```
-
-- Above, we just used the `ReactTestUtils.isCompositeComponent()` to determine if the `Hello` component successfully rendered to our mock document.
+> What is happening here? We use React's [test renderer](https://github.com/facebook/react/tree/master/packages/react-test-renderer) to render the component into a sandboxed "document" so that we can perform inquiries. Notice that we are using `JSX` in the `renderer.create()` method.
 
 - When finished, your suite should look similar to the one below:
 
@@ -264,9 +254,39 @@ import Hello from './hello/Hello';
 ![](img/lab02/woohoo.png)
 
 &nbsp;
+
 ### Commit your changes to Git and get ready for the next lab.
 
 ```
 git add .
 git commit -m 'Lab 2 completed successfully'
 ```
+
+## Extra Credit
+If you're looking for an extra challenge, take a look at [Jest Snapshot testing](http://facebook.github.io/jest/blog/2016/07/27/jest-14.html). On first run, jest will generate a snapshot file that represents the rendered react component in a \_\_snapshots\_\_ folder. On subsequent runs it will compare the test result to the previous snapshot file. On a failure you will have to decide whether to fix the code, modify the test, or press 'u' to update the snapshot file with the new rendering.
+
+Try creating a Snapshot test inside Hello.test.js, or:
+<details><summary>Click here for an example Hello.test.js test</summary><p>
+
+```
+    it('should render to match the snapshot', function () {
+
+        const component = renderer.create(
+            <Hello friend="Luke"/>
+        );
+
+        const json = component.toJSON();
+        expect(json).toMatchSnapshot();
+    });
+```
+
+</p></details>
+<br/>
+
+- Now take a look at the generated \_\_snapshots\_\_/Hello.test.js.snap file to see what the rendered Hello component looks like
+- Modify the test "friend" attribute to a different name
+- See that the test now fails
+- Update the snapshot to match the updated test
+- re-run the tests and see that they are all passing
+
+Don't forget to `git add .` and `git commit -m "extra credit"` when you are done
