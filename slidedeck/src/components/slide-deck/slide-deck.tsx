@@ -5,6 +5,8 @@ import 'reveal.js/css/reveal.css';
 import 'object-partners-revealjs-theme';
 import 'highlight.js/styles/monokai.css';
 
+import '!style-loader!css-loader?importLoaders=1!postcss-loader?config=node_modules/object-partners-presentation/dist/config-files/postcss.config.js!sass-loader!./slide-deck.scss'; // hack hack hack
+
 export interface SlideDeckProps {
   slides: any[][];
 }
