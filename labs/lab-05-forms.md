@@ -26,23 +26,23 @@ If not running, start the `npm start` task.  Otherwise, restart the running task
 
 
 ```javascript
-              <Route exact path="/projects" component={Projects}/>
-              <Route path='/projects/detail/:_id' component={ProjectsDetail} />
-              <Route path='/projects/create' component={ProjectsCreate} />
+    <Route exact path="/projects" component={Projects}/>
+    <Route path='/projects/detail/:_id' component={ProjectsDetail} />
+    <Route path='/projects/create' component={ProjectsCreate} />
 
-              <Route exact path="/employees" component={Employees}/>
-              <Route path='/employees/detail/:_id' component={EmployeesDetail} />
-              <Route path='/employees/create' component={EmployeesCreate} />
+    <Route exact path="/employees" component={Employees}/>
+    <Route path='/employees/detail/:_id' component={EmployeesDetail} />
+    <Route path='/employees/create' component={EmployeesCreate} />
 
-              <Route exact path="/employees/:user_id/timesheets" component={Timesheets}/>
-              <Route exact path='/employees/:user_id/timesheets/detail/:_id' component={TimesheetsDetail} />
+    <Route exact path="/employees/:user_id/timesheets" component={Timesheets}/>
+    <Route exact path='/employees/:user_id/timesheets/detail/:_id' component={TimesheetsDetail} />
 
-              <Route path='/timesheets/create' component={TimesheetsCreate} />
+    <Route path='/timesheets/create' component={TimesheetsCreate} />
 
-              <Route path='/employees/:user_id/timesheets/detail/:timesheet_id/timeunits/create' component={TimeunitsCreate} />
-              <Route path='/employees/:user_id/timesheets/detail/:timesheet_id/timeunits/detail/:_id' component={TimeunitsDetail} />
+    <Route path='/employees/:user_id/timesheets/detail/:timesheet_id/timeunits/create' component={TimeunitsCreate} />
+    <Route path='/employees/:user_id/timesheets/detail/:timesheet_id/timeunits/detail/:_id' component={TimeunitsDetail} />
 
-              <Redirect to="/employees"/>
+    <Redirect to="/employees"/>
 ```
 
 > Take the time to check out the path declarations and how they are adding route params that are dynamically replaced.
