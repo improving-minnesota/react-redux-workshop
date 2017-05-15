@@ -452,5 +452,38 @@ section
     </code>
 
 section
+  h2 react-test-renderer
+  p Renderers for testing components without a DOM
+  p
+    a(href="https://www.npmjs.com/package/react-test-renderer") npm react-test-renderer
+
+section
+  h4.plain  ReactTestRenderer
+  p Renders components to plain JS objects for testing
+  pre.
+    <code class="javascript" data-no-escape>
+      const component = ReactTestRenderer.create(
+        &lt;Link page="https://xkcd.com/"&gt;xkcd&lt;Link&gt;
+      );
+
+      expect(component.props.href).to.equal('https://xkcd.com/');
+      expect(component.children[0]).to.equal('xkcd');
+
+    </code>
+
+section
+  h4.plain  ReactShallowRenderer
+  p Renders components to plain JS objects for testing w/o children
+  pre.
+    <code class="javascript" data-no-escape>
+      const renderer = new ReactShallowRenderer()
+      const output = renderer.render( &lt;App/&gt; ).getRenderOutput();
+
+      let stringVal = JSON.stringify(output);
+      expect(stringVal).toMatch(/employees\/:user_id\/timesheets/);
+
+    </code>
+
+section
   h1 Lab 02
   h2 Your First React Component
