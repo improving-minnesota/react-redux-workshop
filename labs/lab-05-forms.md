@@ -11,177 +11,189 @@ git pull
 
 If not running, start the `npm start` task.  Otherwise, restart the running tasks to pick up any changes in the lab-05-form-validation-start branch.
 
-&nbsp;
+
 ### Check it out!
 
 - Let's look at the progress that has already been completed on the application by the rest of the team.
-  - The component files needed to create and edit an employee have been created for you.  You will need to implement them.
-  - You'll also notice that **React Router** mixins have been added to some of our previous components. More on that later.
+  - The component files needed to create and edit employees, timesheets, and timeunits have been created for you.  This lab will walk you through the implementation of some of those features.
+  - You'll also notice that **React Router** has been added to some of our previous components. More on that later.
 
 &nbsp;
 ### Add the Routes for Creating and Updating
 
 - Before we can do anything, we need to add more routes to our application and tie them together with the appropriate handlers.
-- Open **src/App.js** and add the routes below under the 'index' route:
+- Open **/src/App.js** and add the routes below under the 'Switch' tag (on the same level as your other routes):
 
 
-```javascript
-    <Route exact path="/projects" component={Projects}/>
-    <Route path='/projects/detail/:_id' component={ProjectsDetail} />
-    <Route path='/projects/create' component={ProjectsCreate} />
+```
+<Route path='/employees/detail/:_id' component={EmployeesDetail} />
+<Route path='/employees/create' component={EmployeesCreate} />
+ 
+<Route exact path='/employees/:user_id/timesheets/detail/:_id' component={TimesheetsDetail} />
+  
+<Route path='/employees/:user_id/timesheets/detail/:timesheet_id/timeunits/create' component={TimeunitsCreate} />
+<Route path='/employees/:user_id/timesheets/detail/:timesheet_id/timeunits/detail/:_id' component={TimeunitsDetail} />
 
-    <Route exact path="/employees" component={Employees}/>
-    <Route path='/employees/detail/:_id' component={EmployeesDetail} />
-    <Route path='/employees/create' component={EmployeesCreate} />
-
-    <Route exact path="/employees/:user_id/timesheets" component={Timesheets}/>
-    <Route exact path='/employees/:user_id/timesheets/detail/:_id' component={TimesheetsDetail} />
-
-    <Route path='/timesheets/create' component={TimesheetsCreate} />
-
-    <Route path='/employees/:user_id/timesheets/detail/:timesheet_id/timeunits/create' component={TimeunitsCreate} />
-    <Route path='/employees/:user_id/timesheets/detail/:timesheet_id/timeunits/detail/:_id' component={TimeunitsDetail} />
-
-    <Redirect to="/employees"/>
 ```
 
 > Take the time to check out the path declarations and how they are adding route params that are dynamically replaced.
 
-&nbsp;
-### Add Edit Employee Functionality
+## Run the application and see your work.
 
-- Now that we can log in to our application, let's set up a way to edit an employee.
+If you haven't already done so,
+- In a terminal window run: `npm start` to fire off the build.
+- Navigate to [http://localhost:3000](http://localhost:3000) in your favorite browser.
+- What happens when you try to edit a timesheet?
 
-&nbsp;
-###### Before we get started, take the time to look at the custom form components already implemented for us.
 
-- The first component we need is a form to contain all of our employee's properties.
-- Open **src/components/employees/EmployeeForm.js**.
+### Add Edit Timesheet Functionality
 
-- This form has more props than any component we've made so far, so let's review them:
-  - employee: the employee we will be editing
-  - errors: an object containing validation errors
-  - validate: the function to be called upon a form input value change
-  - validateAll: the function to validate the entire form
-  - hasErrors: a function that can be called to determine if any of the form inputs have validation errors
-  - toggleAdmin: a helper function to toggle the boolean value of `employee.admin`
-  - onSave: the callback to call when the user submits the form
-  - saveText: the text of the save button
+- Our routing is in place, and we're correctly navigating to the timesheet page, but it's empty!
+- First, let's look at how we're getting to the timesheet editor.  Open ```TimesheetRow.js``` and notice a few things.
+  - As mentioned earlier, this component is importing some functionality from ```react-router``` like so:
+    - ```import { withRouter } from 'react-router';```
+  - Then, when exporting the component, we are doing so using ```withRouter```.
+    -  ```export default withRouter(TimesheetRow);```
+  - This wraps our component in a Router component, which will give it the ability to redirect to other routes.  
+  - Take a look at the ```showDetail``` function, which runs when the user clicks on a timesheet row:
+    -  ```this.props.history.push('/employees/' + timesheet.user_id + '/timesheets/detail/' + timesheet._id);```
+    - This is the line that actually directs the user to the specific timesheet detail page.  Look at the routes we defined earlier to see which component should be displayed.
+    
 
-- Ok, so let's tell **React** about these props:
+###### Now let's take the time to look at the Timesheet form component and give it some new powers.
 
+- The first component we need is a form to contain all of our timesheet's properties.
+- Open **/src/components/timesheets/TimesheetForm.js**.
+- You'll notice there are a bunch of validation functions in here. For example:
 ```javascript
-propTypes: {
-  employee:   React.PropTypes.object,
-  errors:     React.PropTypes.object,
-  validate:   React.PropTypes.func.isRequired,
-  validateAll: React.PropTypes.func.isRequired,
-  hasErrors:  React.PropTypes.func.isRequired,
-  toggleAdmin: React.PropTypes.func,
-  onSave: React.PropTypes.func.isRequired,
-  saveText: React.PropTypes.string
-},
+  handleEmployeeChange(value) {
+    let isValid = false;
+        if(value){
+           isValid = true;
+        }
+        return this.setState({ user_id: {value: value, valid: isValid }});
+    }
 ```
 
-- Next we need to act when the user clicks the cancel button.
-  - To do this, we are just navigating back to the top level `employees` route.
-  - We need to add the **Router.Navigation** mixin to our component so that we have access to the `transitionTo()` method.
+- This function will be called when the user selects a new employee.  Once the user does so, the field will be marked as valid in the component's state.
+- Let's hook our component up to our validation functions by returning this from our ```render()``` method:
 
 ```javascript
-mixins: [
-  Router.Navigation
-],
+    return (
+      <form>
+        <FormGroup
+          controlId="name"
+          validationState={this.getNameValidationState()}
+        >
+          {!this.props.timesheet._id &&
+            <div>
+              <ControlLabel>Username</ControlLabel>
+              <FormControl
+                componentClass="select"
+                onChange={(e) => this.handleEmployeeChange(e.target.value)}
+              >
+                <option value="" disabled selected>Select an employee</option>
+                  {
+                    this.props.employees
+                      .map((employee) => {
+                          return <option value={employee._id}>{employee.username}</option>
+                      })
+                  }
+              </FormControl>
+            </div>
+          }
+          <ControlLabel>Name</ControlLabel>
+          <FormControl
+            type="text"
+            value={this.state.name.value}
+            placeholder="Enter name"
+            onChange={(e) => this.handleNameChange(e.target.value)}
+          />
+          <FormControl.Feedback />
+        </FormGroup>
 
-onCancel: function (event) {
-  event.preventDefault();
-  this.transitionTo('employees');
-},
+        <FormGroup
+          controlId="description"
+          validationState={this.getDescriptionValidationState()}
+        >
+          <ControlLabel>Description</ControlLabel>
+          <FormControl
+            type="text"
+            value={this.state.description.value}
+            placeholder="Enter description"
+            onChange={(e) => this.handleDescriptionChange(e.target.value)}
+          />
+          <FormControl.Feedback />
+        </FormGroup>
+
+        <FormGroup
+          controlId="beginDate"
+          validationState={this.getBeginDateValidationState()}
+        >
+          <ControlLabel>Begin Date</ControlLabel>
+          <FormControl
+            type="text"
+            value={this.state.beginDate.value}
+            placeholder="YYYY-MM-DD"
+            onChange={(e) => this.handleBeginDateChange(e.target.value)}
+          />
+          <FormControl.Feedback />
+        </FormGroup>
+
+        <FormGroup
+          controlId="endDate"
+          validationState={this.getEndDateValidationState()}
+        >
+          <ControlLabel>End Date</ControlLabel>
+          <FormControl
+            type="text"
+            value={this.state.endDate.value}
+            placeholder="YYYY-MM-DD"
+            onChange={(e) => this.handleEndDateChange(e.target.value)}
+          />
+          <FormControl.Feedback />
+        </FormGroup>
+
+        <Button bsStyle="success" onClick={this.handleSave} disabled={!this.validateAll()}> Save </Button>&nbsp;
+        <LinkContainer to="/employees/all/timesheets">
+          <Button bsStyle="danger"> Cancel </Button>
+        </LinkContainer>
+      </form>
+    )
 ```
 
-- Now it's time to draw our `render()` method with the JSX we'll use to build the form:
 
+- There are still two functions that need to be implemented: ```componentWillReceiveProps``` and ```handleSave```.
+- Here's what your ```componentWillReceiveProps``` function should look like:
 ```javascript
-render : function () {
-  return (
-    <div className="ui ten column centered grid">
-      <div className="ten wide column">
-        <form className="ui inline form" name="employeeForm" onSubmit={this.props.onSave}>
-
-          <TextInput name="username"
-            label="Username"
-            placeholder="Employee Username"
-            value={this.props.employee.username}
-            error={this.props.errors.username}
-            onChange={this.props.validate} />
-
-          <TextInput name="email"
-            label="Email"
-            placeholder="Employee Email"
-            value={this.props.employee.email}
-            error={this.props.errors.email}
-            onChange={this.props.validate} />
-
-          <TextInput name="firstName"
-            label="First Name"
-            placeholder="First Name"
-            value={this.props.employee.firstName}
-            error={this.props.errors.firstName}
-            onChange={this.props.validate} />
-
-          <TextInput name="lastName"
-            label="Last Name"
-            placeholder="Last Name"
-            value={this.props.employee.lastName}
-            error={this.props.errors.lastName}
-            onChange={this.props.validate} />
-
-          <Checkbox name="admin"
-            label="Admin"
-            value={this.props.employee.admin}
-            onClick={this.props.toggleAdmin}
-            onChange={this.props.validate} />
-
-          <div className="ui horizontal divider"></div>
-
-          <div className="ui sixteen column right floated grid">
-            <SaveButton validateAll={this.props.validateAll} hasErrors={this.props.hasErrors()} saveText={this.props.saveText} />
-            <CancelButton onCancel={this.onCancel} />
-          </div>
-        </form>
-      </div>
-    </div>
-  );
-}
+  componentWillReceiveProps(nextProps) {
+    this.state = {
+      name: {value: nextProps.timesheet.name, valid: null},
+      description: {value: nextProps.timesheet.description, valid: null},
+      beginDate: {value: nextProps.timesheet.beginDate, valid: null},
+      endDate: {value: nextProps.timesheet.endDate, valid: null}
+    };
+  }
 ```
-
-> Notice that we are not actually implementing the save function. That is left for the component that uses this form to implement and pass it in as a prop.
-
-- Time to test the form.
-- For time's sake, we'll just test the functionality of the cancel button.  This will highlight some more coolness of **TestUtils**.
-
-- Open **client/src/components/employees.form.spec.js**.
-
-- Test the cancel button by:
-  - Getting the cancel button component out of the virtual DOM.
-  - Getting the actual HTML button out of the cancel button component.
-  - Telling **TestUtils** to simulate a click on that button.
-  - Testing that the `transitionTo` method was called as a result.
-
-- Add the test suite below and uncomment all the spies:
-
-```javascript
-describe('clicking the cancel button', function () {
-  it('should go back to the employees home', function () {
-    var cancel = TestUtils.findRenderedComponentWithType(element, CancelButton);
-    var button = TestUtils.findRenderedDOMComponentWithTag(cancel, 'button');
-    TestUtils.Simulate.click(button);
-
-    expect(spies.transitionTo).to.have.been.calledWith('employees');
-  });
-});
+- This means that, if the TimesheetForm is being used to view an existing timesheet, that the component's state values will reflect those in the existing timesheet.
+- And here's the function that runs when the user clicks the save button, ```handleSave```:
+ ```javascript
+  handleSave(){
+    if(this.validateAll()) {
+      this.props.handleSave({
+        name: this.state.name.value,
+        description: this.state.description.value,
+        beginDate: this.state.beginDate.value,
+        endDate: this.state.endDate.value,
+        user_id: this.props.timesheet.user_id ?  this.props.timesheet.user_id : this.state.user_id.value,
+        _id: this.props.timesheet._id
+      });
+    }
+  }
 ```
+- What is ```this.validateAll()``` doing?
 
-- Run the tests and validate that they all pass before going to the next section.
+TODO: the rest
 
 &nbsp;
 ## Add the Form into an Employee Detail Component

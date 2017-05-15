@@ -20,31 +20,29 @@ section
     a(href="http://facebook.github.io/react/docs/glossary.html") More info?
 
 section
-  p For a bare-bones React component, we need to know about 2 top level API methods:
+  p For a bare-bones React component, we need to do 2 things
   ul
-    li React.createClass();
-    li React.render();
+    li Extend the react Component
+    li Implement render()
 
 section
-  h2.lower React.createClass();
+  h2.lower Extend React Component
 
 section
   ul
-    li Creates a component class, given a specification
+    li Defines a component class
     li A component implements a render method which returns a single child
     li That child may have an arbitrarily deep child structure
-    li They are convenience wrappers that construct backing instances (via new) for you
 
 section
   pre.
     <code class="javascript" data-trim>
-    var React = require('react/addons');
-    var Hello = React.createClass({
-      render: function () {...}
-    });
+    import React, { Component } from 'react';
+    class Hello extends Component {
+      render() {...}
+    }
 
     module.exports = Hello;
-
     </code>
 
 section
@@ -73,112 +71,60 @@ section
     li Work should be performed in componentDidMount() or the other lifecycle methods
 
 section
-  h2.lower getInitialState()
+  h2.lower constructor
   ul
-    li Invoked once before the component is mounted
-    li The return value will be used as the initial value of this.state
+    li Invoked at object creation
+    li Receives "props"
+    li This is a great place to setup your initial state
 
 section
   pre.
     <code class="javascript" data-trim>
-    getInitialState: function () {
-      return {
+    constructor(props) {
+      super(props);
+      this.state = {
         saveText: 'Update',
         employee: {},
         errors: {}
       };
     }
-
     </code>
 
 section
-  h2.lower getDefaultProps()
+  h2.lower defaultProps
   ul
-    li Invoked once and cached when the class is created
     li Values in the mapping will be set on this.props if that prop is not specified by the parent component
-
-section
-  h2.lower getDefaultProps()
-  ul
-    li This method is invoked before any instances are created and therefore it can't rely on this.props
-    li Objects returned will be shared across instances, not copied
+    li This invoked before any instances are created and therefore it can't rely on this.props
 
 section
   pre.
     <code class="javascript" data-trim>
-    getDefaultProps: function() {
-      return {
-        maxVisible: 5
-      };
+    class Foo extends React.Component {
+        render() {
+            return (&lt;div>{this.props.foo}&lt;/div>)
+        }
     }
-
+    Foo.defaultProps = {
+        foo: ‘Foo’
+    }
     </code>
 
 section
   h2.lower propTypes: {}
   ul
     li The propTypes object allows you to validate props being passed to your components
+    li Defined in a similar matter to defaultProps
 
 section
   pre.
     <code class="javascript" data-trim>
-    propTypes: {
-      max:        React.PropTypes.number.isRequired,
-      maxVisible: React.PropTypes.number,
-      onChange:   React.PropTypes.func.isRequired
+    import PropTypes from ‘prop-types’
+    ...
+    Foo.propTypes: {
+       max:        PropTypes.number.isRequired,
+       maxVisible: PropTypes.number,
+       onChange:   PropTypes.func.isRequired
     }
-
-    </code>
-
-section
-  h2.lower mixins: []
-  ul
-    li The mixins array allows you to use mixins to share behavior among multiple components
-
-section
-  pre.
-    <code class="javascript" data-trim>
-    mixins: [
-      Router.Navigation,
-      Router.State,
-      EmployeeMixin
-    ]
-
-    </code>
-
-section
-  h2.lower statics: {}
-  ul
-    li The statics object allows you to define static methods that can be called on the component class
-    li Methods defined within this block are static, meaning you can run them before any component instances are created
-
-section
-  h2.lower statics: {}
-  ul
-    li Methods do not have access to the props or state of your components
-    li If you want to check the value of props in a static method, have the caller pass in the props as an argument to the static method
-
-section
-  pre.
-    <code class="javascript" data-trim>
-    statics: {
-      willTransitionTo: function (transition, params) {
-        return LoginStore.requireAuthenticatedUser(transition);
-      }
-    }
-
-    </code>
-
-section
-  h2.lower displayName: ""
-  ul
-    li Used in debugging messages
-    li JSX sets this value automatically
-
-section
-  pre.
-    <code class="javascript" data-trim>
-    displayName: 'super-cool-thingy'
 
     </code>
 
@@ -193,26 +139,12 @@ section
 section
   pre.
     <code class="javascript" data-trim>
-    render : function () {
+    render() {
       return (
         &lt;div className="ui message"&gt;
           &lt;div className="ui huge header"&gt;{this.state.greeting}&lt;/div&gt;
           &lt;div className="ui large header"&gt;{this.props.friend}&lt;/div&gt;
         &lt;/div&gt;
-      );
-    }
-
-    </code>
-
-section
-  pre.
-    <code class="javascript" data-trim>
-    render : function () {
-      return (
-        React.createElement("div", {className: "ui message"},
-          React.createElement("div", {className: "ui huge header"}, this.state.greeting),
-          React.createElement("div", {className: "ui large header"}, this.props.friend)
-        )
       );
     }
 
@@ -231,31 +163,6 @@ section
     li className = class
 
 section
-  h2.lower React.render()
-  ul
-    li Renders a ReactElement into the DOM of the supplied container
-    li Returns a reference to the component
-    li Replaces the contents of the container node you pass in
-
-section
-  h2.lower React.render()
-  ul
-    li If the ReactElement was previously rendered into container, this method will perform an update on it
-    li This update will mutate the DOM as necessary to reflect the latest React component
-
-section
-  h2.lower React.render()
-  ul
-    li If the optional callback is provided, it will be executed after the component is rendered or updated
-
-section
-  pre.
-    <code class="javascript" data-trim>
-    React.render(&lt;Hello friend="WoooHooo"/&gt;, document.getElementById('app'));
-
-    </code>
-
-section
   h2 Data: State vs. Props
 
 section
@@ -272,12 +179,12 @@ section
   ul
     li One exception: "Controller" components
     li They will have a state that represents the application data
-    li They pass their state as props to thier children components
+    li They pass their state as props to their children components
 
 section
   pre.
     <code class="javascript" data-trim>
-    render : function () {
+    render() {
       return (
         &lt;EmployeeForm employee={this.state.employee}
           errors={this.state.errors}
@@ -294,37 +201,49 @@ section
 
 section
   h2 Component Lifecycle
+  ul
+    li Mounting
+    li Updating
+    li Unmounting
 
 section
-  h2.lower Mounting:
-  h3.lower componentWillMount()
-  ul
-    li Invoked once, on both the client and server
-    li Invoked immediately before the initial rendering occurs
+  h2 Mounting
+  p These methods are called when an instance of a component is being created and inserted into the DOM:
+  ol
+    li constructor()
+    li componentWillMount()
+    li render()
+    li componentDidMount()
 
 section
   h3.lower componentWillMount()
   ul
+    li Invoked immediately before mounting occurs -- before render()
     li If you call setState within this method, render() will see the updated state
-    li Executed only once despite the state change
+    li Since its before render, setState won't cause a "re-render"
 
 section
-  h2.lower Mounting:
+  h3.lower render()
+
+section
   h3.lower componentDidMount()
   ul
-    li Invoked once, only on the client (not on the server)
     li Invoked immediately after the initial rendering occurs
-    li Has a DOM representation that you can access via React.findDOMNode(this)
+    li Setting state will cause "re-render"
+    li Place to integrate with other JS frameworks
+    li Place to Send AJAX requests
 
 section
-  p Examples of things that should be performed in this method:
-  ul
-    li Integration with other JavaScript frameworks
-    li Set timers using setTimeout or setInterval
-    li Send AJAX requests
+  h2 Updating:
+  p An update can be caused by changes to props or state.
+  ol
+    li componentWillReceiveProps()
+    li shouldComponentUpdate()
+    li componentWillUpdate()
+    li render()
+    li componentDidUpdate()
 
 section
-  h2.lower Updating:
   h4.lower componentWillReceiveProps(object nextProps)
   ul
     li Invoked when a component is receiving new props
@@ -339,7 +258,6 @@ section
     li Calling this.setState() within this function will not trigger an additional render
 
 section
-  h2.lower Updating:
   h4.lower shouldComponentUpdate(object nextProps, object nextState)
   ul
     li Invoked before rendering when new props or state are being received
@@ -353,7 +271,6 @@ section
     li componentWillUpdate() and componentDidUpdate() will not be called
 
 section
-  h2.lower Updating:
   h4.lower componentWillUpdate(object nextProps, object nextState)
   ul
     li Invoked immediately before rendering when new props or state are being received
@@ -366,11 +283,14 @@ section
     li If you need to update state in response to a prop change, use componentWillReceiveProps instead
 
 section
-  h2.lower Updating:
+  h4.lower render()
+
+section
   h4.lower componentDidUpdate(object prevProps, object prevState)
   ul
     li Invoked immediately after the component's updates are flushed to the DOM
     li Not called for the initial render
+    li Setting state will cause "re-render"
     li Operate on the DOM when the component has been updated
 
 section
@@ -384,23 +304,18 @@ section
     li Cleaning up any DOM elements that were created in componentDidMount()
 
 section
-  h2.lower TestUtils
+  h2.lower ReactTestUtils
   ul
     li Utilities to make it easy to test React components
 
 section
   pre.
     <code class="javascript" data-trim>
-    var React, TestUtils;
-    beforeEach(function () {
-      React = require('react/addons');
-      TestUtils = React.addons.TestUtils;
-    });
-
+    import ReactTestUtils from 'react-dom/test-utils';
     </code>
 
 section
-  h4.lower Simulate.{eventName}(DOMElement element, object eventData)
+  h4.lower Simulate.{eventName}(element, [eventData])
   ul
     li Simulate an event dispatch on a DOM node with optional event data
     li Possibly the single most useful utility in ReactTestUtils
@@ -409,23 +324,20 @@ section
 section
   pre.
     <code class="javascript" data-trim>
-    var button = TestUtils.findRenderedDOMComponentWithTag(cancel, 'button');
-    TestUtils.Simulate.click(button);
-
+    // &lt;button ref="button">...&lt;/button>
+    const node = this.refs.button;
+    ReactTestUtils.Simulate.click(node);
     </code>
 
 section
   h4.lower renderIntoDocument(ReactComponent instance)
   ul
     li Render a component into a detached DOM node in the document
-    li This function requires a DOM
-    li It's the testing version of React.render()
 
 section
   pre.
     <code class="javascript" data-trim>
-    EmployeeForm = require('./employee.form');
-    element = TestUtils.renderIntoDocument(
+    element = ReactTestUtils.renderIntoDocument(
       &lt;EmployeeForm employee={employee}
         errors={errors}
         validate={spies.validate}
@@ -463,7 +375,7 @@ section
   pre.
     <code class="javascript" data-trim>
     it('should instantiate the EmployeeForm', function () {
-      expect(TestUtils.isCompositeComponent(element)).to.be.true;
+      expect(ReactTestUtils.isCompositeComponent(element)).toBe(true);
     });
 
     </code>
@@ -490,7 +402,10 @@ section
 section
   pre.
     <code class="javascript" data-trim>
-    var cancel = TestUtils.findRenderedComponentWithClass(element, 'cancel-btn');
+    var cancel = ReactTestUtils.findRenderedComponentWithClass(
+      element,
+      'cancel-btn'
+    );
 
     </code>
 
@@ -508,7 +423,10 @@ section
 section
   pre.
     <code class="javascript" data-trim>
-    var cancel = TestUtils.findRenderedComponentWithType(element, CancelButton);
+    var cancel = ReactTestUtils.findRenderedComponentWithType(
+      element,
+      CancelButton
+    );
 
     </code>
 
@@ -526,7 +444,43 @@ section
 section
   pre.
     <code class="javascript" data-trim>
-    var button = TestUtils.findRenderedDOMComponentWithTag(cancel, 'button');
+    var button = ReactTestUtils.findRenderedDOMComponentWithTag(
+      cancel,
+      'button'
+    );
+
+    </code>
+
+section
+  h2 react-test-renderer
+  p Renderers for testing components without a DOM
+  p
+    a(href="https://www.npmjs.com/package/react-test-renderer") npm react-test-renderer
+
+section
+  h4.plain  ReactTestRenderer
+  p Renders components to plain JS objects for testing
+  pre.
+    <code class="javascript" data-no-escape>
+      const component = ReactTestRenderer.create(
+        &lt;Link page="https://xkcd.com/"&gt;xkcd&lt;Link&gt;
+      );
+
+      expect(component.props.href).to.equal('https://xkcd.com/');
+      expect(component.children[0]).to.equal('xkcd');
+
+    </code>
+
+section
+  h4.plain  ReactShallowRenderer
+  p Renders components to plain JS objects for testing w/o children
+  pre.
+    <code class="javascript" data-no-escape>
+      const renderer = new ReactShallowRenderer()
+      const output = renderer.render( &lt;App/&gt; ).getRenderOutput();
+
+      let stringVal = JSON.stringify(output);
+      expect(stringVal).toMatch(/employees\/:user_id\/timesheets/);
 
     </code>
 

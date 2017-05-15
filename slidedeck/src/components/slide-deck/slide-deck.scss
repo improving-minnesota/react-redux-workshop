@@ -6,15 +6,30 @@
   left: 0;
 }
 
-.reveal .component {
-  font-family: monospace;
-  text-align: center;
-  box-shadow: initial;
+.reveal {
 
-  &.red {
-    color: #c82506;
+  section {
+    .wide {
+      width: 100%;
+    }
   }
+
+  .monospace {
+    font-family: monospace;
+  }
+
+  .component {
+    @extend .monospace;
+    text-align: center;
+    box-shadow: initial;
+
+    &.red {
+      color: #c82506;
+    }
+  }
+
 }
+
 
 pre code {
   position: absolute;
