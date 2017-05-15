@@ -193,124 +193,53 @@ If you haven't already done so,
 ```
 - What is ```this.validateAll()``` doing?
 
-TODO: the rest
 
-&nbsp;
-## Add the Form into an Employee Detail Component
+## Add the Form into an Timesheet Detail Component
 
 - Now let's actually use the form we just built.
-
-- Before we get started, an **EmployeeMixin** with basic form validation has been implemented for you.
-  - Open **client/src/mixins/employee.mixin.js** and look at everything in it:
-    - Attaching the **EmployeeStore** to the component.
-    - `validate()` `validateAll()` `hasErrors()` and `toggleAdmin()` method implementations.
-    - Basic validation for our form
-
-
-- Open **client/src/components/employee.detail.jsx**
-
-- Add the following mixins:
-  - **Router.Navigation** gives us access to the `transitionTo()` method.
-  - **Router.State** give us access to the `getParams()` method
-  - **EmployeeMixin** is the mixin that provides basic validation for our employee
-
-
+- Open **client/src/components/timesheets/TimesheetsDetail.js**
+- Take a look at that cool ```constructor``` method - how is it retrieving the timesheet to be viewed?
+- We have two jobs to complete here!
+  1. Implement the dang ```render``` method
+  2. Implement the dang ```handleSave``` method
+- Here's what your ```render``` method should look like:
 ```javascript
-mixins: [
-  Router.Navigation,
-  Router.State,
-  EmployeeMixin
-],
-```
-
-- Next, let's provide a default state for the component:
-
-```javascript
-getInitialState: function () {
-  return {
-    saveText: 'Update',
-    employee: {},
-    errors: {}
-  };
-},
-```
-
-- The next step is hook our component up to our Flux architecture.
-
-```javascript
-onChange: function () {
-  this.setState(this.store.getState());
-},
-
-componentWillMount: function () {
-  this.store.addChangeListener(this.onChange);
-},
-
-componentWillUnmount: function () {
-  this.store.removeChangeListener(this.onChange);
-},
-```
-
-- If the user refreshes the page or navigates directly to the employee edit route, we need to get the employee from our REST service.
-
-- We'll use the `componentDidMount` lifecycle event to make this call so the store's listeners have been registered.
-
-```javascript
-componentDidMount: function () {
-  this.get();
-},
-
-get: function () {
-  // get the employee from the store
-  var employee = this.store.getState().employee;
-
-  // if there isn't an employee in the store
-  if (_.isEmpty(employee)) {
-
-    // get the id from the url for this route and fire the action
-    var employeeId = this.getParams()._id;
-    EmployeeActions.get(employeeId);
+render() {
+    return (
+      <Grid>
+        <Row>
+          <PageHeader>Timesheet Detail</PageHeader>
+        </Row>
+        <Row>
+          <TimesheetForm timesheet={this.props.timesheet} actions={this.props.actions} handleSave={this.handleSave}/>
+        </Row>
+        { //Show timeunits after the getTimesheet() call finishes loading the timesheet
+          this.props.timesheet && this.props.timesheet._id &&
+          <Row>
+            <Timeunits timesheet={this.props.timesheet} actions={this.props.actions}/>
+          </Row>
+        }
+      </Grid>
+    );
   }
-  else {
-    // manually call the onChange method so that the component knows to update itself
-    this.onChange();
-  }
-},
 ```
-
-- We need to provide the **EmployeeForm** with a callback to call when the save button is clicked.
-  - We'll first validate the entire form to make sure none of the inputs have validation errors.
-  - If there aren't any errors, we'll fire the update action and transition back to the `employees` route.
-
+- Things to notice:
+  - We're passing ```this.handleSave``` down to ```TimesheetForm```, so when the user attempts to save, we'll end up back here with the ability to hook up to Redux
+  - We're only displaying a timesheet's timeunits once it's been retrieved.  More on time units later!
+- Here's what your ```handleSave``` method should look like:
 ```javascript
-saveEmployee: function (event) {
-  event.preventDefault();
-  this.validateAll();
-
-  if (!this.hasErrors()) {
-    EmployeeActions.update(this.state.employee);
-    this.transitionTo('employees');
+  handleSave(timesheet){
+    this.props.actions.updateTimesheet(timesheet).then(() => {
+      this.props.history.push(`/employees/all/timesheets`);
+    });
   }
-},
-
 ```
-
-- Finally, we just need to use the form and pass it all of the props it is expecting in our `render()` method.
-
-```javascript
-render : function () {
-  return (
-    <EmployeeForm employee={this.state.employee}
-      errors={this.state.errors}
-      validateAll={this.validateAll}
-      hasErrors={this.hasErrors}
-      saveText={this.state.saveText}
-      onSave={this.saveEmployee}
-      validate={this.validate}
-      toggleAdmin={this.toggleAdmin} />
-  );
-}
-```
+- Things to notice:
+  - This looks great
+  - After the ```updateTimesheet``` action completes, we're just sending the user back to the timsheet list
+  
+#### Just one more thing before you can use the ```TimesheetsDetail``` component
+- Just kidding!  You should be able to click a timesheet to view its details, and save.
 
 &nbsp;
 ## Test the Employee Detail Component
