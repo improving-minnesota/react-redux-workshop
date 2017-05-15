@@ -11,7 +11,7 @@ git pull
 
 If not running, start the `npm start` task.  Otherwise, restart the running tasks to pick up any changes in the lab-05-form-validation-start branch.
 
-&nbsp;
+
 ### Check it out!
 
 - Let's look at the progress that has already been completed on the application by the rest of the team.

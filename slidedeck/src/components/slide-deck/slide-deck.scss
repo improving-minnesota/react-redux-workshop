@@ -1,0 +1,35 @@
+#slide-root {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.reveal {
+
+  section {
+    .wide {
+      width: 100%;
+    }
+  }
+
+  .monospace {
+    font-family: monospace;
+  }
+
+  .component {
+    @extend .monospace;
+    text-align: center;
+    box-shadow: initial;
+  }
+
+}
+
+
+pre code {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+}

@@ -1,310 +1,194 @@
 section
   h1.lower react-router
+  p Declarative routing for React via components
+  p
+    a(href="https://github.com/ReactTraining/react-router") github react-router
 
 section
   ul
-    li Library to help us track routes with states of our application
+    li Helps us track routes with states of our application
+    li Maintains the browser history within the app
     li Able to nest routes and their handlers
     li Routes are represented as React Components
+    li Provides route info to components via props
 
 section
-  h2.lower Router.Route
-  h2.lower &lt;Route /&gt;
+  h2 react-router component's we'll be covering...
 
 section
-  h2.plain Route props
+  h2.lower.component &lt;BrowserRouter&gt;
+  p A type of &lt;Router&gt; that uses the HTML5 history API to keep your UI in sync with the URL.<br/><br/>
+  p One of 5 different types of Routers available in the react-router library.
+
 
 section
-  h2.lower name
-  ul
-    li The unique name of the route
-    li Used in the Link component and the router's transition methods
+  h2.lower.component &lt;Route&gt;
+  p The core path routing component. Renders some UI when the location matches the Route path.
 
 section
-  h2.lower path
-  ul
-    li Used in the URL
-    li If left undefined, defined by the name
-    li If there is no name, will default to '/'
-
-section
-  h2.lower handler
-  ul
-    li The component to be rendered when the route is active
-
-section
-  h2.lower children
-  ul
-    li Routes can be nested
-    li When a child route path matches, the parent route is also activated
-
-section
-  h2.lower Router.Redirect
-  h3 &lt;Redirect /&gt;
-
-section
-  h2.plain Redirect props
-
-section
-  h2.lower from
-  ul
-    li Path you want to redirect from, including dynamic segments
-    li Defaults to * so you can redirect anything not matched to somewhere else
-
-section
-  h2.lower to
-  ul
-    li Name of the route you want to redirect to
-
-section
-  h2.lower params
-  ul
-    li By default, the parameters will just pass through to the new route
-    li You can specify them if you need to
-
-section
-  h2.lower query
-  ul
-    li By default, the query parameters will just pass through to the new route
-    li You can specify them if you need to
-
-section
-  pre.
-    <code class="javascript" data-trim>
-    var Projects = require('./components/projects/projects');
-    var Employees = require('./components/employees/employees');
-    var Timesheets = require('./components/timesheets/timesheets');
-
-    (&lt;Route name='app' path="/" handler={App}&gt;
-
-      &lt;Route name='projects'   path='/projects'  handler={Projects} /&gt;
-      &lt;Route name='employees'  path='/employees' handler={Employees} /&gt;
-      &lt;Route name='timesheets' path='/employees/:user_id/timesheets' handler={Timesheets} /&gt;
-
-      &lt;Redirect to="employees" /&gt;
-    &lt;/Route&gt;)
+  h3.plain &lt;Route&gt; config properties we'll cover
+  pre(style="width:100%").
+    <code class="html" data-trim data-noescape>
+      &lt;Route <mark>exact</mark> path="/employees" component={Employees}/&gt;
+      &lt;Route <mark>path</mark>='/employees/detail/:_id' component={EmployeesDetail} /&gt;
+      &lt;Route path='/employees/create' <mark>component</mark>={EmployeesCreate} /&gt;
 
     </code>
 
 section
-  h2.lower Router.Link
-  h3.lower &lt;Link /&gt;
+  h3.lower path
+  ul
+    li The pattern used to match this route against the URL
+    li Based on Express-style path strings
+      ul
+        li e.g. <span class="component" style="color:#c82506">/employees/:id</span>
+        li npm
+          a(href="https://www.npmjs.com/package/path-to-regexp")  path-to-regexp
+    li If multiple routes match, each will get rendered
+    li If path not defined, the route will always render
+
+section
+  h3.lower component
+  ul
+    li The react component to be rendered when the route is active
+    li Alternative render properties (not covered today):
+      ul
+        li <span class="component" style="color:#c82506">render</span> - quick inline function rendering
+        li <span class="component" style="color:#c82506">children</span> - for complex rendering logic needs
+
+section
+  h3.lower exact & strict
+  ul
+    li.
+      <span class="component" style="color:#c82506">exact</span> - only matches if an
+      <span style="font-style:italic">exact</span> match
+    li.
+      <span class="component" style="color:#c82506">strict</span> - requires the trailing slash
+      <span style="font-style:italic">exact</span> match
+    li.
+      If <span class="component">exact</span> is omitted, a route path of <span class="component">/employees</span>
+      will match a URL of <span class="component">/employees/anything</span>
+    li.
+      Check the <a href="https://reacttraining.com/react-router/web/api/Route/exact-bool">docs</a> for more info
+
+section
+  h2.lower.component &lt;Redirect&gt;
+  p Navigates to a new location. <br/><br/>
+  pre.
+    <code class="html" data-trim data-noescape>
+      &lt;Redirect from='/employee-list' to='/employees'/&gt;
+
+    </code>
+
+section
+  h2.lower.component &lt;Switch&gt;
+  p Renders the first child Route/Redirect that matches.<br/><br/>
+  pre(style="width:100%").
+    <code class="html" data-trim data-noescape>
+      &lt;Switch&gt;
+        &lt;Redirect from='/employee-list' to='/employees'/&gt;
+
+        &lt;Route path='/employees/details/:_id' component={EmployeeDetail} /&gt;
+
+        &lt;Route path="/employees" component={Employees}/&gt;
+
+        {/* Unreachable: inside Switch && /employees is not exact */}
+        &lt;Route path="/employees/depts" component={EmployeesByDept}/&gt;
+
+      &lt;/Switch&gt;
+
+    </code>
+
+section
+  h2.lower.component &lt;Link&gt;
+  p Declarative navigation integrated with the router.
 
 section
   ul
     li Renders an &lt;a&gt; tag
     li Links to a route in the application
-    li If you change the path of your route, you don't have to change your links as well
+    li If you change the path of your route, <br/>you don't have to change your links as well
+    li.
+      <span class="component" style="color:#c82506">&lt;NavLink&gt;</span> is a specialized version of &lt;Link&gt;
+    ul
+      li Knows when the route it links to is active
+      li Dynamic
+        span.component  activeClassName/activeStyle
+      li Has exact and strict params like a Route
 
 section
-  ul
-    li Knows when the route it links to is active
-    li Automatically applies its activeClassName and/or activeStyle
-
-section
-  pre.
+  h3.lower &lt;Link&gt; Examples
+  pre(style="width:100%").
     <code class="javascript" data-trim>
-    (&lt;Link className={projectsClasses} to="projects"&gt;Projects&lt;/Link&gt;
-    &lt;Link className={employeesClasses} to="employees"&gt;Employees&lt;/Link&gt;
-    &lt;Link className={timesheetsClasses} to="timesheets"
-      params={{user_id: this.state.user._id}}&gt;Timesheets&lt;/Link&gt;)
+    &lt;Link className={projectsClasses} to="projects"&gt;Projects&lt;/Link&gt;
+    &lt;Link to="{`${employees}/${id}`}" replace &gt;Employees&lt;/Link&gt;
+    &lt;Link className={timesheetsClasses} to={{
+        pathname: '/timesheets',
+        search: '?sort=startDate',
+        hash: '#id-12345',
+        state: { highlightUser: this.state.user._id }
+      }} &gt;Timesheets&lt;/Link&gt;
 
     </code>
 
 section
-  h2.lower Router.RouteHandler
-  h3 &lt;RouteHandler /&gt;
+  h2 Using react-router in your components
 
 section
+  h2.lower Route Props
+  p Components receive the following props from Router
+  ul.monospace
+    li match
+    li location
+    li history
+
+section
+  h3.lower match
+  p Object containing information about how the Route matched the URL.
   ul
-    li Renders the handler of the route
-    li Entry point in the DOM for your handler component
+    li
+      <span class="component" style="color:#c82506">path</span> - Path pattern on the Route that matched
+      <br/>
+      span(style="margin-left:1em; color:#656565;") e.g.&nbsp;
+        span.component(style="font-size:0.95em;") /employee/:id
+    li
+      <span class="component" style="color:#c82506">url</span> - URL segment that was matched
+      <br/>
+      span(style="margin-left:1em;color:#656565;") e.g.&nbsp;
+        span.component(style="font-size:0.95em;") /employee/2
+    li
+      <span class="component" style="color:#c82506">params</span> - key/values for the dynamic parts of URL
+      <br/>
+      span(style="margin-left:1em;color:#656565;")
+        span.component(style="font-size:0.95em;") /employee/2 =>/employee/:id => {id:2}
+    li
+      <span class="component" style="color:#c82506">isExact</span> - true if the entire URL was matched
 
 section
-  h3 Static Lifecycle Methods
-  ul
-    li.highlight willTransitionTo(transition, params, query, callback)
-    ul
-      li Called when a handler is about to render
-    li.highlight willTransitionFrom(transition, component, callback)
-    ul
-      li Called when an active route is being transitioned out
-
-section
-  h3.lower Router.run()
-  ul
-    li The main API for the react router
-    li It runs your routes, matches them against a location, and calls back with the next state for you to render
-
-section
+  h3.lower location
+  p Represents where the app is, was or will be.
   pre.
     <code class="javascript" data-trim>
-    Router.run(routes, function (Handler, state) {
-      React.render(&lt;Handler /&gt;, document.getElementById('app'));
-    });
-
-    </code>
-
-section
-  h1 Router Mixins
-
-section
-  h2.lower Router.State
-
-section
-  h3.lower getPath()
-  ul
-    li Returns the current URL path, including the query string
-
-section
-  h3.lower getPathname()
-  ul
-    li Returns the current URL path without the query string
-
-section
-  h3.lower getParams()
-  ul
-    li Returns a hash of the currently active URL params
-
-section
-  h3.lower getQuery()
-  ul
-    li Returns a hash of the currently active query params
-
-section
-  h3.lower isActive(routeName, params, query)
-  ul
-    li Returns true if a route, params, and query are active, false otherwise
-
-section
-  h3.lower getRoutes()
-  ul
-    li Returns an array of the currently active routes, in nesting order
-
-section
-  h3.lower Router.Navigation
-
-section
-  h4.lower transitionTo(routeNameOrPath, [params[, query]])
-  ul
-    li Programmatically transition to a new route
-
-section
-  h4.lower replaceWith(routeNameOrPath, [params[, query]])
-  ul
-    li Replace current route with a new route
-    li Does not add an entry to the browser history
-
-section
-  h3.lower goBack()
-  ul
-    li Go to the last route.
-    li Removes the most recent entry from the browser history
-    li Returns true unless it's the first entry in the app history
-
-section
-  pre.
-    <code class="javascript" data-trim>
-    if (!this.goBack()) {
-      this.transitionTo('/otherpage')
+    {
+      key: 'd34cf',
+      pathname: '/employees'
+      search: '?sortBy=totalHours',
+      hash: '#id-1234',
+      state: {
+        [userDefined]: true
+      }
     }
 
     </code>
 
 section
-  h4.lower makePath(routeName, params, query)
-  ul
-    li Creates a URL path to a route
+  p Where we are
+  p.component this.props.location
+  p Where we were
+  p.component this.props.history...
+  p Where we are going
+  p.component &lt;Link to={location}/&gt;
 
-section
-  h4.lower makeHref(routeName, params, query)
-  ul
-    li Creates an href to a route
-    li Used with State when you need to build components similar to Link
-
-section
-  h1 React (cont.)
-
-section
-  h2 JSX Event Handlers
-  h3.lower SyntheticEvent
-
-section
-  ul
-    li Event handlers are passed instances of SyntheticEvent.
-    li Cross-browser wrapper around the browser's native event.
-    li It has the same interface as the browser's native event.
-    li.highlight stopPropagation() and preventDefault()
-
-section
-  h2 Supported Events
-
-section
-  h2 Clipboard Events
-  ul
-    li onCopy onCut onPaste
-
-section
-  h2 Keyboard Events
-  ul
-    li onKeyDown onKeyPress onKeyUp
-
-section
-  h2 Form Events
-  ul
-    li onChange onInput onSubmit
-
-section
-  h2 Mouse Events
-  ul
-    li onClick onContextMenu onDoubleClick
-    li onDrag onDragEnd onDragEnter onDragExit
-    li onDragLeave onDragOver onDragStart onDrop
-    li onMouseDown onMouseEnter onMouseLeave
-    li onMouseMove onMouseOut onMouseOver onMouseUp
-
-section
-  h2 Touch events
-  ul
-    li Enabled by calling: React.initializeTouchEvents(true) before rendering any component
-    li onTouchCancel onTouchEnd onTouchMove onTouchStart
-
-section
-  h2 UI Events
-  ul
-    li onScroll
-
-section
-  h2 Wheel Events
-  ul
-    li onWheel
-
-section
-  ul
-    li Each of these events are normalized for every supported browser
-    li Behave the same across browsers
-    li Have the same properties
-    li Check the docs for each event's properties
-
-section
-  h2 The Classnames Library
-
-section
-  ul
-    li Third party utility to make it easier to manipulate CSS classes in your React components
-
-section
-  pre.
-    <code class="javascript" data-trim>
-    var classNames = require('classnames');
-    // In our Component
-    render: function () {
-      var rowClasses = classNames('repeated-item fadeable-row', {
-        'faded': employee.deleted
-      });
-    }
-
-    </code>
 
 section
   h3 Lab Prep
