@@ -88,7 +88,7 @@ export class SlideDeck extends React.Component<SlideDeckProps, SlideDeckState> {
           }
           <section data-state="title">
             <h1>Thanks!</h1>
-            <h2>Any questions?</h2>
+            <h3>Follow us! @objectpartners</h3>
           </section>
         </div>
       </div>
