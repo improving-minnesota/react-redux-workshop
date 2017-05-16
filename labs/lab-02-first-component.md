@@ -270,15 +270,11 @@ Try creating a Snapshot test inside Hello.test.js, or:
 <details><summary>Click here for an example Hello.test.js test</summary><p>
 
 ```
-    it('should render to match the snapshot', function () {
+  it('should render to match the snapshot', function () {
+    const component = shallow(<Hello friend="Luke"/>);
 
-        const component = renderer.create(
-            <Hello friend="Luke"/>
-        );
-
-        const json = component.toJSON();
-        expect(json).toMatchSnapshot();
-    });
+    expect(component).toMatchSnapshot();
+  });
 ```
 
 </p></details>
