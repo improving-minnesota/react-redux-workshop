@@ -191,18 +191,17 @@ describe('Hello World:', function () {
 
 });
 ```
-
-- If it's not already running, open your terminal and run the test (`npm test`) command.
-
-![](img/lab02/npm.test.png)
-
-- Did your test pass?
-
 - What are we testing here?:
   - We test that the component successfully renders (if you never test anything else, at least test this)
   - We test that the initial state renders ('Howdy')
   - We test that default props work ('Partner')
   - and that passed-in props work ('Fred')
+  
+- If it's not already running, open your terminal and run the test (`npm test`) command.
+
+![](img/lab02/npm.test.png)
+
+- Did your test pass?
 
 - There are many more assertions that are possible!
   - Test for a css classname
