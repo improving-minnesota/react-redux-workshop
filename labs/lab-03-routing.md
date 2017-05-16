@@ -254,11 +254,10 @@ If you haven't already done so,
 
 ```javascript
   render() {
-    let key = 1;
-
+  
     let employeeRows = this.props.employees.map(function (employee) {
       return (
-        <EmployeeRow employee={employee} key={++key} />
+        <EmployeeRow employee={employee} key={employee._id} />
       );
     });
 
