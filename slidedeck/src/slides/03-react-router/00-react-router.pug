@@ -1,16 +1,41 @@
 section
+  h1 Routing
+
+section
+  p Since our backend doesn't serve different "pages", how do we handle different URLs?
+  ul
+    li.monospace /
+    li.monospace /login
+    li.monospace /secure/employees
+    li.monospace /secure/timesheets
+
+
+- var routeTransition = "<span style='color:#999'>=></span>";
+section
+  p Modern JS frameworks<br/>(Angular, Ember, React, Vue.js)<br/>handle this client-side via Routing
+  p.
+    These all use the browser's <a href='https://developer.mozilla.org/en-US/docs/Web/API/History'>History API</a>
+    <br/>to transition the application
+  ul(style="list-style-type:none")
+    li.monospace
+      p /#inbox !{routeTransition} /#sent <br/>
+    li.monospace
+      p /amegala !{routeTransition} /objectpartners
+    li.monospace
+      p /moments?cat=1 !{routeTransition} /moments?cat=2
+
+section
   h1.lower react-router
   p Declarative routing for React via components
   p
     a(href="https://github.com/ReactTraining/react-router") github react-router
-
 section
   ul
     li Helps us track routes with states of our application
     li Maintains the browser history within the app
-    li Able to nest routes and their handlers
+    li Able to trigger multiple routes
     li Routes are represented as React Components
-    li Provides route info to components via props
+    li Routes provides info to components via props
 
 section
   h2 react-router component's we'll be covering...
@@ -38,13 +63,16 @@ section
 section
   h3.lower path
   ul
-    li The pattern used to match this route against the URL
+    li Pattern used to match this route against the URL
     li Based on Express-style path strings
       ul
         li e.g. <span class="component" style="color:#c82506">/employees/:id</span>
         li npm
           a(href="https://www.npmjs.com/package/path-to-regexp")  path-to-regexp
-    li If multiple routes match, each will get rendered
+    li.
+      If multiple routes match, each will get rendered<br/>
+      &nbsp;(unless defined inside a <span class='monospace'>switch</span>)
+
     li If path not defined, the route will always render
 
 section
@@ -119,9 +147,9 @@ section
 section
   h3.lower &lt;Link&gt; Examples
   pre(style="width:100%").
-    <code class="javascript" data-trim>
+    <code class="html" data-trim>
     &lt;Link className={projectsClasses} to="projects"&gt;Projects&lt;/Link&gt;
-    &lt;Link to="{`${employees}/${id}`}" replace &gt;Employees&lt;/Link&gt;
+    &lt;Link to="{`${employees}/${id}`}" replace=true &gt;Employees&lt;/Link&gt;
     &lt;Link className={timesheetsClasses} to={{
         pathname: '/timesheets',
         search: '?sort=startDate',
