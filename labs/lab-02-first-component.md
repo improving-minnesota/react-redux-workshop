@@ -156,7 +156,7 @@ describe('Hello World:', function () {
     expect(component).not.toIncludeText('Partner');
   });
 ```
-> What is happening here? We use the [Enzyme](http://airbnb.io/enzyme/index.html) [shallow renderer](http://airbnb.io/enzyme/docs/api/shallow.html) to render the component into a sandboxed "document" so that we can perform inquiries. Notice that we are using `JSX` in the `shallow()` method. Shallow testing is useful to isolate our test by not rendering any child components. For more advanced "integration" style tests you would use `mount()` for [full DOM rendering](http://airbnb.io/enzyme/docs/api/mount.html)
+> What is happening here? We use the [shallow renderer](http://airbnb.io/enzyme/docs/api/shallow.html) from [Enzyme](http://airbnb.io/enzyme/index.html) to render the component into a sandboxed "document" so that we can perform inquiries. Notice that we are using `JSX` in the `shallow()` method. Shallow testing is useful to isolate our test by not rendering any child components. For more advanced "integration" style tests you would use `mount()` for [full DOM rendering](http://airbnb.io/enzyme/docs/api/mount.html)
 
 - When finished, your suite should look similar to the one below:
 
