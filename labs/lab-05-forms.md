@@ -471,7 +471,7 @@ constructor(props) {
   this.handleSave = this.handleSave.bind(this);
 }
 ```
-- This should all look pretty familiar, although you might be asking yourself... why are we retrieving all the employees?  It's because the timesheet will have a select field whose optioons are all the existing employees!
+- This should all look pretty familiar, although you might be asking yourself... why are we retrieving all the employees?  It's because the timesheet will have a select field whose options are all the existing employees!
 - Next, let's implement our ```handleSave``` method:
 
 ```javascript
