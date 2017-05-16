@@ -366,22 +366,20 @@ import {PageHeader, Grid, Row} from 'react-bootstrap';
 
 ```javascript
   it('should instantiate the Employee Component', function () {
-      const component = renderer.create(
+      const component = shallow(
               <Employees/>
       );
 
-      const stringVal = JSON.stringify(component);
-      expect(stringVal).toMatch(/Employees/);
+      expect(component).toHaveLength(1);
 
   });
 
   it('should contain a correct employee', function () {
-    const component = renderer.create(
+    const component = mount(
         <Employees/>
     );
 
-    const stringVal = JSON.stringify(component);
-    expect(stringVal).toMatch(/admin@mixtape.com/);
+    expect(component).toIncludeText('admin@mixtape.com');
   });
 ```
 
