@@ -290,4 +290,7 @@ Try creating a Snapshot test inside Hello.test.js, or:
 - Update the snapshot to match the updated test
 - re-run the tests and see that they are all passing
 
+## Extra Extra Credit
+Modify the App.test.js file to test for the rendering of the `Hello` component that we added to App.js.
+
 Don't forget to `git add .` and `git commit -m "extra credit"` when you are done
