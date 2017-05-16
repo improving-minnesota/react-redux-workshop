@@ -295,4 +295,4 @@ Try creating a Snapshot test inside Hello.test.js, or:
 ## Extra Extra Credit
 Modify the App.test.js file to test for the rendering of the `Hello` component that we added to App.js.
 
-Don't forget to `git add .` and `git commit -m "extra credit"` when you are done
+Don't forget to `git add .` and `git commit -m "extra extra credit"` when you are done
