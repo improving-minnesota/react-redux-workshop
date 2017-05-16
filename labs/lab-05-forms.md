@@ -11,7 +11,7 @@ git pull
 
 If not running, start the `npm start` task.  Otherwise, restart the running tasks to pick up any changes in the lab-05-form-validation-start branch.
 
-
+&nbsp;
 ### Check it out!
 
 - Let's look at the progress that has already been completed on the application by the rest of the team.
@@ -38,20 +38,225 @@ If not running, start the `npm start` task.  Otherwise, restart the running task
 
 > Take the time to check out the path declarations and how they are adding route params that are dynamically replaced.
 
-## Run the application and see your work.
 
-If you haven't already done so,
-- In a terminal window run: `npm start` to fire off the build.
-- Navigate to [http://localhost:3000](http://localhost:3000) in your favorite browser.
-- What happens when you try to edit a timesheet?
-
+&nbsp;
 ### Add Edit Employee Functionality
+
+- Now let's set up a way to edit an employee.
+
+&nbsp;
+###### Before we get started, take the time to look at the custom form components already implemented for us.
+
+- The first component we need is a form to contain all of our employee's properties.
+- Open **/src/components/employees/EmployeeForm.js**.
+
+- Let's review the ```props``` of this component:
+  - employee : the employee we will be editing
+  - handleSave: the callback to call when the user submits the form
+  - history: provided by ```react-router```, this will allow the component to manipulate app's route
+
+- Next we need to act when the user clicks the cancel or save buttons.
+- First, add both buttons to the ```render()``` method of the EmployeeForm - these should be the final child elements of the ```<form>```.
+
+```javascript
+
+<Button bsStyle="success" onClick={this.handleSave} disabled={!this.validateAll()}> Save </Button>
+<LinkContainer to="/employees">
+  <Button bsStyle="danger"> Cancel </Button>
+</LinkContainer>
+
+```
+
+- LinkContainer is a component that will allow us to easily reroute when clicked.
+- The save button will call ```this.handleSave```, which is the next function we should define.
+- Here's what ```handleSave``` should look like:
+
+```javascript
+handleSave(){
+    if(this.validateAll()) {
+      this.props.handleSave({
+        username: this.state.username.value,
+        email: this.state.email.value,
+        firstName: this.state.firstName.value,
+        lastName: this.state.lastName.value,
+        admin: this.state.admin.value,
+        _id: this.props.employee._id
+      });
+    }
+  }
+```
+
+- If all the fields in the form are valid, we're calling the function that was passed down to us as the ```handleSave``` prop.
+- We haven't defined ```validateAll()``` yet, so let's do that next.  Here's what it should look like:
+
+```javascript
+validateAll(){
+    return (
+      this.state.username.value
+      && this.state.email.value
+      && this.state.firstName.value
+      && this.state.lastName.value
+      && this.state.admin.value !== null
+    );
+  }
+```
+
+- Here, we're simply checking that we have values for all the fields.  Our other handler functions will update the state appropriately as the user changes field values.  But what if the ```EmployeeForm``` is being used to edit an existing employee?
+- We already know that this component can receive an ```employee``` in its props, what we need to do is update the state to reflect that employee's values.
+- The ```componentWillReceiveProps``` is a nice place to do that.  Here's what it should look like:
+
+```javascript
+  componentWillReceiveProps(nextProps) {
+    this.state = {
+      username: {value: nextProps.employee.username, valid: null},
+      email: {value: nextProps.employee.email, valid: null},
+      firstName: {value: nextProps.employee.firstName, valid: null},
+      lastName: {value: nextProps.employee.lastName, valid: null},
+      admin: {value: nextProps.employee.admin, valid: null}
+    };
+  }
+```
+
+- This function is called when the parent component updates this component's props.  The new props are passed as an argument, so we use that to update the component's state.  The component will then render as necessary.
+
+- Now it's time to update our `render()` method to include the fields that our coworkers forgot to include!  Looks like we don't have fields for email or firstName.  Well, if you want something done right...  Let's add them:
+
+```javascript
+<FormGroup
+      controlId="email"
+      validationState={this.getEmailValidationState()}
+    >
+      <ControlLabel>Email</ControlLabel>
+      <FormControl
+        type="email"
+        value={this.state.email.value}
+        placeholder="Enter email"
+        onChange={(e) => this.handleEmailChange(e.target.value)}
+      />
+      <FormControl.Feedback />
+    </FormGroup>
+    
+    <FormGroup
+      controlId="firstName"
+      validationState={this.getFirstNameValidationState()}
+    >
+      <ControlLabel>First Name</ControlLabel>
+      <FormControl
+        type="text"
+        value={this.state.firstName.value}
+        placeholder="Enter firstName"
+        onChange={(e) => this.handleFirstNameChange(e.target.value)}
+      />
+      <FormControl.Feedback />
+</FormGroup>
+```
+
+> Notice that we are not actually implementing the save function. That is left for the component that uses this form to implement and pass it in as a prop.
+
+&nbsp;
+## Add the Form into an Employee Detail Component
+
+- Now let's actually use the form we just built.
+- Open **/src/components/employees/EmployeesDetail.js**
+- Let's setup our proptTypes, first.   We already have the ```history``` prop, but we need to include an ```employee``` prop as well, like so:
+
+```javascript
+EmployeesDetail.propTypes = {
+  employee: PropTypes.object.isRequired,
+  history: PropTypes.object
+};
+```
+
+-  Next, let's hook up to the Redux architecture.  The only thing we'll need from the Redux state is the employee, like so:
+
+```javascript
+function mapStateToProps(state) {
+  return {
+    employee: state.employees.employee
+  }
+}
+```
+
+-  This component will also need the ability to update the Redux state through using the ```EmployeeActions```, like so:
+
+```javascript
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators(EmployeeActions, dispatch)
+  };
+}
+```
+
+- Next, let's update the render function to include the ```EmployeeForm```, and pass it all the props it needs:
+
+```javascript
+render() {
+    return (
+      <Grid>
+        <Row>
+          <PageHeader>Employees Detail</PageHeader>
+        </Row>
+        <Row>
+          <EmployeeForm employee={this.props.employee} actions={this.props.actions} handleSave={this.handleSave}/>
+        </Row>
+      </Grid>
+    );
+  }
+```
+- Notice that we're passing ```EmployeeForm``` a reference to ```this.handleSave```, which we still need to define:
+
+```javascript
+handleSave(employee){
+  this.props.actions.updateEmployee(employee).then(() => {
+    this.props.history.push('/employees');
+  });
+}
+```
+- Finally, we need to build the constructor.  Go ahead and do that now, then we'll look at each part:
+
+```javascript
+constructor(props) {
+  super(props);
+
+  const id = props.match.params._id;
+  props.actions.getEmployee(id);
+
+  this.handleSave = this.handleSave.bind(this);
+}
+```
+
+- ```super(props)``` must be the first line in any react constructor
+- Then, we grab the employee id from the URL parameter, and use it to retrieve that employee.
+- Finally, we're forcing ```this``` to always be this component when ```handleSave``` is called by the child component.
+
+&nbsp;
+## Test the Employee Detail Component
+
+- Open **/src/components/employees/EmployeesDetail**
+- Update the test labeled ```should instantiate the Employees Detail Component ```:
+
+```javascript
+  it('should instantiate the Employees Detail Component', function () {
+    const component = renderer.create(
+      <MemoryRouter><EmployeesDetail store={mockStore}/></MemoryRouter>
+    );
+
+      const stringVal = JSON.stringify(component);
+      expect(stringVal).toMatch(/Employees Detail/);
+
+  });
+```
+
+- Run the tests and verify that they pass before moving on to the next section.
+
+## Add navigation to the Employee Detail Component
 
 - We have an Employee Detail route, but there's no way to get to it yet.
 - We're going to add functionality so that when you click an **EmployeeRow**, the router will transition to the appropriate detail route for the employee.
 
 
-- Open **src/components/employees/EmployeeRow.js**
+- Open **/src/components/employees/EmployeeRow.js**
+
 - Add the `showDetail()` method to the **EmployeeRow**
 
 ```javascript
@@ -70,380 +275,15 @@ If you haven't already done so,
 ```javascript
 <tr className={rowClass} onClick={() => {this.showDetail(employee)}}>
 ```
-- Now try clicking on an employee - what happens?
-- Run the tests and verify that all of them pass before moving to the next section.
-
-### Add Edit Timesheet Functionality
-
-- Our routing is in place, and we're correctly navigating to the timesheet page, but it's empty!
-- First, let's look at how we're getting to the timesheet editor.  Open ```TimesheetRow.js``` and notice a few things.
-  - As mentioned earlier, this component is importing some functionality from ```react-router``` like so:
-    - ```import { withRouter } from 'react-router';```
-  - Then, when exporting the component, we are doing so using ```withRouter```.
-    -  ```export default withRouter(TimesheetRow);```
-  - This wraps our component in a Router component, which will give it the ability to redirect to other routes.  
-  - Take a look at the ```showDetail``` function, which runs when the user clicks on a timesheet row:
-    -  ```this.props.history.push('/employees/' + timesheet.user_id + '/timesheets/detail/' + timesheet._id);```
-    - This is the line that actually directs the user to the specific timesheet detail page.  Look at the routes we defined earlier to see which component should be displayed.
-    
-
-###### Now let's take the time to look at the Timesheet form component and give it some new powers.
-
-- The first component we need is a form to contain all of our timesheet's properties.
-- Open **/src/components/timesheets/TimesheetForm.js**.
-- You'll notice there are a bunch of validation functions in here. For example:
-```javascript
-  handleEmployeeChange(value) {
-    let isValid = false;
-        if(value){
-           isValid = true;
-        }
-        return this.setState({ user_id: {value: value, valid: isValid }});
-    }
-```
-
-- This function will be called when the user selects a new employee.  Once the user does so, the field will be marked as valid in the component's state.
-- Let's hook our component up to our validation functions by returning this from our ```render()``` method:
-
-```javascript
-    return (
-      <form>
-        <FormGroup
-          controlId="name"
-          validationState={this.getNameValidationState()}
-        >
-          {!this.props.timesheet._id &&
-            <div>
-              <ControlLabel>Username</ControlLabel>
-              <FormControl
-                componentClass="select"
-                onChange={(e) => this.handleEmployeeChange(e.target.value)}
-              >
-                <option value="" disabled selected>Select an employee</option>
-                  {
-                    this.props.employees
-                      .map((employee) => {
-                          return <option value={employee._id}>{employee.username}</option>
-                      })
-                  }
-              </FormControl>
-            </div>
-          }
-          <ControlLabel>Name</ControlLabel>
-          <FormControl
-            type="text"
-            value={this.state.name.value}
-            placeholder="Enter name"
-            onChange={(e) => this.handleNameChange(e.target.value)}
-          />
-          <FormControl.Feedback />
-        </FormGroup>
-
-        <FormGroup
-          controlId="description"
-          validationState={this.getDescriptionValidationState()}
-        >
-          <ControlLabel>Description</ControlLabel>
-          <FormControl
-            type="text"
-            value={this.state.description.value}
-            placeholder="Enter description"
-            onChange={(e) => this.handleDescriptionChange(e.target.value)}
-          />
-          <FormControl.Feedback />
-        </FormGroup>
-
-        <FormGroup
-          controlId="beginDate"
-          validationState={this.getBeginDateValidationState()}
-        >
-          <ControlLabel>Begin Date</ControlLabel>
-          <FormControl
-            type="text"
-            value={this.state.beginDate.value}
-            placeholder="YYYY-MM-DD"
-            onChange={(e) => this.handleBeginDateChange(e.target.value)}
-          />
-          <FormControl.Feedback />
-        </FormGroup>
-
-        <FormGroup
-          controlId="endDate"
-          validationState={this.getEndDateValidationState()}
-        >
-          <ControlLabel>End Date</ControlLabel>
-          <FormControl
-            type="text"
-            value={this.state.endDate.value}
-            placeholder="YYYY-MM-DD"
-            onChange={(e) => this.handleEndDateChange(e.target.value)}
-          />
-          <FormControl.Feedback />
-        </FormGroup>
-
-        <Button bsStyle="success" onClick={this.handleSave} disabled={!this.validateAll()}> Save </Button>&nbsp;
-        <LinkContainer to="/employees/all/timesheets">
-          <Button bsStyle="danger"> Cancel </Button>
-        </LinkContainer>
-      </form>
-    )
-```
+- Open your app and click on an employee... did it work!?!?!?
 
 
-- There are still two functions that need to be implemented: ```componentWillReceiveProps``` and ```handleSave```.
-- Here's what your ```componentWillReceiveProps``` function should look like:
-```javascript
-  componentWillReceiveProps(nextProps) {
-    this.state = {
-      name: {value: nextProps.timesheet.name, valid: null},
-      description: {value: nextProps.timesheet.description, valid: null},
-      beginDate: {value: nextProps.timesheet.beginDate, valid: null},
-      endDate: {value: nextProps.timesheet.endDate, valid: null}
-    };
-  }
-```
-- This means that, if the TimesheetForm is being used to view an existing timesheet, that the component's state values will reflect those in the existing timesheet.
-- And here's the function that runs when the user clicks the save button, ```handleSave```:
- ```javascript
-  handleSave(){
-    if(this.validateAll()) {
-      this.props.handleSave({
-        name: this.state.name.value,
-        description: this.state.description.value,
-        beginDate: this.state.beginDate.value,
-        endDate: this.state.endDate.value,
-        user_id: this.props.timesheet.user_id ?  this.props.timesheet.user_id : this.state.user_id.value,
-        _id: this.props.timesheet._id
-      });
-    }
-  }
-```
-- What is ```this.validateAll()``` doing?
-
-
-## Add the Form into an Timesheet Detail Component
-
-- Now let's actually use the form we just built.
-- Open **/src/components/timesheets/TimesheetsDetail.js**
-- Take a look at that cool ```constructor``` method - how is it retrieving the timesheet to be viewed?
-- We have two jobs to complete here!
-  1. Implement the dang ```render``` method
-  2. Implement the dang ```handleSave``` method
-- Here's what your ```render``` method should look like:
-```javascript
-render() {
-    return (
-      <Grid>
-        <Row>
-          <PageHeader>Timesheet Detail</PageHeader>
-        </Row>
-        <Row>
-          <TimesheetForm timesheet={this.props.timesheet} actions={this.props.actions} handleSave={this.handleSave}/>
-        </Row>
-        { //Show timeunits after the getTimesheet() call finishes loading the timesheet
-          this.props.timesheet && this.props.timesheet._id &&
-          <Row>
-            <Timeunits timesheet={this.props.timesheet} actions={this.props.actions}/>
-          </Row>
-        }
-      </Grid>
-    );
-  }
-```
-- Things to notice:
-  - We're passing ```this.handleSave``` down to ```TimesheetForm```, so when the user attempts to save, we'll end up back here with the ability to hook up to Redux
-  - We're only displaying a timesheet's timeunits once it's been retrieved.  More on time units later!
-- Here's what your ```handleSave``` method should look like:
-```javascript
-  handleSave(timesheet){
-    this.props.actions.updateTimesheet(timesheet).then(() => {
-      this.props.history.push(`/employees/all/timesheets`);
-    });
-  }
-```
-- Things to notice:
-  - This looks great
-  - After the ```updateTimesheet``` action completes, we're just sending the user back to the timesheet list
-  
-#### Just one more thing before you can use the ```TimesheetsDetail``` component
-- Just kidding!  You should be able to click a timesheet to view its details, and save.
-
-&nbsp;
-## Test the Employee Detail Component
-
-- Open **/src/components/employees/EmployeesDetail.test.js**
-- Find the test with the description ```'should instantiate the Employees Detail Component'```
-
-```javascript
-    TEST EMPLOYEE DETAIL HERE
-```
-
-- Run the tests and verify that they pass before moving on to the next section.
-
-&nbsp;
-## Run the application and see your work.
-
-If you haven't already done so,
-- In a terminal windows run: `gulp watch:dev` to fire off the build.
-- In a separate terminal run: `gulp serve:dev` to serve the index.html.
-- Navigate to [http://localhost:3000](http://localhost:3000) in your favorite browser.
-
-- Try navigating to an employee detail by clicking on a row in the table and editing the employee. Did it save correctly?
-
-![](img/lab05/edit.employee.png)
+## Extra credit
+Are you a true champion?  Make it possible to create a new employee.
 
 
 &nbsp;
-## Add the Ability to Create an Employee
-
-- Open **client/src/components/employees.create.jsx**
-- Following the same steps you did for the **EmployeeDetail** component, implement and test the **EmployeeCreate** component.
-
-```javascript
-mixins : [
-  Router.Navigation,
-  Router.State,
-  EmployeeMixin
-],
-
-onChange: function () {
-  this.setState(this.store.getState());
-},
-
-componentWillMount: function () {
-  this.store.addChangeListener(this.onChange);
-},
-
-componentWillUnmount: function () {
-  this.store.removeChangeListener(this.onChange);
-},
-
-getInitialState: function () {
-  return {
-    saveText: 'Create',
-    employee: {
-      admin:false
-    },
-    errors: {}
-  };
-},
-
-saveEmployee: function (event) {
-  event.preventDefault();
-  this.validateAll();
-
-  if (!this.hasErrors()) {
-    EmployeeActions.create(this.state.employee);
-    this.transitionTo('employees');
-  }
-},
-
-render : function () {
-  return (
-    <EmployeeForm employee={this.state.employee}
-      errors={this.state.errors}
-      validateAll={this.validateAll}
-      hasErrors={this.hasErrors}
-      saveText={this.state.saveText}
-      onSave={this.saveEmployee}
-      validate={this.validate}
-      toggleAdmin={this.toggleAdmin} />
-  );
-}
-```
-
-- Now test it!!
-- Open **client/src/components/employees.create.spec.js** and add the tests.
-  - You'll have to uncomment the spies for them to work.
-
-```javascript
-describe('saving an employee', function () {
-  beforeEach(function () {
-    element.saveEmployee({preventDefault: _.noop});
-  });
-
-  it('should validate the entire employee', function () {
-    expect(spies.validateAll).to.have.been.called;
-  });
-
-  describe('when the employee passes validation', function () {
-    beforeEach(function () {
-      spies.hasErrors = sinon.stub(element, 'hasErrors').returns(false);
-    });
-
-    afterEach(function () {
-      spies.hasErrors.restore();
-    });
-
-    it('should fire a create action', function () {
-      expect(spies.create).to.have.been.called;
-    });
-
-    it('should transition back to the employee list', function () {
-      expect(spies.transitionTo).to.have.been.calledWith('employees');
-    });
-  });
-});
-```
-
-- Now, we need a way to get there.  Let's add a button in the **Employees** component that navigates to the create employee route.
-
-- Open **client/src/components/employees.jsx**
-
-- Add the callback to navigate to the `employee.create` route:
-
-```javascript
-  createNew: function createNew () {
-    this.transitionTo('employees.create');
-  },
-```
-
-
-- In the `render()` method add the button below in place of the comment:
-
-```javascript
-<div className="row">
-  <button className="ui right floated primary button pad-bottom" type="button" onClick={this.createNew}>
-    New Employee
-  </button>
-</div>
-```
-
-- Then, lets test it, of course!:
-
-- In **client/src/components/employees.spec.js** add:
-
-```javascript
-describe('clicking the new employee button', function () {
-  it('should transition to the create employee route', function () {
-    var button = TestUtils.findRenderedDOMComponentWithTag(element, 'button');
-    TestUtils.Simulate.click(button);
-    expect(spies.transitionTo).to.have.been.calledWith('employees.create');
-  });
-});
-```
-
-- Run the tests and watch them pass.
-
-&nbsp;
-## Run the application and see your work.
-
-If you haven't already done so,
-- In a terminal windows run: `gulp watch:dev` to fire off the build.
-- In a separate terminal run: `gulp serve:dev` to serve the index.html.
-- Navigate to [http://localhost:3000](http://localhost:3000) in your favorite browser.
-
-- Click the create employee button.
-
-![](img/lab05/employees.png)
-
-- Attempt to create an employee. Did you get any validation errors?
-
-![](img/lab05/validation.errors.png)
-
-
-&nbsp;
-### Commit your changes to Git and get ready for the next lab.
+### Commit your changes to Git - congrats, you are a React/Redux Master.
 
 ```
 git add .
