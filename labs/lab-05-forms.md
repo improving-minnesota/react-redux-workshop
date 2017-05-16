@@ -34,6 +34,8 @@ If not running, start the `npm start` task.  Otherwise, restart the running task
 <Route path='/employees/:user_id/timesheets/detail/:timesheet_id/timeunits/create' component={TimeunitsCreate} />
 <Route path='/employees/:user_id/timesheets/detail/:timesheet_id/timeunits/detail/:_id' component={TimeunitsDetail} />
 
+<Route path='/timesheets/create' component={TimesheetsCreate} />
+
 ```
 
 > Take the time to check out the path declarations and how they are adding route params that are dynamically replaced.
@@ -277,9 +279,229 @@ constructor(props) {
 ```
 - Open your app and click on an employee... did it work!?!?!?
 
+### Add Edit Timesheet Functionality
+- Now that we can edit employees, let's try to create and edit timesheets.
+- Click on a timesheet - our routing is in place, and we're correctly navigating to the timesheet page, but it's empty!
+
+###### Now let's take the time to look at the Timesheet form component and give it some new powers.
+
+- The first component we need is a form to contain all of our timesheet's properties.
+- Open **/src/components/timesheets/TimesheetForm.js**.
+- You'll notice there are a bunch of validation functions in here. For example:
+```javascript
+  handleEmployeeChange(value) {
+    let isValid = false;
+        if(value){
+           isValid = true;
+        }
+        return this.setState({ user_id: {value: value, valid: isValid }});
+    }
+```
+
+- This function will be called when the user selects a new employee.  Once the user does so, the field will be marked as valid in the component's state.
+- Let's hook our component up to our validation functions by returning this from our ```render()``` method:
+
+```javascript
+    return (
+      <form>
+        <FormGroup
+          controlId="name"
+          validationState={this.getNameValidationState()}
+        >
+          {!this.props.timesheet._id &&
+            <div>
+              <ControlLabel>Username</ControlLabel>
+              <FormControl
+                componentClass="select"
+                onChange={(e) => this.handleEmployeeChange(e.target.value)}
+              >
+                <option value="" disabled selected>Select an employee</option>
+                  {
+                    this.props.employees
+                      .map((employee) => {
+                          return <option value={employee._id}>{employee.username}</option>
+                      })
+                  }
+              </FormControl>
+            </div>
+          }
+          <ControlLabel>Name</ControlLabel>
+          <FormControl
+            type="text"
+            value={this.state.name.value}
+            placeholder="Enter name"
+            onChange={(e) => this.handleNameChange(e.target.value)}
+          />
+          <FormControl.Feedback />
+        </FormGroup>
+
+        <FormGroup
+          controlId="description"
+          validationState={this.getDescriptionValidationState()}
+        >
+          <ControlLabel>Description</ControlLabel>
+          <FormControl
+            type="text"
+            value={this.state.description.value}
+            placeholder="Enter description"
+            onChange={(e) => this.handleDescriptionChange(e.target.value)}
+          />
+          <FormControl.Feedback />
+        </FormGroup>
+
+        <FormGroup
+          controlId="beginDate"
+          validationState={this.getBeginDateValidationState()}
+        >
+          <ControlLabel>Begin Date</ControlLabel>
+          <FormControl
+            type="text"
+            value={this.state.beginDate.value}
+            placeholder="YYYY-MM-DD"
+            onChange={(e) => this.handleBeginDateChange(e.target.value)}
+          />
+          <FormControl.Feedback />
+        </FormGroup>
+
+        <FormGroup
+          controlId="endDate"
+          validationState={this.getEndDateValidationState()}
+        >
+          <ControlLabel>End Date</ControlLabel>
+          <FormControl
+            type="text"
+            value={this.state.endDate.value}
+            placeholder="YYYY-MM-DD"
+            onChange={(e) => this.handleEndDateChange(e.target.value)}
+          />
+          <FormControl.Feedback />
+        </FormGroup>
+
+        <Button bsStyle="success" onClick={this.handleSave} disabled={!this.validateAll()}> Save </Button>&nbsp;
+        <LinkContainer to="/employees/all/timesheets">
+          <Button bsStyle="danger"> Cancel </Button>
+        </LinkContainer>
+      </form>
+    )
+```
+
+
+- There are still two functions that need to be implemented: ```componentWillReceiveProps``` and ```handleSave```.
+- Here's what your ```componentWillReceiveProps``` function should look like:
+```javascript
+  componentWillReceiveProps(nextProps) {
+    this.state = {
+      name: {value: nextProps.timesheet.name, valid: null},
+      description: {value: nextProps.timesheet.description, valid: null},
+      beginDate: {value: nextProps.timesheet.beginDate, valid: null},
+      endDate: {value: nextProps.timesheet.endDate, valid: null}
+    };
+  }
+```
+
+- And here's the function that runs when the user clicks the save button, ```handleSave```:
+ ```javascript
+  handleSave(){
+    if(this.validateAll()) {
+      this.props.handleSave({
+        name: this.state.name.value,
+        description: this.state.description.value,
+        beginDate: this.state.beginDate.value,
+        endDate: this.state.endDate.value,
+        user_id: this.props.timesheet.user_id ?  this.props.timesheet.user_id : this.state.user_id.value,
+        _id: this.props.timesheet._id
+      });
+    }
+  }
+```
+- What is ```this.validateAll()``` doing?
+
+## Add the Form into an Timesheet Detail Component
+
+- Now let's actually use the form we just built.
+- Open **/src/components/timesheets/TimesheetsDetail.js**
+- Take a look at that cool ```constructor``` method - how is it retrieving the timesheet to be viewed?
+- We have two jobs to complete here!
+  1. Implement the dang ```render``` method
+  2. Implement the dang ```handleSave``` method
+- Here's what your ```render``` method should look like:
+```javascript
+render() {
+    return (
+      <Grid>
+        <Row>
+          <PageHeader>Timesheet Detail</PageHeader>
+        </Row>
+        <Row>
+          <TimesheetForm timesheet={this.props.timesheet} actions={this.props.actions} handleSave={this.handleSave}/>
+        </Row>
+        { //Show timeunits after the getTimesheet() call finishes loading the timesheet
+          this.props.timesheet && this.props.timesheet._id &&
+          <Row>
+            <Timeunits timesheet={this.props.timesheet} actions={this.props.actions}/>
+          </Row>
+        }
+      </Grid>
+    );
+  }
+```
+- Notice - we're only displaying a timesheet's timeunits once it's been retrieved.
+- Here's what your ```handleSave``` method should look like:
+```javascript
+  handleSave(timesheet){
+    this.props.actions.updateTimesheet(timesheet).then(() => {
+      this.props.history.push(`/employees/all/timesheets`);
+    });
+  }
+```
+- Things to notice:
+  - This looks great
+  - After the ```updateTimesheet``` action completes, we're just sending the user back to the timesheet list
+  
+#### Just one more thing before you can use the ```TimesheetsDetail``` component
+- Just kidding!  You should be able to click a timesheet to view its details, and save.
+
+## Add ability to create a new timesheet
+- Navigate to **/src/components/timesheets/TimesheetsCreate.js**.
+- Let's create a constructor and talk about it:
+
+```javascript
+constructor(props) {
+  super(props);
+  this.props.employeeActions.listEmployees();
+  this.handleSave = this.handleSave.bind(this);
+}
+```
+- This should all look pretty familiar, although you might be asking yourself... why are we retrieving all the employees?  It's because the timesheet will have a select field whose optioons are all the existing employees!
+- Next, let's implement our ```handleSave``` method:
+
+```javascript
+handleSave(timesheet){
+  this.props.actions.createTimesheet(timesheet).then(() => {
+    this.props.history.push('/employees/all/timesheets');
+  });
+}
+```
+
+- Finally, let's add our render method:
+```javascript
+render() {
+    return (
+      <Grid>
+        <Row>
+          <PageHeader>Timesheet Create</PageHeader>
+        </Row>
+        <Row>
+          <TimesheetForm employees={this.props.employees} handleSave={this.handleSave}/>
+        </Row>
+      </Grid>
+    );
+  }
+```
+- Return to your app - now you should be able to create new timesheets!
 
 ## Extra credit
-Are you a true champion?  Make it possible to create a new employee.
+Are you a true champion?  Make it possible to create a new employee. Hint: look at how it works in timesheets!
 
 
 &nbsp;
