@@ -303,41 +303,38 @@ section
     li Invalidating timers
     li Cleaning up any DOM elements that were created in componentDidMount()
 
+
+
 section
-  h2.lower ReactTestUtils
+  h2.lower Enzyme
   ul
-    li Utilities to make it easy to test React components
+    li Testing utility to assert, manipulate, and traverse your React Components' output
+    li (from Airbnb Engineering)
+    li
+      a(href="http://airbnb.io/enzyme/index.html") airbnb.io/enzyme
 
 section
   pre.
     <code class="javascript" data-trim>
-    import ReactTestUtils from 'react-dom/test-utils';
+    import { shallow, mount } from 'enzyme';
     </code>
 
 section
-  h4.lower Simulate.{eventName}(element, [eventData])
+  h4.lower Enzyme render testing
   ul
-    li Simulate an event dispatch on a DOM node with optional event data
-    li Possibly the single most useful utility in ReactTestUtils
-    li Has a method for every event that React understands
+    li Shallow
+      ul
+        li Isolate your test by not rendering any child components
+    li Mount
+      ul
+        li More of an 'integration' test
+        li Test child component rendering
+        li Test DOM interactions
 
 section
   pre.
     <code class="javascript" data-trim>
-    // &lt;button ref="button">...&lt;/button>
-    const node = this.refs.button;
-    ReactTestUtils.Simulate.click(node);
-    </code>
-
-section
-  h4.lower renderIntoDocument(ReactComponent instance)
-  ul
-    li Render a component into a detached DOM node in the document
-
-section
-  pre.
-    <code class="javascript" data-trim>
-    element = ReactTestUtils.renderIntoDocument(
+    element = shallow(
       &lt;EmployeeForm employee={employee}
         errors={errors}
         validate={spies.validate}
@@ -349,138 +346,75 @@ section
     </code>
 
 section
-  h2 Expectation Helpers
-
-section
-  h4.lower isElement(ReactElement element)
+  h2.lower Jest Expect
   ul
-    li Returns true if the element is any ReactElement
+    li Default set of expect() assertions included in Jest
+    li toBeTruthy(), toBeFalsy(), toHaveLength(), toEqual(), etc...
+    li
+      a(href="http://facebook.github.io/jest/docs/expect.html") Jest Expect API
 
 section
-  h4.lower isElementOfType(ReactElement element, function componentClass)
+  h4.lower Minimal Component Test
   ul
-    li Returns true if the element is a ReactElement that has a type of a React componentClass
-
-section
-  h4.lower isDOMComponent(ReactComponent instance)
-  ul
-    li Returns true if the instance is a DOM component (such as a &lt;div&gt; or &lt;span&gt;)
-
-section
-  h4.lower isCompositeComponent(ReactComponent instance)
-  ul
-    li Returns true if the instance is a composite component (created with React.createClass())
-
-section
+    li Test that the component renders successfully
   pre.
     <code class="javascript" data-trim>
-    it('should instantiate the EmployeeForm', function () {
-      expect(ReactTestUtils.isCompositeComponent(element)).toBe(true);
-    });
+    expect(shallow(<Hello />)).toHaveLength(1);
 
     </code>
 
 section
-  h4.lower isCompositeComponentWithType(ReactComponent instance, function componentClass)
+  h2.lower Enzyme Matchers
   ul
-    li Returns true if the instance is a composite component (created with React.createClass()) whose type is of a React componentClass
+    li Custom assertion library for Enzyme
+    li (from Hudl's Blaine Kasten)
+    li
+      a(href="https://github.com/blainekasten/enzyme-matchers") github.com/blainekasten/enzyme-matchers
+
+section
+  h4.lower toIncludeText(text)
+  ul
+    li Returns true if the text is anywhere in the component
+  pre.
+    <code class="javascript" data-trim>
+    expect(shallow(&lt;Hello />)).toIncludeText('Howdy');
+
+    </code>
+
+section
+  h4.lower toContainReact(jsx)
+  ul
+    li Returns true if the JSX element is in the component
+  pre.
+    <code class="javascript" data-trim>
+    expect(shallow(&lt;Hello />)).toContainReact(&lt;td>Howdy&lt;/td>);
+
+    </code>
+
+section
+  h4.lower toHaveProp(propName, value)
+  ul
+    li To verify that shallow rendered children have correct values passed into them
+  pre.
+    <code class="javascript" data-trim>
+    //Find first Route in rendered App
+    const route = shallow(&lt;App />).find('Route').at(0);
+
+    expect(route).toHaveProp('path', '/projects');
+
+    </code>
 
 section
   h2 DOM Query Methods
 
 section
-  h4.lower scryRenderedDOMComponentsWithClass(ReactComponent tree, string className)
+  h4.lower find(selector)
   ul
-    li Finds all instances of components in the rendered tree that are DOM components and whose class matches className
-
-section
-  h4.lower findRenderedDOMComponentWithClass(ReactComponent tree, string className)
-  ul
-    li Like scryRenderedDOMComponentsWithClass() but expects there to be one result
-    li Throws an exception if there is more than one match or no match at all
-
-section
+    li Find all nodes that match the selector
   pre.
     <code class="javascript" data-trim>
-    var cancel = ReactTestUtils.findRenderedComponentWithClass(
-      element,
-      'cancel-btn'
-    );
-
-    </code>
-
-section
-  h4.lower scryRenderedComponentsWithType(ReactComponent tree, function componentClass)
-  ul
-    li Finds all instances of components with type equal to componentClass
-
-section
-  h4.lower findRenderedComponentWithType(ReactComponent tree, function componentClass)
-  ul
-    li Same as scryRenderedComponentsWithType() but expects there to be exactly one result
-    li Throws an exception if there is more than one match or no match at all
-
-section
-  pre.
-    <code class="javascript" data-trim>
-    var cancel = ReactTestUtils.findRenderedComponentWithType(
-      element,
-      CancelButton
-    );
-
-    </code>
-
-section
-  h4.lower scryRenderedDOMComponentsWithTag(ReactComponent tree, string tagName)
-  ul
-    li Finds all instances of components in the rendered tree that are DOM components and whose tag name matches tagName
-
-section
-  h4.lower findRenderedDOMComponentWithTag(ReactComponent tree, string tagName)
-  ul
-    li Like scryRenderedDOMComponentsWithTag() but expects there to be exactly one result
-    li Throws an exception if there is more than one match or no match at all
-
-section
-  pre.
-    <code class="javascript" data-trim>
-    var button = ReactTestUtils.findRenderedDOMComponentWithTag(
-      cancel,
-      'button'
-    );
-
-    </code>
-
-section
-  h2 react-test-renderer
-  p Renderers for testing components without a DOM
-  p
-    a(href="https://www.npmjs.com/package/react-test-renderer") npm react-test-renderer
-
-section
-  h4.plain  ReactTestRenderer
-  p Renders components to plain JS objects for testing
-  pre.
-    <code class="javascript" data-no-escape>
-      const component = ReactTestRenderer.create(
-        &lt;Link page="https://xkcd.com/"&gt;xkcd&lt;Link&gt;
-      );
-
-      expect(component.props.href).to.equal('https://xkcd.com/');
-      expect(component.children[0]).to.equal('xkcd');
-
-    </code>
-
-section
-  h4.plain  ReactShallowRenderer
-  p Renders components to plain JS objects for testing w/o children
-  pre.
-    <code class="javascript" data-no-escape>
-      const renderer = new ReactShallowRenderer()
-      const output = renderer.render( &lt;App/&gt; ).getRenderOutput();
-
-      let stringVal = JSON.stringify(output);
-      expect(stringVal).toMatch(/employees\/:user_id\/timesheets/);
+    //Finds all rows with css class 'odd'
+    expect(comp.find('tr.odd')).toHaveLength(1);
 
     </code>
 
