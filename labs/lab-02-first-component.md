@@ -198,10 +198,19 @@ describe('Hello World:', function () {
 
 - Did your test pass?
 
-- There are a couple of other tests we could perform:
-  - Test that the initial state was rendered inside the element.
-  - Test that the default prop was rendered inside the element.
-  - We'll do more of this style testing in upcoming labs, but you can study ahead in the [React docs for TestUtils.](https://facebook.github.io/react/docs/test-utils.html)
+- What are we testing here?:
+  - We test that the component successfully renders (if you never test anything else, at least test this)
+  - We test that the initial state renders ('Howdy')
+  - We test that default props work ('Partner')
+  - and that passed-in props work ('Fred')
+
+- There are many more assertions that are possible!
+  - Test for a css classname
+  - Test component state internal object representation
+  - We'll do more testing in upcoming labs, but you can study ahead:
+    - [Jest Expect](http://facebook.github.io/jest/docs/expect.html) assertions
+    - [Enzyme](http://airbnb.io/enzyme/index.html) testing features
+    - [Enzyme Matchers](https://github.com/blainekasten/enzyme-matchers) api
 
 &nbsp;
 ## Let's render Hello World to the Browser!!
