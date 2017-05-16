@@ -238,12 +238,11 @@ constructor(props) {
 
 ```javascript
   it('should instantiate the Employees Detail Component', function () {
-    const component = renderer.create(
+    const component = mount(
       <MemoryRouter><EmployeesDetail store={mockStore}/></MemoryRouter>
     );
 
-      const stringVal = JSON.stringify(component);
-      expect(stringVal).toMatch(/Employees Detail/);
+    expect(component).toIncludeText('Employees Detail');
 
   });
 ```
