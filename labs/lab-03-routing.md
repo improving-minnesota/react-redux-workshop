@@ -153,17 +153,17 @@ import {LinkContainer} from 'react-router-bootstrap';
 - Open **src/components/nav/Navigation.test.js** and add the test suite.
 
 - Add the below code to the **Navigation.test.js**
-> Note that we need to wrap the Navigation in a **BrowserRouter**
+> Note that we need to wrap the Navigation in a **BrowserRouter**, so we use `mount` to render the nested Navigation element here
 
 ```javascript
   let nav;
 
   beforeEach(() =>{
-    nav = ReactTestUtils.renderIntoDocument(<BrowserRouter><Navigation /></BrowserRouter>);
+    nav = mount(<BrowserRouter><Navigation /></BrowserRouter>);
   });
 
   it('should instantiate the Navigation Component', function () {
-    expect(ReactTestUtils.isCompositeComponent(nav)).toBe(true);
+    expect(nav).toHaveLength(1);
   });
 ```
 
@@ -230,13 +230,13 @@ If you haven't already done so,
       'admin':true
     }]
     
-    const component = renderer.create(
-        <EmployeeTable employees={employees}/>
+    const component = shallow(
+	<EmployeeRow employee={employee}/>
     );
 
-    let stringVal = JSON.stringify(component);
-    expect(stringVal).toMatch(/table/);
-    expect(stringVal).toMatch(/Flintstone/);
+    expect(component).toContainReact(<td>Flintstone</td>);
+    expect(component).toContainReact(<td>fflintstone</td>);
+    expect(component).toContainReact(<td>Yes</td>);
   });
 
 ```
@@ -307,19 +307,20 @@ EmployeeTable.propTypes = {
                           'email':'fred.flintstone@slatequarry.com',
                           'firstName':'Fred',
                           'lastName':'Flintstone',
-                          'admin':true
+                          'admin':true,
+                          '_id':1
                          }]
 
 
 
-        const component = renderer.create(
+        const component = mount(
                 <EmployeeTable employees={employees}/>
         );
 
-        let stringVal = JSON.stringify(component);
-        expect(stringVal).toMatch(/table/);
-        expect(stringVal).toMatch(/Admin/);
-
+        expect(component).toContainReact(<th>Last Name</th>);
+        expect(component).toIncludeText('Flintstone');
+	
+	expect(component.find('tbody tr')).toHaveLength(1);
 
   });
 
@@ -365,22 +366,20 @@ import {PageHeader, Grid, Row} from 'react-bootstrap';
 
 ```javascript
   it('should instantiate the Employee Component', function () {
-      const component = renderer.create(
+      const component = shallow(
               <Employees/>
       );
 
-      const stringVal = JSON.stringify(component);
-      expect(stringVal).toMatch(/Employees/);
+      expect(component).toHaveLength(1);
 
   });
 
   it('should contain a correct employee', function () {
-    const component = renderer.create(
+    const component = mount(
         <Employees/>
     );
 
-    const stringVal = JSON.stringify(component);
-    expect(stringVal).toMatch(/admin@mixtape.com/);
+    expect(component).toIncludeText('admin@mixtape.com');
   });
 ```
 

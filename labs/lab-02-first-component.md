@@ -191,17 +191,25 @@ describe('Hello World:', function () {
 
 });
 ```
-
+- What are we testing here?:
+  - We test that the component successfully renders (if you never test anything else, at least test this)
+  - We test that the initial state renders ('Howdy')
+  - We test that default props work ('Partner')
+  - and that passed-in props work ('Fred')
+  
 - If it's not already running, open your terminal and run the test (`npm test`) command.
 
 ![](img/lab02/npm.test.png)
 
 - Did your test pass?
 
-- There are a couple of other tests we could perform:
-  - Test that the initial state was rendered inside the element.
-  - Test that the default prop was rendered inside the element.
-  - We'll do more of this style testing in upcoming labs, but you can study ahead in the [React docs for TestUtils.](https://facebook.github.io/react/docs/test-utils.html)
+- There are many more assertions that are possible!
+  - Test for a css classname
+  - Test component state internal object representation
+  - We'll do more testing in upcoming labs, but you can study ahead:
+    - [Jest Expect](http://facebook.github.io/jest/docs/expect.html) assertions
+    - [Enzyme](http://airbnb.io/enzyme/index.html) testing features
+    - [Enzyme Matchers](https://github.com/blainekasten/enzyme-matchers) api
 
 &nbsp;
 ## Let's render Hello World to the Browser!!
@@ -256,19 +264,21 @@ git commit -m 'Lab 2 completed successfully'
 ## Extra Credit
 If you're looking for an extra challenge, take a look at [Jest Snapshot testing](http://facebook.github.io/jest/blog/2016/07/27/jest-14.html). On first run, jest will generate a snapshot file that represents the rendered react component in a \_\_snapshots\_\_ folder. On subsequent runs it will compare the test result to the previous snapshot file. On a failure you will have to decide whether to fix the code, modify the test, or press 'u' to update the snapshot file with the new rendering.
 
+Snapshot testing can save you time from writing individual expect assertions on elements, by simply allowing you to review the snapshot file on any changes.
+
 Try creating a Snapshot test inside Hello.test.js, or:
 <details><summary>Click here for an example Hello.test.js test</summary><p>
 
 ```
-    it('should render to match the snapshot', function () {
+  import renderer from 'react-test-renderer';
+  
+  it('should render to match the snapshot', function () {
+    const component = renderer.create(
+      <Hello friend="Luke"/>
+    );
 
-        const component = renderer.create(
-            <Hello friend="Luke"/>
-        );
-
-        const json = component.toJSON();
-        expect(json).toMatchSnapshot();
-    });
+    expect(component.toJSON()).toMatchSnapshot();
+  });
 ```
 
 </p></details>
@@ -280,4 +290,9 @@ Try creating a Snapshot test inside Hello.test.js, or:
 - Update the snapshot to match the updated test
 - re-run the tests and see that they are all passing
 
-Don't forget to `git add .` and `git commit -m "extra credit"` when you are done
+`git add .` and `git commit -m "extra credit"` when you are done
+
+## Extra Extra Credit
+Modify the App.test.js file to test for the rendering of the `Hello` component that we added to App.js.
+
+Don't forget to `git add .` and `git commit -m "extra extra credit"` when you are done
