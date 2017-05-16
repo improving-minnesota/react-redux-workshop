@@ -153,17 +153,17 @@ import {LinkContainer} from 'react-router-bootstrap';
 - Open **src/components/nav/Navigation.test.js** and add the test suite.
 
 - Add the below code to the **Navigation.test.js**
-> Note that we need to wrap the Navigation in a **BrowserRouter**
+> Note that we need to wrap the Navigation in a **BrowserRouter**, so we use `mount` to render the nested Navigation element here
 
 ```javascript
   let nav;
 
   beforeEach(() =>{
-    nav = ReactTestUtils.renderIntoDocument(<BrowserRouter><Navigation /></BrowserRouter>);
+    nav = mount(<BrowserRouter><Navigation /></BrowserRouter>);
   });
 
   it('should instantiate the Navigation Component', function () {
-    expect(ReactTestUtils.isCompositeComponent(nav)).toBe(true);
+    expect(nav).toHaveLength(1);
   });
 ```
 
