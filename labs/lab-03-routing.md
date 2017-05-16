@@ -223,12 +223,13 @@ If you haven't already done so,
 
 ```javascript
   it('should instantiate the Employee Table', function () {
-    const employees = [{username:'fflintstone',
-      'email':'fred.flintstone@slatequarry.com',
-      'firstName':'Fred',
-      'lastName':'Flintstone',
-      'admin':true
-    }]
+    const employee = {
+       username: 'fflintstone',
+       email: 'fred.flintstone@slatequarry.com',
+       firstName: 'Fred',
+       lastName: 'Flintstone',
+       admin: true
+    }
     
     const component = shallow(
 	<EmployeeRow employee={employee}/>
