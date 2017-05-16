@@ -230,13 +230,13 @@ If you haven't already done so,
       'admin':true
     }]
     
-    const component = renderer.create(
-        <EmployeeTable employees={employees}/>
+    const component = shallow(
+	<EmployeeRow employee={employee}/>
     );
 
-    let stringVal = JSON.stringify(component);
-    expect(stringVal).toMatch(/table/);
-    expect(stringVal).toMatch(/Flintstone/);
+    expect(component).toContainReact(<td>Flintstone</td>);
+    expect(component).toContainReact(<td>fflintstone</td>);
+    expect(component).toContainReact(<td>Yes</td>);
   });
 
 ```
@@ -307,19 +307,20 @@ EmployeeTable.propTypes = {
                           'email':'fred.flintstone@slatequarry.com',
                           'firstName':'Fred',
                           'lastName':'Flintstone',
-                          'admin':true
+                          'admin':true,
+                          '_id':1
                          }]
 
 
 
-        const component = renderer.create(
+        const component = mount(
                 <EmployeeTable employees={employees}/>
         );
 
-        let stringVal = JSON.stringify(component);
-        expect(stringVal).toMatch(/table/);
-        expect(stringVal).toMatch(/Admin/);
-
+        expect(component).toContainReact(<th>Last Name</th>);
+        expect(component).toIncludeText('Flintstone');
+	
+	expect(component.find('tbody tr')).toHaveLength(1);
 
   });
 
