@@ -416,7 +416,7 @@ export default connect(
     
     let employeeRows = this.props.employees.map(function (employee) {
       return (
-        <EmployeeRow employee={employee} key={++key} actions={actions} />
+        <EmployeeRow employee={employee} key={employee._id} actions={actions} />
       );
     });
 ``` 
