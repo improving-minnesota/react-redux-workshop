@@ -3,18 +3,18 @@ section
 
 section
   ul
-    li &lt;input&gt;, &lt;textarea&gt;, and &lt;option&gt; differ from other native components since they are mutated via user interactions
-    li They provide interfaces to manage forms in response to user interactions
+    li Form Inputs differ from most other React components since hold internal state from user interactions
+  pre.
+    <code class="html" data-trim>
+    &lt;form>
+      &lt;label>
+        Name:
+        &lt;input type="text" name="name" />
+      &lt;/label>
+      &lt;input type="submit" value="Submit" />
+    &lt;/form>
 
-section
-  h2 Interactive Props
-
-section
-  p Props affected via user interactions:
-  ul
-    li value:     supported by input and textarea
-    li checked:   supported checkbox or radio
-    li selected:  supported by option
+    </code>
 
 section
   ul
@@ -22,68 +22,91 @@ section
     li Set a callback to the onChange prop
     li The callback fires when:
       ul
-        li The value changes
-        li Checked state changes
-        li Selected state changes
+        li The value changes (every keystroke)
+        li Checked state changes (checkbox)
+        li Selected state changes (select dropdown)
 
 section
   h2 Controlled Components
-
-section
   ul
+    li React controls state and display
     li Any &lt;input&gt; with value set is a controlled component
     li Value of the rendered element will always reflect the value prop
-
-section
-  h2 Uncontrolled Components
-
-section
-  ul
-    li Any &lt;input&gt; that does not supply a value (or sets it to null)
-    li Value of the rendered element will reflect the user's input
-
-section
-  h2 Validation
-
-section
-  ul
-    li We can now use controlled components in our form to enforce validation
-
-section
   pre.
-    <code class="javascript" data-trim>
-    (&lt;form name="employeeForm"&gt;
-      &lt;input name="username"
-        value={this.props.employee.username}
-        onChange={this.props.validate} /&gt;
-    &lt;/form&gt;)
+    <code class="javascript" data-trim>handleCityChange(event) {
+      this.setState({city: {value: event.target.value}});
+    }
 
+    &lt;input type="text" value={this.state.city.value}
+           onChange={this.handleCityChange} />
+    </code>
+
+section
+  h2 React Bootstrap
+  ul
+    li Bootstrap Form components for React
+  pre.
+    <code class="javascript" data-trim>&lt;FormGroup controlId="firstName">
+      &lt;ControlLabel>First Name&lt;/ControlLabel>
+      &lt;FormControl
+        type="text"
+        value={this.state.firstName.value}
+        placeholder="Enter firstName"
+        onChange={(e) => this.handleFirstNameChange(e.target.value)}
+      />
+    &lt;/FormGroup>
+    </code>
+
+section
+  h2 React Bootstrap Validation
+  ul
+    li Add a validationState function to return one of success, warning, or error
+    li Add `&lt;FormControl.Feedback />` inside the FormGroup tag
+
+section
+  h3 Validation
+  pre.
+    <code class="javascript" data-trim>&lt;FormGroup
+      controlId="firstName"
+      validationState={this.getFirstNameValidationState()}
+    >
+      &lt;ControlLabel>First Name&lt;/ControlLabel>
+      &lt;FormControl
+        type="text"
+        value={this.state.firstName.value}
+        placeholder="Enter firstName"
+        onChange={(e) => this.handleFirstNameChange(e.target.value)}
+      />
+      &lt;FormControl.Feedback />
+    &lt;/FormGroup>
     </code>
 
 section
   pre.
-    <code class="javascript" data-trim>
-    validate: function (event) {
-      var field = event.target.name;
-      var value = event.target.value;
+    <code class="javascript" data-trim>getFirstNameValidationState() {
+      if (!this.state) return;
+      if (this.state.firstName.valid === true) return 'success';
+      else if (this.state.firstName.valid === false) return 'error';
+    }
 
-      // min length 1
-      if (!value || value.length &lt; 1) {
-        this.state.errors[field] =
-          'You must provide a username.';
-      }
-      // max length 40
-      else if (value.length &gt; 40) {
-        this.state.errors[field] =
-          'Username can only be 40 characters long.';
-      }
+    handleFirstNameChange(value) {
+      const isValid = value ? true : false;
+      return this.setState(
+        { firstName: {value: value, valid: isValid }}
+      );
+    }
+    </code>
 
-      this.props.employee[field] = value;
-      return this.setState({
-        employee: this.state.employee,
-        errors: this.state.errors
-      });
-    }</code>
+section
+  h2 Uncontrolled Components
+  ul
+    li React does not control the state
+    li Used for custom behavior
+    li Good for co-existing with non-react libraries
+    li Use a `ref` function to get input value from DOM
+  pre.
+    <code class="html" data-trim>&lt;input type="text" ref={(input) => this.textInput = input} />
+    </code>
 
 section
   h1 Lab 5
