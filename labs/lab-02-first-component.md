@@ -116,15 +116,15 @@ export default Hello;
 - Now that we've created our first component, let's test it to make sure that React can initialize and render it to the DOM.
 
 - Open **/src/hello/Hello.test.js**
-- First, let's import our libraries for `React` `Hello` and `react-test-renderer`
+- First, let's import our libraries for `React` `Hello` and the shallow `enzyme` renderer
 - Then, let's set up the Hello World test by adding a suite (describe block):
 
 
 ```javascript
 import React from 'react';
-import Hello from './Hello';
-import renderer from 'react-test-renderer';
+import { shallow } from 'enzyme';
 
+import Hello from './Hello';
 
 describe('Hello World:', function () {
 
@@ -135,70 +135,61 @@ describe('Hello World:', function () {
 - Now we need to set up our components that we'll be testing.
 
 ```javascript
-    it('should render with default text', function () {
+  it('renders without exploding', () => {
+    expect(shallow(<Hello />)).toHaveLength(1);
+  });
 
-        const component = renderer.create(
-                <Hello/>
-        );
+  it('should render with default text', function () {
+    const component = shallow(<Hello />);
 
-        let stringVal = JSON.stringify(component);
-        expect(stringVal).toMatch(/Howdy/);
-        expect(stringVal).toMatch(/Partner/);
-   
-    });
+    expect(component).toIncludeText('Howdy');
+    expect(component).toIncludeText('Partner');
+  });
 
-    it('should render with our props', function () {
+  it('should render with our props', function () {
+    const component = shallow(
+      <Hello friend="Fred"/>
+    );
 
-        const component = renderer.create(
-                <Hello friend="Fred"/>
-        );
-
-        let stringVal = JSON.stringify(component);
-        expect(stringVal).toMatch(/Howdy/);
-        expect(stringVal).toMatch(/Fred/);
-
-    });
-
-
+    expect(component).toIncludeText('Howdy');
+    expect(component).toIncludeText('Fred');
+    expect(component).not.toIncludeText('Partner');
+  });
 ```
-> What is happening here? We use React's [test renderer](https://github.com/facebook/react/tree/master/packages/react-test-renderer) to render the component into a sandboxed "document" so that we can perform inquiries. Notice that we are using `JSX` in the `renderer.create()` method.
+> What is happening here? We use the [Enzyme](http://airbnb.io/enzyme/index.html) [shallow renderer](http://airbnb.io/enzyme/docs/api/shallow.html) to render the component into a sandboxed "document" so that we can perform inquiries. Notice that we are using `JSX` in the `shallow()` method. Shallow testing is useful to isolate our test by not rendering any child components. For more advanced "integration" style tests you would use `mount()` for [full DOM rendering](http://airbnb.io/enzyme/docs/api/mount.html)
 
 - When finished, your suite should look similar to the one below:
 
 ```javascript
 import React from 'react';
+import { shallow } from 'enzyme';
+
 import Hello from './Hello';
-import renderer from 'react-test-renderer';
 
 describe('Hello World:', function () {
 
+  it('renders without exploding', () => {
+    expect(shallow(<Hello />)).toHaveLength(1);
+  });
 
-    it('should render with default text', function () {
+  it('should render with default text', function () {
+    const component = shallow(<Hello />);
 
-        const component = renderer.create(
-                <Hello/>
-        );
+    expect(component).toIncludeText('Howdy');
+    expect(component).toIncludeText('Partner');
+  });
 
-        let stringVal = JSON.stringify(component);
-        expect(stringVal).toMatch(/Howdy/);
-        expect(stringVal).toMatch(/Partner/);
-   
-    });
+  it('should render with our props', function () {
+    const component = shallow(
+      <Hello friend="Fred"/>
+    );
 
-    it('should render with our props', function () {
-
-        const component = renderer.create(
-                <Hello friend="Fred"/>
-        );
-
-        let stringVal = JSON.stringify(component);
-        expect(stringVal).toMatch(/Howdy/);
-        expect(stringVal).toMatch(/Fred/);
-
-    });
+    expect(component).toIncludeText('Howdy');
+    expect(component).toIncludeText('Fred');
+    expect(component).not.toIncludeText('Partner');
+  });
 
 });
-
 ```
 
 - If it's not already running, open your terminal and run the test (`npm test`) command.
