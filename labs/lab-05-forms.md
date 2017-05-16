@@ -233,7 +233,7 @@ constructor(props) {
 &nbsp;
 ## Test the Employee Detail Component
 
-- Open **/src/components/employees/EmployeesDetail**
+- Open **/src/components/employees/EmployeesDetail.test.js**
 - Update the test labeled ```should instantiate the Employees Detail Component ```:
 
 ```javascript
