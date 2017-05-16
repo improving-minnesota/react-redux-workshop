@@ -45,6 +45,33 @@ If you haven't already done so,
 - Navigate to [http://localhost:3000](http://localhost:3000) in your favorite browser.
 - What happens when you try to edit a timesheet?
 
+### Add Edit Employee Functionality
+
+- We have an Employee Detail route, but there's no way to get to it yet.
+- We're going to add functionality so that when you click an **EmployeeRow**, the router will transition to the appropriate detail route for the employee.
+
+
+- Open **src/components/employees/EmployeeRow.js**
+- Add the `showDetail()` method to the **EmployeeRow**
+
+```javascript
+  showDetail(employee) {
+    if(employee.deleted) {
+      console.log('You cannot edit a deleted employee.');
+      return;
+    }
+
+    this.props.history.push('/employees/detail/' + employee._id);
+  }
+```
+
+- Now add an `onClick()` handler to the `<tr/>` in the `render()` method.
+
+```javascript
+<tr className={rowClass} onClick={() => {this.showDetail(employee)}}>
+```
+- Now try clicking on an employee - what happens?
+- Run the tests and verify that all of them pass before moving to the next section.
 
 ### Add Edit Timesheet Functionality
 
@@ -197,7 +224,7 @@ If you haven't already done so,
 ## Add the Form into an Timesheet Detail Component
 
 - Now let's actually use the form we just built.
-- Open **client/src/components/timesheets/TimesheetsDetail.js**
+- Open **/src/components/timesheets/TimesheetsDetail.js**
 - Take a look at that cool ```constructor``` method - how is it retrieving the timesheet to be viewed?
 - We have two jobs to complete here!
   1. Implement the dang ```render``` method
@@ -236,7 +263,7 @@ render() {
 ```
 - Things to notice:
   - This looks great
-  - After the ```updateTimesheet``` action completes, we're just sending the user back to the timsheet list
+  - After the ```updateTimesheet``` action completes, we're just sending the user back to the timesheet list
   
 #### Just one more thing before you can use the ```TimesheetsDetail``` component
 - Just kidding!  You should be able to click a timesheet to view its details, and save.
@@ -244,140 +271,14 @@ render() {
 &nbsp;
 ## Test the Employee Detail Component
 
-- Open **client/src/components/employee.detail.spec.js**
-- Uncomment the spies and add the following suites:
+- Open **/src/components/employees/EmployeesDetail.test.js**
+- Find the test with the description ```'should instantiate the Employees Detail Component'```
 
 ```javascript
-describe('getting the employee', function () {
-  describe('and the employee exists on the store state', function () {
-    beforeEach(function () {
-      element.store.state.employee = {_id: 'abc123'};
-      element.get();
-    });
-
-    it('should set the employee on the component state', function () {
-      expect(element.state.employee._id).to.equal('abc123');
-    });
-  });
-
-  describe('and the employee does NOT exist in the stored state', function () {
-    beforeEach(function () {
-      element.get();
-    });
-
-    it('should fire a get employee action', function () {
-      expect(proxies['../../actions/employee.actions'].get).to.have.been.calledWith('abc123');
-    });
-  });
-});
-
-describe('saving an employee', function () {
-  beforeEach(function () {
-    element.saveEmployee({preventDefault: _.noop});
-  });
-
-  it('should validate the entire employee', function () {
-    expect(spies.validateAll).to.have.been.called;
-  });
-
-  describe('and the employee passes validation', function () {
-    beforeEach(function () {
-      spies.hasErrors = sinon.stub(element, 'hasErrors').returns(false);
-    });
-
-    afterEach(function () {
-      spies.hasErrors.restore();
-    });
-
-    it('should fire an update action', function () {
-      expect(proxies['../../actions/employee.actions'].update).to.have.been.called;
-    });
-
-    it('should transition back to the employee list', function () {
-      expect(spies.transitionTo).to.have.been.calledWith('employees');
-    });
-  });
-});
+    TEST EMPLOYEE DETAIL HERE
 ```
 
 - Run the tests and verify that they pass before moving on to the next section.
-
-## Add navigation to the Employee Detail Component
-
-- We have an Employee Detail route, but there's no way to get to it yet.
-- We're going to add functionality so that when you click an **EmployeeRow**, the router will transition to the appropriate detail route for the employee.
-
-
-- Open **client/src/components/employees/employee.row.jsx**
-
-- Add the `showDetail()` method to the **EmployeeRow**
-
-```javascript
-showDetail: function showDetail () {
-  var employee = this.props.employee;
-  if (employee.deleted) {
-    console.log('You cannot edit a deleted employee.');
-    return;
-  }
-  this.props.store.setState({employee: employee});
-  this.transitionTo('employees.detail', {_id: employee._id});
-},
-```
-
-- Now add an `onClick()` handler to the `<tr/>` in the `render()` method.
-
-```javascript
-<tr className={classNames} ref={employee._id} onClick={this.showDetail}>
-```
-
-- Let's test that clicking the row actually navigates to where it's supposed to:
-
-- Open **client/src/components/employees/employee.row.spec.js**
-- Add the following suites to the end of the **Employee Row Component** suite:
-
-```javascript
-describe('clicking the row', function () {
-  describe('when the employee is deleted', function () {
-    beforeEach(function () {
-      employee = {
-        _id: 'abc123',
-        deleted: true
-      };
-
-      element = TestUtils.renderIntoDocument(<EmployeeRow employee={employee} store={EmployeeStore} />);
-      element.showDetail();
-    });
-  });
-
-  describe('when the employee is NOT deleted', function () {
-    beforeEach(function () {
-      employee = {
-        _id: 'abc123',
-        username: 'sterlingArcher',
-        deleted: false
-      };
-
-      element = TestUtils.renderIntoDocument(<EmployeeRow employee={employee} store={EmployeeStore} />);
-      spies.transitionTo = sinon.stub(element, 'transitionTo');
-      element.showDetail();
-    });
-
-    afterEach(function () {
-      spies.transitionTo.restore();
-    });
-
-    it('should set the employee on the stored state', function () {
-      expect(element.props.store.getState().employee.username).to.equal('sterlingArcher');
-    });
-
-    it('should transition to the detail route', function () {
-      expect(spies.transitionTo).to.have.been.calledWith('employees.detail', {_id: 'abc123'});
-    });
-  });
-});
-```
-
-- Run the tests and verify that all of them pass before moving to the next section.
 
 &nbsp;
 ## Run the application and see your work.
