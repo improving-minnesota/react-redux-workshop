@@ -1,183 +1,348 @@
 section
-  h1 Flux
+  h1 Redux
 
 section
-  h3.lower Three major parts
+  h3.lower Three principles
   ul
-    li the dispatcher
-    li the stores
-    li the views (React components)
+    li Single source of truth - object tree in a single store
+    li State is read-only - can only be changed by dispatching an action
+    li Changes are made with pure functions called reducers
 
 section
+  h2 Benefits
+
+section
+  h3 Predictability
   ul
-    li Not MVC
-    li Controllers do exist in a Flux application, but they are controller-views
+    li State mutation is more predictable by imposing restrictions on updating
+    ul
+      li Actions are handled in a strict order
+      li Actions can be recorded and replayed
 
 section
-  h3 Controller Components
+  h3 Centralization
   ul
-    li Views at the top of the hierarchy that retrieve data from the stores
-    li These views pass data down to their children
+    li Centralized state helps avoid race conditions and side effects
+    li Allows for centralized handling of concerns
+    ul
+      li Logging
+      li Undo/Redo
+      li State persistence
 
 section
-  h3 Action creators
+  h2 Core Concepts
+
+section
+  h3 Actions
   ul
-    li Dispatcher helper methods
-    li Support a semantic API that describes all changes that are possible in the application
+    li.
+      Plain JavaScript objects that have a <span class="component red">type</span> that describes the action being performed
+    li Objects can contain just about anything else, but we tend to use Flux Standard Actions
 
 section
+  h3 Flux Standard Action
   ul
-    li Unidirectional data flow
-    li When a user interacts with a React view, the view propagates an action
-    li The stores react and fire an event
-    li All interested other views update accordingly
+    li An action MUST
+    ul
+      li be a plain JavaScript object
+      li.
+        have a <span class="component red">type</span> property
+    li An action MAY
+    ul
+      li.
+        have an <span class="component red">error</span> property
+      li.
+        have a <span class="component red">payload</span> property
+      li.
+        have a <span class="component red">meta</span> property
+    li.
+      An action MUST NOT include properties other than <span class="component red">type</span>, <span class="component red">payload</span>, <span class="component red">error</span>, and <span class="component red">meta</span>
 
 section
-  //img(src="/react-workshop/assets/img/lecture-04/flux.diagram.png")
-
-section
-  h2 Dispatcher
-
-section
+  h3 Action Creators
   ul
-    li Singleton
-    li Central hub of data flow in a Flux application
-
-section
-  ul
-    li Essentially a registry of callbacks
-    li Can invoke these callbacks in order
-
-section
-  ul
-    li Each store registers a callback with the dispatcher
-    li When new data comes into the dispatcher, it then uses these callbacks to propagate that data to all of the stores
-
-section
-  ul
-    li Initiated through the dispatch() method
-    li Takes a data payload object as its sole argument
-    li This payload is typically synonymous with an action
-
-section
-  h3.lower dispatch()
-  ul
-    li Provides a simple, synchronous iteration through the callbacks
-
-section
-  pre.
+    li Function that creates and returns an action
+  pre(style="width:100%").
     <code class="javascript" data-trim>
-    var dispatcher = _.extend(new Dispatcher(), {
-      handleViewAction: function(action) {
-        this.dispatch({
-          source: 'VIEW_ACTION',
-          action: action
-        });
-      }
-    });
+      // action type
+      const ADD_AGENT = 'ADD_AGENT'
 
-    </code>
-
-section
-  h2 Actions
-
-section
-  ul
-    li Used to update data via user interaction or other changes in the UI
-    li Data is packaged into an action
-      ul
-        li Object literal containing the new fields of data
-        li Specific action type
-
-section
-  ul
-    li Identified by a type attribute
-    li Stores typically use this attribute to determine if and how they should respond to it
-
-section
-  ul
-    li Stores and views control themselves
-    li They are not acted upon by external objects
-    li Actions flow into the stores through the callbacks they define and register
-
-section
-  pre.
-    <code class="javascript" data-trim>
-    list: function (query) {
-      dispatcher.handleViewAction({
-        actionType: 'list',
-        query: query
-      });
-    }
-
-    </code>
-
-section
-  h2 Stores
-
-section
-  ul
-    li Contain the application state and logic
-    li Somewhat similar to a model in a traditional MVC
-    li They manage the state of many objects
-    li They do not represent a single record of data like ORM models do
-
-section
-  ul
-    li Registers itself with the dispatcher and provides it with a callback
-    li The callback receives the action as a parameter
-    li The dispatcher interprets the action and provides the proper hooks into the store's internal methods
-    li This allows an action to result in an update to the state of the store, via the dispatcher
-
-section
-  ul
-    li After the stores are updated, they broadcast an event and declare that their state has changed
-    li Views query the new state and update themselves
-
-section
-  p Let's look at the base Store that others extend
-
-section
-  pre.
-    <code class="javascript" data-trim>
-    // The initialize function of an extended Store
-    initialize: function () {
-      var events = {};
-      events['list']    = this.list;
-      events['get']     = this.get;
-      events['update']  = this.update;
-      this.register(events);
-      return this;
-    }
-
-    </code>
-
-section
-  pre.
-    <code class="javascript" data-trim>
-    register: function (events) {
-      var self = this;
-
-      // calling the dispatcher's register method
-      dispatcher.register(function (payload) {
-        var action = payload.action;
-        var promise = events[action.actionType];
-
-        if (!_.isUndefined(promise)) {
-          promise.apply(self, [payload])
-            .then(function () {
-              self.emitChange();
-            });
+      // action creator
+      function addAgent(agent) {
+        return {
+          type: ADD_AGENT,
+          payload: agent
         }
-        return true;
-      });
-    }
+      }
+    </code>
+
+section
+  h3 Reducers
+  ul
+    li Pure function that changes the state in response to an action
+    li Takes the previous state and an action and returns the next state
+    li.
+      <span class="component red">(previousState, action) => newState</span>
+    pre(style="width:100%").
+      <code class="javascript" data-trim>
+        const initialState = {
+          agents: []
+        }
+
+        function agentReducer(state = initialState, action) {
+          switch (action.type) {
+            case ADD_EMPLOYEE:
+              return Object.assign({}, state, {
+                examples: state.agents.concat([action.payload])
+              })
+              ...
+          }
+        }
+      </code>
+
+section
+  h3 Store
+  ul
+    li The "glue" between actions and reducers
+    li Contains the current state value
+    li Only one store in a Redux application
+
+section
+  h3 Store instantiation
+  pre(style="width:100%").
+    <code class="javascript" data-trim>
+      import { createStore } from 'redux'
+      import agentReducer from './reducers'
+
+      const store = createStore(agentReducer)
+    </code>
+
+section
+  h3 Store API
+  ul
+    li.
+      <span class="component red">getState()</span> - allows access to the state
+    li.
+      <span class="component red">dispatch(action)</span> - allows state to be updated
+    li.
+      <span class="component red">subscribe(listener)</span> - registers a listener to the state and returns a function that will allow the listener to unsubscribe
+
+section
+  h3 A store in action
+  pre(style="width:100%").
+    <code class="javascript" style="max-height: 600px;" data-trim>
+      import {addEmployee} from './actions'
+      import { createStore } from 'redux'
+      import employeeReducer from './reducers'
+
+      // Create the store from the reducer from before
+      const store = createStore(employeeReducer)
+
+      // Start listening to state changes
+      // It will print out the state when it changes
+      const unsubscribe = store.subscribe(() =>
+        console.log(store.getState())
+      )
+
+      // Dispatch some actions
+      // These will go through the reducer to update the store
+      store.dispatch(addEmployee({name: 'Sterling Archer', title: 'Agent'})
+      store.dispatch(addEmployee({name: 'Lana Kane', title: 'Agent'})
+      store.dispatch(addEmployee({name: 'Cyril Figgis', title: 'Comptroller'})
+
+      // Stop listening to state changes
+      unsubscribe()
+    </code>
+
+section
+  h3 Data Flow
+  ul
+    li.
+      Redux follows a strict unidirectional data flow
+    li.
+       Action is called via <span class="component red">store.dispatch(action)</span>
+    li The reducer function is called
+      ul
+        li.
+          There is only one reducer function, but it can be made up of several smaller reducers via
+        <span class="component red">combineReducers()</span> or some other method of combining reducers
+    li The store saves the result from the reducer(s)
+      ul
+        li.
+          All listeners registered via <span class="component red">store.subscribe(listener)</span> will be called
+        li.
+          Current state is now available by calling <span class="component red">store.getState()</span>
+
+section
+  h2 Advanced Topics
+
+section
+  h2 Middleware
+
+section
+  h3 Middleware
+  ul
+    li Used to run code after an action is dispatched but before it gets to the reducer
+    li Applies configured middleware in a chain that will get run in order
+    li Can inspect both actions and state, modify action data, send other actions, stop actions completely, etc.
+
+section
+  h3 Middleware
+  ul
+    li.
+      Usually in the form of <span class="component red">middleware = store => next => action</span>
+  ul
+    li.
+      <span class="component red">store</span> - the store
+    li.
+      <span class="component red">next</span> - the next piece of middleware in the chain
+    li.
+      <span class="component red">action</span> - the current action
+
+section
+  h3 Middleware - Simple Logger
+  pre(style="width:100%").
+    <code class="javascript" data-trim>
+      const logger = store => next => action => {
+        console.log('ACTION =>', action)
+        let result = next(action)
+        console.log('NEXT =>' , store.getState())
+        return result
+      }
+
+      export default logger
+    </code>
+
+section
+  h3 Middleware in action
+  pre(style="width:100%").
+    <code class="javascript" data-trim>
+      import { createStore, combineReducers, applyMiddleware } from 'redux'
+      import { agentReducer } from 'agent/modules'
+      import { cyborgReducer } from 'cyborg/modules'
+      import logger from 'middleware/logger'
+
+      const reducers = combineReducers(agentReducer, cyborgReducer)
+
+      const store = createStore(
+        reducers,
+        applyMiddleware(logger)
+      )
+
+      export default store
+    </code>
+
+
+section
+  h3 How do we get data from a REST API?
+  img(src='/resources/images/thinking.jpg')
+
+section
+  h2 Async Actions
+
+section
+  h3 Async Actions
+  ul
+    li Important events when you call an async action
+    ul
+      li When the call is started
+      li When a response or error is received
+
+section
+  h3 Async Actions
+  ul
+    li Therefore, you need three actions tell the reducer(s):
+    ul
+      li When an async request begins
+      li When the request finishes successfully
+      li When the request fails
+
+section
+  h3 Async Actions
+  pre(style="width:100%").
+    <code class="javascript" data-trim>
+      // separate types
+      { type: 'app/agent/FETCH_AGENTS_REQUEST' }
+      { type: 'app/agent/FETCH_AGENTS_FAILURE', error: 'Oops' }
+      { type: 'app/agent/FETCH_AGENTS_SUCCESS', response: { ... } }
+
+      // status field
+      { type: 'app/agent/FETCH_AGENTS' }
+      { type: 'app/agent/FETCH_AGENTS', status: 'error', error: 'Oops' }
+      { type: 'app/agent/FETCH_AGENTS', status: 'success', response: { ... } }
 
     </code>
 
 section
+  h2 Async Action Creators
+
+section
+  h3 Async Action Creators
   ul
-    li Notice that the callback is expecting the Store's method to return a promise so that it knows how to emit a change
+    li.
+      Standard way to create an async action creator is to use a <span class="component red">thunk</span>
+      using the <span class="component red">react-thunk</span> middleware
+
+section
+  h2 ???
+  img(src='/resources/images/grandma_what.jpg')
+
+section
+  h3 Thunks in Redux
+  ul
+    li.
+      Action creators return a function with <span class="component red">dispatch</span> as a single argument
+    li.
+      The <span class="component red">react-thunk</span> middleware knows how to handle action creators that return a function
+      and passes the store's <span class="component red">dispatch()</span> to the function
+    li.
+      The function called by the middleware returns a value, like a <span class="component red">Promise</span> object.
+
+section
+  h3 Thunk example
+  pre(style="width:100%").
+    <code class="javascript" style="max-height: 700px;" data-trim>
+      import axios from 'axios'
+
+      export const FETCH_AGENTS_REQUEST = 'app/agent/FETCH_AGENTS_REQUEST'
+      export const FETCH_AGENTS_FAILURE = 'app/agent/FETCH_AGENTS_FAILURE'
+      export const FETCH_AGENTS_SUCCESS = 'app/agent/FETCH_AGENTS_SUCCESS'
+
+      const requestAgents = () => {
+        return {
+          type: FETCH_AGENTS_REQUEST
+        }
+      }
+
+      const requestAgentsSuccess = (agents) => {
+        return {
+          type: FETCH_AGENTS_SUCCESS,
+          payload: agents
+        }
+      }
+
+      const requestAgentsError = (error) => {
+        return {
+          type: FETCH_AGENTS_FAILURE,
+          error: error
+        }
+      }
+    </code>
+
+section
+  h3 Thunk example (cont.)
+  pre(style="width:100%").
+    <code class="javascript" data-trim>
+      export const fetchAgents = () => {
+        return (dispatch) => {
+          dispatch(requestAgents())
+          return axios.get('api/agents')
+            .then(response => response.data)
+            .then(agents => dispatch(requestAgentsSuccess(agents)))
+            .catch(error => dispatch(requestAgentsError(error)))
+        }
+      }
+    </code>
 
 section
   h2 axios
@@ -187,6 +352,169 @@ section
       a(href="https://github.com/mzabriskie/axios") API on Github
 
 section
+  h2 React Redux
+
+section
+  h3 React Redux
+  ul
+    li Used to making binding React components to Redux a little easier
+
+section
+  h3 Tenets
+  ul
+    li Presentational (dumb) components vs. container (smart) components
+    li Avoid using state or React lifecycle methods in components if possible
+
+section
+  h3 Presentational components
+  ul
+    li Don't know about Redux
+    li Get data from props
+    li.
+      Can be implemented as <span class="component red">functional stateless components</span>
+
+section
+  h4 Example functional stateless component
+  pre(style="width:100%").
+    <code class="javascript" style="max-height: 700px;" data-trim>
+      import React from 'react'
+      import PropTypes from 'prop-types'
+
+      const AgentDetails  = ( { agent, onClick } ) => (
+        &lt;li onClick={onClick}&gt;
+          {agent.name} - {agent.title}
+        &lt;/li&gt;
+      )
+
+      AgentDetails.propTypes = {
+        onClick: PropTypes.func.isRequired,
+        agent: PropTypes.shape({
+          name: PropTypes.string.isRequired,
+          title: PropTypes.string.isRequired,
+        })
+      }
+
+      export default AgentDetails
+    </code>
+
+section
+  h3 Container components
+  ul
+    li Used as a bridge between React and Redux to dispatch actions and update the store
+    li.
+      Uses React Redux <span class="component red">connect()</span> function
+
+section
+  h3 Connect function
+  ul
+    li.
+      <span class="component red">connect([mapStateToProps], [mapDispatchToProps], [mergeProps], [options])</span>
+    li.
+      <span class="component red">mapStateToProps</span> and <span class="component red">mapDispatchToProps</span> are the most commonly used parameters
+
+section
+  h3 mapStateToProps(state, [ownProps])
+  ul
+    li Must be an object
+    li Subscribes the component to store updates
+    li Allows mapping of store data to props in child components
+    li.
+      If passed <span class="component red">ownProps</span>, will pass in props passed to this component
+
+section
+  h3 mapDispatchToProps(dispatch, [ownProps])
+  ul
+    li Can be an object or a function
+    li.
+      If passed an object, each function inside it is considered an action creator and binds to <span class="component red">store.dispatch</span>
+    li.
+      If passed a function, the function is given the <span class="component red">dispatch</span> function directly
+    li.
+      If passed <span class="component red">ownProps</span>, will pass in props passed to this component
+
+section
+  h3 Example container component
+  pre(style="width:100%").
+    <code class="javascript" style="max-height: 700px;" data-trim>
+      import React, {Component} from 'react'
+      import PropTypes from 'prop-types'
+
+      import AgentDetails from '../components/AgentDetails'
+
+      class AgentList extends Component {
+
+        render() {
+          return (
+            &lt;ul&gt;{this.props.agents.map(
+            agent => (&lt;AgentDetails agent={agent} onClick={this.props.onAgentClick}/&gt;))}&lt;/ul&gt;
+          )
+        }
+
+      }
+
+      AgentList.propTypes = {
+        agents: PropTypes.array.isRequired
+      }
+
+      export default AgentList
+
+    </code>
+
+section
+  h3 Connecting with connect()
+  pre(style="width:100%").
+    <code class="javascript" style="max-height: 700px;" data-trim>
+      import {connect} from 'react-redux'
+      import {onAgentClick} from '../actions/agentActions'
+      import AgentList from '../components/AgentList'
+
+      const mapStateToProps = (state) => {
+        return {
+          agents: state.agents
+        }
+      }
+
+      const mapDispatchToProps = {
+        onAgentClick
+      }
+
+      const ConnectedAgentList = connect(mapStateToProps, mapDispatchToProps)(AgentList)
+
+      export default ConnectedAgentList
+    </code>
+
+section
+  h3 Presentational vs. container components
+  table(style={'font-size': '75%'})
+    thead
+      tr
+        td
+        td Presentational components
+        td Container components
+    tbody
+      tr
+        td Purpose
+        td How things look (markup, styles)
+        td How things work (data fetching, state updates)
+      tr
+        td Aware of Redux
+        td No
+        td Yes
+      tr
+        td To read data
+        td Read data from props
+        td Subscribe to Redux state
+      tr
+        td To change data
+        td Invoke callbacks from props
+        td Dispatch Redux actions
+      tr
+        td Are written
+        td By hand
+        td.
+          Generated by React Redux via <span class="component red">connect()</span>
+
+section
   h1 Lab 04
-  h2 Adding Flux to Timesheetz
+  h2 Adding Redux to Timesheetz
 

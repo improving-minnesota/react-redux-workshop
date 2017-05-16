@@ -22,6 +22,10 @@
     @extend .monospace;
     text-align: center;
     box-shadow: initial;
+
+    &.red {
+      color: #c82506;
+    }
   }
 
 }
