@@ -44,14 +44,12 @@ import {BrowserRouter, Route, Switch, Redirect} from 'react-router-dom';
     return (
       <BrowserRouter>
         <div className="App">
-          <Route path={"/"}>
-            <Switch>
-              <Route path="/projects" component={Projects}/>
-              <Route exact path="/employees" component={Employees}/>
-              <Route path="/employees/:user_id/timesheets" component={Timesheets}/>
-              <Redirect to="/employees"/>
-            </Switch>
-          </Route>
+        <Switch>
+          <Route path="/projects" component={Projects}/>
+          <Route exact path="/employees" component={Employees}/>
+          <Route path="/employees/:user_id/timesheets" component={Timesheets}/>
+          <Redirect to="/employees"/>
+        </Switch>
 
         </div>
       </BrowserRouter>
@@ -77,15 +75,13 @@ class App extends Component {
     return (
       <BrowserRouter>
         <div className="App">
-          <Navigation/>
-          <Route path={"/"}>
+            <Navigation/>
             <Switch>
               <Route path="/projects" component={Projects}/>
               <Route exact path="/employees" component={Employees}/>
               <Route path="/employees/:user_id/timesheets" component={Timesheets}/>
               <Redirect to="/employees"/>
             </Switch>
-          </Route>
 
         </div>
       </BrowserRouter>
