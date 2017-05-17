@@ -203,6 +203,14 @@ describe('Hello World:', function () {
 
 - Did your test pass?
 
+- If you get a weird error like the following, try installing watchman as reported here: [watchman bug](https://github.com/facebookincubator/create-react-app/issues/871)
+```
+Error: Error watching file for changes: EMFILE
+    at exports._errnoException (util.js:953:11)
+    at FSEvent.FSWatcher._handle.onchange (fs.js:1400:11)
+npm ERR! Test failed.  See above for more details.
+```
+
 - There are many more assertions that are possible!
   - Test for a css classname
   - Test component state internal object representation
