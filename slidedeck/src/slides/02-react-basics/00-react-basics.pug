@@ -17,16 +17,16 @@ section
 
 section
   p
-    a(href="http://facebook.github.io/react/docs/glossary.html") More info?
+    a(href="https://facebook.github.io/react/docs/reconciliation.html") More info?
 
 section
   p For a bare-bones React component, we need to do 2 things
   ul
-    li Extend the react Component
-    li Implement render()
+    li Extend the React Component class
+    li Implement <span class="component red">render()</span>
 
 section
-  h2.lower Extend React Component
+  h2.lower React Component
 
 section
   ul
@@ -37,12 +37,12 @@ section
 section
   pre.
     <code class="javascript" data-trim>
-    import React, { Component } from 'react';
+    import React, { Component } from 'react'
     class Hello extends Component {
       render() {...}
     }
 
-    module.exports = Hello;
+    export default Hello
     </code>
 
 section
@@ -58,17 +58,17 @@ section
   h2.lower render()
   ul
     li You should return null (or false) to indicate that you don't want anything rendered
-    li React renders a &lt;noscript&gt; tag to work with our current diffing algorithm
-    li When returning null or false, React.findDOMNode(this) will return null
+    li React renders a <span class="component red">&lt;noscript&gt;</span> tag to work with our current diffing algorithm
+    li When returning null or false, <span class="component red">ReactDOM.findDOMNode(this)</span> will return null
 
 section
   h2.lower render()
   ul
     li Should be pure
     li Should not modify component state
-    li Should return the same result each time it's invoked
+    li Should return the same result each time it is invoked
     li Should not read from or write to the DOM
-    li Work should be performed in componentDidMount() or the other lifecycle methods
+    li Work should be performed in <span class="component red">componentDidMount()</span> or the other lifecycle methods
 
 section
   h2.lower constructor
@@ -81,20 +81,20 @@ section
   pre.
     <code class="javascript" data-trim>
     constructor(props) {
-      super(props);
+      super(props)
       this.state = {
         saveText: 'Update',
         employee: {},
         errors: {}
-      };
+      }
     }
     </code>
 
 section
   h2.lower defaultProps
   ul
-    li Values in the mapping will be set on this.props if that prop is not specified by the parent component
-    li This invoked before any instances are created and therefore it can't rely on this.props
+    li Values in the mapping will be set on <span class="component red">this.props</span> if that prop is not specified by the parent component
+    li This invoked before any instances are created and therefore it can't rely on <span class="component red">this.props</span>
 
 section
   pre.
@@ -112,8 +112,8 @@ section
 section
   h2.lower propTypes: {}
   ul
-    li The propTypes object allows you to validate props being passed to your components
-    li Defined in a similar matter to defaultProps
+    li The <span class="component red">propTypes</span> object allows you to validate props being passed to your components
+    li Defined in a similar matter to <span class="component red">defaultProps</span>
 
 section
   pre.
@@ -159,20 +159,20 @@ section
 section
   p Since JSX is a superset of JavaScript, identifiers like class and for as XML attribute names is discouraged
   ul
-    li htmlFor = for
-    li className = class
+    li <span class="component red">htmlFor</span> instead of <span class="component red">for</span>
+    li <span class="component red">className</span> instead of  <span class="component red">class</span>
 
 section
   h2 Data: State vs. Props
 
 section
   ul
-    li "props" are the data you pass into your component via attributes
+    li <span class="component red">props</span> are the data you pass into your component via attributes
     li Used for application data that you need to display or manage with your component
 
 section
   ul
-    li "state" is your component's internally scoped ... state
+    li <span class="component red">state</span> is your component's internally scoped ... state
     li Used for the behavior of your component: open, disabled, submitted, etc.
 
 section
@@ -194,7 +194,7 @@ section
           onSave={this.saveEmployee}
           validate={this.validate}
           toggleAdmin={this.toggleAdmin} /&gt;
-      );
+      )
     }
 
     </code>
@@ -210,17 +210,17 @@ section
   h2 Mounting
   p These methods are called when an instance of a component is being created and inserted into the DOM:
   ol
-    li constructor()
-    li componentWillMount()
-    li render()
-    li componentDidMount()
+    li <span class="component red">constructor()</span>
+    li <span class="component red">componentWillMount()</span>
+    li <span class="component red">render()</span>
+    li <span class="component red">componentDidMount()</span>
 
 section
   h3.lower componentWillMount()
   ul
-    li Invoked immediately before mounting occurs -- before render()
-    li If you call setState within this method, render() will see the updated state
-    li Since its before render, setState won't cause a "re-render"
+    li Invoked immediately before mounting occurs -- before <span class="component red">render()</span>
+    li If you call <span class="component red">setState()</span> within this method, <span class="component red">render()</span> will see the updated state
+    li Since it happens before <span class="component red">render()</span>, <span class="component red">setState()</span> won't cause a "re-render"
 
 section
   h3.lower render()
@@ -229,19 +229,19 @@ section
   h3.lower componentDidMount()
   ul
     li Invoked immediately after the initial rendering occurs
-    li Setting state will cause "re-render"
+    li Setting state via <span class="component red">this.setState()</span> will cause "re-render"
     li Place to integrate with other JS frameworks
-    li Place to Send AJAX requests
+    li Place to make AJAX requests
 
 section
   h2 Updating:
   p An update can be caused by changes to props or state.
   ol
-    li componentWillReceiveProps()
-    li shouldComponentUpdate()
-    li componentWillUpdate()
-    li render()
-    li componentDidUpdate()
+    li <span class="component red">componentWillReceiveProps()</span>
+    li <span class="component red">shouldComponentUpdate()</span>
+    li <span class="component red">componentWillUpdate()</span>
+    li <span class="component red">render()</span>
+    li <span class="component red">componentDidUpdate()</span>
 
 section
   h4.lower componentWillReceiveProps(object nextProps)
@@ -253,22 +253,22 @@ section
   h4.lower componentWillReceiveProps(object nextProps)
   ul
     li Used to react to a prop transition
-    li This happens before render() is called when updating the state using this.setState()
-    li The old props can be accessed via this.props
-    li Calling this.setState() within this function will not trigger an additional render
+    li This happens before <span class="component red">render()</span> is called when updating the state using <span class="component red">this.setState()</span>
+    li The old props can be accessed via <span class="component red">this.props</span>
+    li Calling <span class="component red">this.setState()</span> within this function will not trigger an additional render
 
 section
   h4.lower shouldComponentUpdate(object nextProps, object nextState)
   ul
     li Invoked before rendering when new props or state are being received
-    li This method is not called for the initial render or when forceUpdate is used
+    li This method is not called for the initial render or when <span class="component red">forceUpdate</span> is used
 
 section
   h4.lower shouldComponentUpdate(object nextProps, object nextState)
   ul
-    li Return false when you're certain that the transition to the new props and state will not require a component update
-    li render() will be completely skipped until the next state change
-    li componentWillUpdate() and componentDidUpdate() will not be called
+    li Return <span class="component red">false</span> when you're certain that the transition to the new props and state will not require a component update
+    li <span class="component red">render()</span> will be completely skipped until the next state change
+    li <span class="component red">componentWillUpdate()</span> and <span class="component red">componentDidUpdate()</span> will not be called
 
 section
   h4.lower componentWillUpdate(object nextProps, object nextState)
@@ -279,8 +279,8 @@ section
 section
   h4.lower componentWillUpdate(object nextProps, object nextState)
   ul
-    li Cannot use this.setState() in this method
-    li If you need to update state in response to a prop change, use componentWillReceiveProps instead
+    li Cannot use <span class="component red">this.setState()</span> in this method
+    li If you need to update state in response to a prop change, use <span class="component red">componentWillReceiveProps()</span> instead
 
 section
   h4.lower render()
@@ -300,10 +300,11 @@ section
     li Invoked immediately before a component is unmounted from the DOM
     li Perform any necessary cleanup in this method
   ul
-    li Invalidating timers
-    li Cleaning up any DOM elements that were created in componentDidMount()
+    li Invalidate timers if necessary
+    li Clean up any DOM elements that were created in <span class="component red">componentDidMount()</span>
 
-
+section
+  h1.lower Test Helpers
 
 section
   h2.lower Enzyme
@@ -316,16 +317,16 @@ section
 section
   pre.
     <code class="javascript" data-trim>
-    import { shallow, mount } from 'enzyme';
+    import { shallow, mount } from 'enzyme'
     </code>
 
 section
   h4.lower Enzyme render testing
   ul
-    li Shallow
+    li <span class="component red">shallow()</span>
       ul
         li Isolate your test by not rendering any child components
-    li Mount
+    li <span class="component red">mount()</span>
       ul
         li More of an 'integration' test
         li Test child component rendering
@@ -341,15 +342,15 @@ section
         hasErrors={spies.hasErrors}
         toggleAdmin={spies.toggleAdmin}
         onSave={spies.onSave} /&gt;
-    );
+    )
 
     </code>
 
 section
   h2.lower Jest Expect
   ul
-    li Default set of expect() assertions included in Jest
-    li toBeTruthy(), toBeFalsy(), toHaveLength(), toEqual(), etc...
+    li Default set of <span class="component red">expect()</span> assertions included in Jest
+    li <span class="component red">toBeTruthy(), toBeFalsy(), toHaveLength(), toEqual()</span>, etc...
     li
       a(href="http://facebook.github.io/jest/docs/expect.html") Jest Expect API
 
@@ -359,7 +360,7 @@ section
     li Test that the component renders successfully
   pre.
     <code class="javascript" data-trim>
-    expect(shallow(<Hello />)).toHaveLength(1);
+    expect(shallow(<Hello />)).toHaveLength(1)
 
     </code>
 
@@ -377,7 +378,7 @@ section
     li Returns true if the text is anywhere in the component
   pre.
     <code class="javascript" data-trim>
-    expect(shallow(&lt;Hello />)).toIncludeText('Howdy');
+    expect(shallow(&lt;Hello />)).toIncludeText('Howdy')
 
     </code>
 
@@ -387,7 +388,7 @@ section
     li Returns true if the JSX element is in the component
   pre.
     <code class="javascript" data-trim>
-    expect(shallow(&lt;Hello />)).toContainReact(&lt;td>Howdy&lt;/td>);
+    expect(shallow(&lt;Hello />)).toContainReact(&lt;td>Howdy&lt;/td>)
 
     </code>
 
@@ -398,9 +399,9 @@ section
   pre.
     <code class="javascript" data-trim>
     //Find first Route in rendered App
-    const route = shallow(&lt;App />).find('Route').at(0);
+    const route = shallow(&lt;App />).find('Route').at(0)
 
-    expect(route).toHaveProp('path', '/projects');
+    expect(route).toHaveProp('path', '/projects')
 
     </code>
 
@@ -414,7 +415,7 @@ section
   pre.
     <code class="javascript" data-trim>
     //Finds all rows with css class 'odd'
-    expect(comp.find('tr.odd')).toHaveLength(1);
+    expect(comp.find('tr.odd')).toHaveLength(1)
 
     </code>
 
