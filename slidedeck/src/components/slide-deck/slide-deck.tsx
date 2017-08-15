@@ -65,7 +65,7 @@ export class SlideDeck extends React.Component<SlideDeckProps, SlideDeckState> {
         <div className="slides">
           <section data-state="title">
             <h1>React</h1>
-            <h2>Nebraska.Code() - May 2017</h2>
+            <h2>MidwestJS - August 2017</h2>
           </section>
           {
             slides

@@ -4,10 +4,10 @@ section
 section
   p Since our backend doesn't serve different "pages", how do we handle different URLs?
   ul
-    li.monospace /
-    li.monospace /login
-    li.monospace /secure/employees
-    li.monospace /secure/timesheets
+    li.monospace <span class="component red">/</span>
+    li.monospace <span class="component red">/login</span>
+    li.monospace <span class="component red">/secure/employees</span>
+    li.monospace <span class="component red">/secure/timesheets</span>
 
 
 - var routeTransition = "<span style='color:#999'>=></span>";
@@ -18,11 +18,11 @@ section
     <br/>to transition the application
   ul(style="list-style-type:none")
     li.monospace
-      p /#inbox !{routeTransition} /#sent <br/>
+      p <span class="component red">/#inbox</span> !{routeTransition} <span class="component red">/#sent</span> <br/>
     li.monospace
-      p /amegala !{routeTransition} /objectpartners
+      p <span class="component red">/opi</span> !{routeTransition} <span class="component red">/objectpartners</span>
     li.monospace
-      p /moments?cat=1 !{routeTransition} /moments?cat=2
+      p <span class="component red">/moments?cat=1</span> !{routeTransition} <span class="component red">/moments?cat=2</span>
 
 section
   h1.lower react-router
@@ -35,14 +35,14 @@ section
     li Maintains the browser history within the app
     li Able to trigger multiple routes
     li Routes are represented as React Components
-    li Routes provides info to components via props
+    li Routes provides info to components via <span class="component red">props</span>
 
 section
-  h2 react-router component's we'll be covering...
+  h2 react-router components we'll be covering...
 
 section
   h2.lower.component &lt;BrowserRouter&gt;
-  p A type of &lt;Router&gt; that uses the HTML5 history API to keep your UI in sync with the URL.<br/><br/>
+  p A type of <span class="component red">&lt;Router&gt;</span> that uses the HTML5 history API to keep your UI in sync with the URL.<br/><br/>
   p One of 5 different types of Routers available in the react-router library.
 
 
@@ -66,36 +66,36 @@ section
     li Pattern used to match this route against the URL
     li Based on Express-style path strings
       ul
-        li e.g. <span class="component" style="color:#c82506">/employees/:id</span>
+        li e.g. <span class="component red">/employees/:id</span>
         li npm
           a(href="https://www.npmjs.com/package/path-to-regexp")  path-to-regexp
     li.
       If multiple routes match, each will get rendered<br/>
-      &nbsp;(unless defined inside a <span class='monospace'>switch</span>)
+      &nbsp;(unless defined inside a <span class="component red">switch</span>)
 
     li If path not defined, the route will always render
 
 section
   h3.lower component
   ul
-    li The react component to be rendered when the route is active
+    li The React component to be rendered when the route is active
     li Alternative render properties (not covered today):
       ul
-        li <span class="component" style="color:#c82506">render</span> - quick inline function rendering
-        li <span class="component" style="color:#c82506">children</span> - for complex rendering logic needs
+        li <span class="component red">render</span> - quick inline function rendering
+        li <span class="component red">children</span> - for complex rendering logic needs
 
 section
   h3.lower exact & strict
   ul
     li.
-      <span class="component" style="color:#c82506">exact</span> - only matches if an
+      <span class="component red">exact</span> - only matches if an
       <span style="font-style:italic">exact</span> match
     li.
-      <span class="component" style="color:#c82506">strict</span> - requires the trailing slash
+      <span class="component red">strict</span> - requires the trailing slash
       <span style="font-style:italic">exact</span> match
     li.
-      If <span class="component">exact</span> is omitted, a route path of <span class="component">/employees</span>
-      will match a URL of <span class="component">/employees/anything</span>
+      If <span class="component red">exact</span> is omitted, a route path of <span class="component red">/employees</span>
+      will match a URL of <span class="component red">/employees/anything</span>
     li.
       Check the <a href="https://reacttraining.com/react-router/web/api/Route/exact-bool">docs</a> for more info
 
@@ -133,15 +133,15 @@ section
 
 section
   ul
-    li Renders an &lt;a&gt; tag
+    li Renders an <span class="component red">&lt;a&gt;</span> tag
     li Links to a route in the application
     li If you change the path of your route, <br/>you don't have to change your links as well
     li.
-      <span class="component" style="color:#c82506">&lt;NavLink&gt;</span> is a specialized version of &lt;Link&gt;
+      <span class="component red">&lt;NavLink&gt;</span> is a specialized version of <span class="component red">&lt;Link&gt;</span>
     ul
       li Knows when the route it links to is active
       li Dynamic
-        span.component  activeClassName/activeStyle
+        span.component.red  activeClassName/activeStyle
       li Has exact and strict params like a Route
 
 section
@@ -165,32 +165,35 @@ section
 section
   h2.lower Route Props
   p Components receive the following props from Router
-  ul.monospace
-    li match
-    li location
-    li history
+  ul
+    li
+      span.component.red match
+    li 
+      span.component.red location
+    li 
+      span.component.red history
 
 section
   h3.lower match
   p Object containing information about how the Route matched the URL.
   ul
     li
-      <span class="component" style="color:#c82506">path</span> - Path pattern on the Route that matched
+      <span class="component red">path</span> - Path pattern on the Route that matched
       <br/>
       span(style="margin-left:1em; color:#656565;") e.g.&nbsp;
         span.component(style="font-size:0.95em;") /employee/:id
     li
-      <span class="component" style="color:#c82506">url</span> - URL segment that was matched
+      <span class="component red">url</span> - URL segment that was matched
       <br/>
       span(style="margin-left:1em;color:#656565;") e.g.&nbsp;
         span.component(style="font-size:0.95em;") /employee/2
     li
-      <span class="component" style="color:#c82506">params</span> - key/values for the dynamic parts of URL
+      <span class="component red">params</span> - key/values for the dynamic parts of URL
       <br/>
       span(style="margin-left:1em;color:#656565;")
         span.component(style="font-size:0.95em;") /employee/2 =>/employee/:id => {id:2}
     li
-      <span class="component" style="color:#c82506">isExact</span> - true if the entire URL was matched
+      <span class="component red">isExact</span> - true if the entire URL was matched
 
 section
   h3.lower location
@@ -211,11 +214,11 @@ section
 
 section
   p Where we are
-  p.component this.props.location
+  p.component.red this.props.location
   p Where we were
-  p.component this.props.history...
+  p.component.red this.props.history...
   p Where we are going
-  p.component &lt;Link to={location}/&gt;
+  p.component.red &lt;Link to={location}/&gt;
 
 
 section

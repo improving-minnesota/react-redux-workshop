@@ -19,7 +19,7 @@ section
 section
   ul
     li Form components allow listening for changes
-    li Set a callback to the onChange prop
+    li Set a callback to the <span class="component red">onChange</span> prop
     li The callback fires when:
       ul
         li The value changes (every keystroke)
@@ -30,8 +30,8 @@ section
   h2 Controlled Components
   ul
     li React controls state and display
-    li Any &lt;input&gt; with value set is a controlled component
-    li Value of the rendered element will always reflect the value prop
+    li Any <span class="component red">&lt;input&gt;</span> with value set is a controlled component
+    li Value of the rendered element will always reflect the <span class="component red">value</span> prop
   pre.
     <code class="javascript" data-trim>handleCityChange(event) {
       this.setState({city: {value: event.target.value}});
@@ -61,7 +61,7 @@ section
   h2 React Bootstrap Validation
   ul
     li Add a validationState function to return one of success, warning, or error
-    li Add `&lt;FormControl.Feedback />` inside the FormGroup tag
+    li Add <span class="component red">&lt;FormControl.Feedback/></span> inside the FormGroup tag
 
 section
   h3 Validation
@@ -98,14 +98,21 @@ section
     </code>
 
 section
-  h2 Uncontrolled Components
+  h3 Uncontrolled Components
   ul
     li React does not control the state
     li Used for custom behavior
-    li Good for co-existing with non-react libraries
-    li Use a `ref` function to get input value from DOM
+    li Good for co-existing with non-React libraries
+    li Use a <span class="component red">ref</span> function to get input value from DOM
+    li Optionally, use <span class="component red">defaultValue</span> instead of <span class="component red">value</span>, <span class="component red">defaultChecked</span> instead of <span class="component red">checked</span>
   pre.
-    <code class="html" data-trim>&lt;input type="text" ref={(input) => this.textInput = input} />
+    <code class="javascript" data-trim>&lt;form onSubmit={this.handleSubmit}&gt;
+      &lt;input type="text" ref={(input) => this.name = input} />
+    &lt;/form&gt;
+
+    handleSubmit(event) {
+      console.log(`Input value: ${this.name}`)
+    }
     </code>
 
 section
