@@ -359,7 +359,7 @@ const rootReducer = combineReducers({
 ### Use the Employee Actions
 
 - Now, let's update our **Employee** components to use these actions.
-- Open **src/components/Employees.js**
+- Open **src/components/employees/Employees.js**
 - Import some **redux** libraries we need and the **EmployeeActionCreator**
 
 ```javascript
