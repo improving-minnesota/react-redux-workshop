@@ -4,6 +4,7 @@ node_js:
 cache:
   yarn: true
 
+before_script: cd slidedeck
 script: yarn test
 
 before_deploy: yarn build
