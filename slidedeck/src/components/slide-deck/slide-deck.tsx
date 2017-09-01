@@ -1,19 +1,18 @@
 import * as React from 'react';
-import * as renderHtml from 'react-render-html';
 
 import 'reveal.js/css/reveal.css';
 import 'object-partners-revealjs-theme';
 import 'highlight.js/styles/monokai.css';
 
-import '!style-loader!css-loader?importLoaders=1!postcss-loader?config=node_modules/object-partners-presentation/dist/config-files/postcss.config.js!sass-loader!./slide-deck.scss'; // hack hack hack
+import '!style-loader!css-loader?importLoaders=1!postcss-loader?config=node_modules/object-partners-presentation/dist/config-files/postcss.config.js!sass-loader!./slide-deck.scss'; // hack required because object-partners-presentation is not extensible enough
 
-export interface SlideDeckProps {
-  slides: any[][];
+interface Props {
+  slides: string[][];
 }
 
-export interface SlideDeckState {}
+interface State {}
 
-export class SlideDeck extends React.Component<SlideDeckProps, SlideDeckState> {
+export class SlideDeck extends React.Component<Props, State> {
   componentDidMount() {
     require.ensure([
       'reveal.js',
@@ -65,7 +64,7 @@ export class SlideDeck extends React.Component<SlideDeckProps, SlideDeckState> {
         <div className="slides">
           <section data-state="title">
             <h1>React</h1>
-            <h2>MidwestJS - August 2017</h2>
+            <h2>HDC - September 6, 2017</h2>
           </section>
           {
             slides
@@ -74,11 +73,11 @@ export class SlideDeck extends React.Component<SlideDeckProps, SlideDeckState> {
                   <section key={deckIndex}>
                     {
                       deck
-                        .map((slide: any, slideIndex: number) => {
+                        .map((html: any, slideIndex: number) => {
                           return (
-                            <section key={slideIndex}>
-                              {renderHtml(slide)}
-                            </section>
+                            <section
+                              key={`${deckIndex}-${slideIndex}`} dangerouslySetInnerHTML={{ __html: html }} // #yolo
+                            />
                           );
                         })
                     }

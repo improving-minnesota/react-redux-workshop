@@ -37,7 +37,6 @@
     "object-partners-revealjs-theme": "ObjectPartners/object-partners-revealjs-theme#1.0.1",
     "react": "~15.5.4",
     "react-dom": "~15.5.4",
-    "react-render-html": "~0.1.6",
     "reveal.js": "~3.4.1"
   }
 }
