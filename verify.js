@@ -4,7 +4,7 @@ var verifySystem = workshopSetup.verifySystem;
 
 verifySystem([
   verifySystem.validators.node('>=5.0.0'),
-  verifySystem.validators.yarnNpm('>=0.30.0', '>=3.0.0')
+  verifySystem.validators.yarnNpm('>=0.20.0', '>=3.0.0')
 ])
   .then(function () {
     console.log('🎉  Congrats! Your system is setup properly')
