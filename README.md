@@ -1,11 +1,33 @@
 React Redux Workshop Labs and Slides
-================
+___
 
-Slides and labs for the accompanying workshop demo repo https://github.com/objectpartners/react-redux-timesheet/
+## Setup
+
+Prior to attending the workshop, we ask to validate your machine setup so that we can ensure a smooth workshop focused on learning React, not tweaking machine setup!
+
+1. Please ensure you have all the requested tooling (e.g. git) as specified in [setup instructions][./labs/lab-01-setup.md]
+1. Run `node verify.js`
+
+If all goes well, you should see
+
+> 🎉  Congrats! Your system is setup properly
+> You should be good to install and run things.
+
+## Additional Info
+
+- [Slides][slides]
+- [Labs][labs]
+- [Completed product][completed]
+
+Slides and labs for the accompanying workshop demo repo 
 
 ## Labs ##
-Lab markdown files are located in the labs folder
+Lab markdown files are located in the [labs](./labs) folder
 
 ## Slide Deck ##
-The slide deck is located in the slidedeck folder.  Here are the
-published slides [http://objectpartners.github.io/react-redux-workshop](http://objectpartners.github.io/react-redux-workshop)
+The slide deck is located in the [slidedeck](./slidedeck) folder.  Here are the
+published slides [Slidedeck](https://objectpartners.github.io/react-redux-workshop/)
+
+[slides]: ./slidedeck
+[labs]: ./labs
+[completed]: https://github.com/objectpartners/react-redux-timesheet

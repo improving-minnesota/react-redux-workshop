@@ -1,4 +1,4 @@
-# angular-slides
+# react-redux-workshop-slides
 
 The slides for the accompanying workshop https://github.com/objectpartners/react-redux-workshop/
 
