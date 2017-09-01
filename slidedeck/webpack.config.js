@@ -1,4 +1,4 @@
-const getWebpackConfig = require('object-partners-presentation');
+const getWebpackConfig = require('@object-partners/presentation-config');
 const path = require('path');
 
 const CopyWebpackPlugin = require('copy-webpack-plugin');
@@ -20,8 +20,6 @@ const configFn = getWebpackConfig({
       }
     ])
   ]
-}, {
-  dirname: __dirname
 });
 
 module.exports = configFn;
