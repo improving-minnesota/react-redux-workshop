@@ -21,6 +21,7 @@
     "test": "echo \"We should probably write some tests huh\""
   },
   "devDependencies": {
+    "@objectpartners/presentation-config": "^1.0.0",
     "@types/node": "~7.0.12",
     "@types/react": "~15.0.23",
     "@types/react-dom": "~15.5.0",

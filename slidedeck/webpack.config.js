@@ -1,4 +1,4 @@
-const getWebpackConfig = require('@object-partners/presentation-config');
+const getWebpackConfig = require('@objectpartners/presentation-config');
 const path = require('path');
 
 const CopyWebpackPlugin = require('copy-webpack-plugin');
