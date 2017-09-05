@@ -16,6 +16,14 @@ If all goes well, you should see
 > 
 > You should be good to install and run things.
 
+## Forking
+
+Alternately, you may consider forking the `react-redux-workshop` to your own personal account. You can do that like so:
+
+1. Fork from the GitHub web UI (top right "Fork" button)
+1. Use the new git repo URL that was created. For instance, `https://github.com/myaccountname/react-redux-workshop.git`
+1. Follow the other steps as normal
+
 ## Additional Info
 
 - [Hosted slides][slides]
