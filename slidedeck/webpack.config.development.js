@@ -7,11 +7,9 @@ module.exports = function webpackDevConfig(baseConfig) {
     mode: 'development',
     devServer: {
       port: 9998,
-      contentBase: [
-        'src/public',
-        '.'
-      ]
-        .map(contentPath => path.join(__dirname, contentPath))
+      contentBase: ['src/public', '.'].map(contentPath =>
+        path.join(__dirname, contentPath)
+      )
     }
   });
 };

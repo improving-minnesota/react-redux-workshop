@@ -29,16 +29,16 @@ module.exports = function webpackConfig() {
           use: ['babel-loader']
         },
         {
-                test: /reveal\.js\/plugin\/.*\.(js|html)$/,
-                use: [
-                  {
-                    loader: 'file-loader',
-                    options: {
-                      name: '[path][name].[ext]'
-                    }
-                  }
-                ],
-                include: [path.join(__dirname, 'node_modules')]
+          test: /reveal\.js\/plugin\/.*\.(js|html)$/,
+          use: [
+            {
+              loader: 'file-loader',
+              options: {
+                name: '[path][name].[ext]'
+              }
+            }
+          ],
+          include: [path.join(__dirname, 'node_modules')]
         },
         {
           test: /\.css$/,
@@ -50,15 +50,18 @@ module.exports = function webpackConfig() {
         },
         {
           test: /\.(md|markdown)/,
-          use: ['html-loader', {
-            loader: 'markdown-loader',
-            options: {
-              highlight(code) {
-                return require('highlight.js').highlightAuto(code).value;
-              },
-              sanitize: false
+          use: [
+            'html-loader',
+            {
+              loader: 'markdown-loader',
+              options: {
+                highlight(code) {
+                  return require('highlight.js').highlightAuto(code).value;
+                },
+                sanitize: false
+              }
             }
-}]
+          ]
         },
         {
           test: /\.(jpe?g|png|gif|mp4)/,
@@ -74,7 +77,7 @@ module.exports = function webpackConfig() {
     ],
     resolve: {
       alias: {
-        'resources': path.join(__dirname, 'resources')
+        resources: path.join(__dirname, 'resources')
       }
     }
   };
