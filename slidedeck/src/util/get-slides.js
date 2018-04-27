@@ -1,9 +1,9 @@
-export function getSlides(): any[][] {
+export function getSlides() {
   const context = require.context('../slides', true, /\.md|markdown|\.pug$/);
 
   return context.keys()
-    .sort((a: string, b: string) => {
-      const getSortObject = (name: string) => {
+    .sort((a, b) => {
+      const getSortObject = name => {
         const [, folderName, fileName] = name.split('/');
         return {
           folder: parseInt(folderName.split('-').shift(), 10),
@@ -31,7 +31,7 @@ export function getSlides(): any[][] {
       }
       return folderDiff;
     })
-    .reduce((newSlides: any[][], key: string) => {
+    .reduce((newSlides, key) => {
       const [, folderName] = key.split('/');
       const index = parseInt(folderName.split('-').shift(), 10);
       if (!newSlides[index]) {
@@ -39,7 +39,7 @@ export function getSlides(): any[][] {
       }
 
       //To help with reworking React Workshop, allow for single file with multiple slides
-      const slide: string = context(key) as string;
+      const slide = context(key);
       if (slide.indexOf('<section>') !== -1) {
         const sections = slide.replace(/\<section\>/g, '').split('</section>')    .filter(it => it.length > 0);
         Array.prototype.push.apply(newSlides[index], sections);

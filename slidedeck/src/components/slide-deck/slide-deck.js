@@ -1,18 +1,12 @@
-import * as React from 'react';
+import React, { Component } from 'react';
 
 import 'reveal.js/css/reveal.css';
-import 'object-partners-revealjs-theme';
+import '@objectpartners/revealjs-theme';
 import 'highlight.js/styles/monokai.css';
 
-import '!style-loader!css-loader?importLoaders=1!postcss-loader?config=node_modules/object-partners-presentation/dist/config-files/postcss.config.js!sass-loader!./slide-deck.scss'; // hack required because object-partners-presentation is not extensible enough
+import './slide-deck.css';
 
-interface Props {
-  slides: string[][];
-}
-
-interface State {}
-
-export class SlideDeck extends React.Component<Props, State> {
+export class SlideDeck extends Component {
   componentDidMount() {
     require.ensure([
       'reveal.js',
@@ -26,7 +20,7 @@ export class SlideDeck extends React.Component<Props, State> {
       require('reveal.js/lib/js/head.min.js');
       require('reveal.js/lib/js/html5shiv.js');
 
-      (window as any).Reveal = Reveal;
+      window.Reveal = Reveal;
       const hljs = require('highlight.js');
 
       Reveal.initialize({
@@ -68,12 +62,12 @@ export class SlideDeck extends React.Component<Props, State> {
           </section>
           {
             slides
-              .map((deck: any[], deckIndex: number) => {
+              .map((deck, deckIndex) => {
                 return (
                   <section key={deckIndex}>
                     {
                       deck
-                        .map((html: any, slideIndex: number) => {
+                        .map((html, slideIndex) => {
                           return (
                             <section
                               key={`${deckIndex}-${slideIndex}`} dangerouslySetInnerHTML={{ __html: html }} // #yolo

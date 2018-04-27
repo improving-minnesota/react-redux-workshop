@@ -1,25 +1,83 @@
-const getWebpackConfig = require('@objectpartners/presentation-config');
 const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-const CopyWebpackPlugin = require('copy-webpack-plugin');
+const ENV = process.env.NODE_ENV;
 
-const configFn = getWebpackConfig({
-  resolve: {
-    alias: {
-      resources: path.resolve('resources')
-    }
-  },
-  plugins: [
-    new CopyWebpackPlugin([
-      {
-        from: path.join(__dirname, 'node_modules/reveal.js/plugin/notes/*')
-      },
-      {
-        context: path.join(__dirname, 'src'),
-        from: path.join('.*')
+const getExtendConfig = environment => {
+  const noop = config => config;
+  try {
+    return require(`./webpack.config.${environment}`);
+  } catch (e) {
+    return noop;
+  }
+};
+
+module.exports = function webpackConfig() {
+  const extend = getExtendConfig(ENV);
+  const base = {
+    mode: 'production',
+    entry: './src/index',
+    output: {
+      path: path.join(__dirname, 'dist'),
+      filename: 'bundle.js'
+    },
+    module: {
+      rules: [
+        {
+          test: /\.js$/,
+          include: [path.join(__dirname, 'src')],
+          use: ['babel-loader']
+        },
+        {
+                test: /reveal\.js\/plugin\/.*\.(js|html)$/,
+                use: [
+                  {
+                    loader: 'file-loader',
+                    options: {
+                      name: '[path][name].[ext]'
+                    }
+                  }
+                ],
+                include: [path.join(__dirname, 'node_modules')]
+        },
+        {
+          test: /\.css$/,
+          use: ['style-loader', 'css-loader', 'postcss-loader']
+        },
+        {
+          test: /\.(pug|jade)/,
+          use: ['html-loader', 'pug-html-loader']
+        },
+        {
+          test: /\.(md|markdown)/,
+          use: ['html-loader', {
+            loader: 'markdown-loader',
+            options: {
+              highlight(code) {
+                return require('highlight.js').highlightAuto(code).value;
+              },
+              sanitize: false
+            }
+}]
+        },
+        {
+          test: /\.(jpe?g|png|gif|mp4)/,
+          use: ['url-loader']
+        }
+      ]
+    },
+    plugins: [
+      new HtmlWebpackPlugin({
+        template: path.join(__dirname, 'src/public/index.pug'),
+        chunksSortMode: 'dependency'
+      })
+    ],
+    resolve: {
+      alias: {
+        'resources': path.join(__dirname, 'resources')
       }
-    ])
-  ]
-});
+    }
+  };
 
-module.exports = configFn;
+  return extend(base);
+};
