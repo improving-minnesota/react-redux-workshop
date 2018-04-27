@@ -1,8 +1,6 @@
 const path = require('path');
 
 module.exports = function webpackDevConfig(baseConfig) {
-  baseConfig.mode = 'development';
-
   return Object.assign({}, baseConfig, {
     mode: 'development',
     devServer: {

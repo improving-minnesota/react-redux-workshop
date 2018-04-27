@@ -1,5 +1,5 @@
 {
-  "name": "react-redux-slides",
+  "name": "@objectpartners/react-redux-workshop-slides",
   "version": "1.0.0",
   "main": "dist/index.js",
   "contributors": [
@@ -9,7 +9,8 @@
     "Mike Hostetler",
     "Justin Perinovic",
     "Jeff Sheets",
-    "Travis Martensen"
+    "Travis Martensen",
+    "Dustin Schau <dustin.schau@objectpartners.com>"
   ],
   "license": "MIT",
   "scripts": {
