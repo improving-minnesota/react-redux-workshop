@@ -1,0 +1,4 @@
+[build]
+  base = "slidedeck"
+  publish = "slidedeck/dist"
+  command = "yarn build"
