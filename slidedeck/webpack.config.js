@@ -1,9 +1,12 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
-require('dotenv').config();
-
-const ENV = process.env.NODE_ENV;
+require('dotenv').config({
+  path: path.join(
+    process.cwd(),
+    process.env.NODE_ENV === 'development' ? '.env.development' : '.env'
+  )
+});
 
 const getExtendConfig = environment => {
   const noop = config => config;
@@ -15,7 +18,7 @@ const getExtendConfig = environment => {
 };
 
 module.exports = function webpackConfig() {
-  const extend = getExtendConfig(ENV);
+  const extend = getExtendConfig(process.env.NODE_ENV);
   const base = {
     mode: 'production',
     entry: './src/index',
@@ -74,7 +77,7 @@ module.exports = function webpackConfig() {
     plugins: [
       new webpack.DefinePlugin({
         'process.env': {
-          NODE_ENV: JSON.stringify(ENV),
+          NODE_ENV: JSON.stringify(process.env.NODE_ENV),
           WORKSHOP_CLIENT: JSON.stringify(process.env.WORKSHOP_CLIENT),
           WORKSHOP_DATE: JSON.stringify(process.env.WORKSHOP_DATE)
         }
