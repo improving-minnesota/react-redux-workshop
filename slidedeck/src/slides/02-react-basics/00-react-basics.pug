@@ -7,151 +7,45 @@ section
   h3 A JavaScript library for building user interfaces
 
 section
-  h1 Virtual DOM
-
-section
-  ul
-    li Replica of the Browser DOM
-    li React redraws the entire screen on change
-    li React calculates the minimum amount of changes required
-
-section
-  p
-    a(href="https://facebook.github.io/react/docs/reconciliation.html") More info?
-
-section
-  p For a bare-bones React component, we need to do 2 things
-  ul
-    li Extend the React Component class
-    li Implement <span class="component red">render()</span>
-
-section
-  h2.lower React Component
-
-section
-  ul
-    li Defines a component class
-    li A component implements a render method which returns a single child
-    li That child may have an arbitrarily deep child structure
-
-section
-  pre.
-    <code class="javascript" data-trim>
-    import React, { Component } from 'react'
-    class Hello extends Component {
-      render() {...}
-    }
-
-    export default Hello
-    </code>
-
-section
-  h2 Component Specifications
-
-section
-  h2.lower render()
-  ul
-    li Required
-    li Returns a single child component that is either a virtual representation of a native DOM component or composite component
-
-section
-  h2.lower render()
-  ul
-    li You should return null (or false) to indicate that you don't want anything rendered
-    li React renders a <span class="component red">&lt;noscript&gt;</span> tag to work with our current diffing algorithm
-    li When returning null or false, <span class="component red">ReactDOM.findDOMNode(this)</span> will return null
-
-section
-  h2.lower render()
-  ul
-    li Should be pure
-    li Should not modify component state
-    li Should return the same result each time it is invoked
-    li Should not read from or write to the DOM
-    li Work should be performed in <span class="component red">componentDidMount()</span> or the other lifecycle methods
-
-section
-  h2.lower constructor
-  ul
-    li Invoked at object creation
-    li Receives "props"
-    li This is a great place to setup your initial state
-
-section
-  pre.
-    <code class="javascript" data-trim>
-    constructor(props) {
-      super(props)
-      this.state = {
-        saveText: 'Update',
-        employee: {},
-        errors: {}
-      }
-    }
-    </code>
-
-section
-  h2.lower defaultProps
-  ul
-    li Values in the mapping will be set on <span class="component red">this.props</span> if that prop is not specified by the parent component
-    li This is invoked before any instances are created and therefore it can't rely on <span class="component red">this.props</span>
-
-section
-  pre.
-    <code class="javascript" data-trim>
-    class Foo extends React.Component {
-        render() {
-            return (&lt;div>{this.props.foo}&lt;/div>)
-        }
-    }
-    Foo.defaultProps = {
-        foo: ‘Foo’
-    }
-    </code>
-
-section
-  h2.lower propTypes: {}
-  ul
-    li The <span class="component red">propTypes</span> object allows you to validate props being passed to your components
-    li Defined in a similar matter to <span class="component red">defaultProps</span>
-
-section
-  pre.
-    <code class="javascript" data-trim>
-    import PropTypes from ‘prop-types’
-    ...
-    Foo.propTypes: {
-       max:        PropTypes.number.isRequired,
-       maxVisible: PropTypes.number,
-       onChange:   PropTypes.func.isRequired
-    }
-
-    </code>
-
-section
   h1 JSX
 
 section
   ul
-    li JavaScript syntax extension that looks similar to XML
+    li JavaScript syntax extension that looks similar to HTML
     li Compiles to actual JavaScript that you'll be able to see during labs
 
 section
+  p Returning JSX elements
   pre.
     <code class="javascript" data-trim>
-    render() {
-      return (
-        &lt;div className="ui message"&gt;
-          &lt;div className="ui huge header"&gt;{this.state.greeting}&lt;/div&gt;
-          &lt;div className="ui large header"&gt;{this.props.friend}&lt;/div&gt;
-        &lt;/div&gt;
-      );
-    }
-
+      function Hello(props) {
+        return (
+          &lt;header&gt;
+            &lt;h1 className="title"&gt;Hello {props.name}!&lt;/h1&gt;
+          &lt;/header&gt;
+        );
+      }
     </code>
 
 section
-  p React's JSX uses the upper vs. lower case convention to distinguish between local component classes and HTML tags
+  p Returning the same elements without JSX
+  pre.
+    <code class="javascript" data-trim>
+      function Hello(props) {
+        return React.createElement(
+          'header',
+          {},
+          React.createElement(
+            'h1',
+            { className: 'title' },
+            `Hello ${props.name}!`
+          )
+        );
+      }
+    </code>
+
+section
+  p React's JSX uses the upper vs. lower case convention to distinguish between React Component classes and HTML tags
   ul
     li UpperCase = Component
     li lowercase = tag
@@ -163,40 +57,116 @@ section
     li <span class="component red">className</span> instead of  <span class="component red">class</span>
 
 section
-  h2 Data: State vs. Props
+  h1 Virtual DOM
 
 section
   ul
-    li <span class="component red">props</span> are the data you pass into your component via attributes
-    li Used for application data that you need to display or manage with your component
+    li Replica of the Browser DOM
+    li React redraws the entire screen on change
+    li React calculates the minimum amount of changes required
+  p
+    a(href="https://facebook.github.io/react/docs/reconciliation.html") More info?
 
 section
-  ul
-    li <span class="component red">state</span> is your component's internally scoped ... state
-    li Used for the behavior of your component: open, disabled, submitted, etc.
+  h1 React Components
 
 section
+  p Components let you split the UI into independent, reusable pieces
   ul
-    li One exception: "Controller" components
-    li They will have a state that represents the application data
-    li They pass their state as props to their children components
+    li Accept arbitrary inputs
+    li Return React elements to display in the UI
+
+section
+  h2 Functional Component
+  ul
+    li Is just a JavaScript function
+    li Doesn't hold on to any state
 
 section
   pre.
     <code class="javascript" data-trim>
-    render() {
-      return (
-        &lt;EmployeeForm employee={this.state.employee}
-          errors={this.state.errors}
-          validateAll={this.validateAll}
-          hasErrors={this.hasErrors}
-          saveText={this.state.saveText}
-          onSave={this.saveEmployee}
-          validate={this.validate}
-          toggleAdmin={this.toggleAdmin} /&gt;
-      )
-    }
+      import ReactDOM from 'react-dom';
 
+      function Hello(props) {
+        return &lt;h1&gt;Hello {props.name}!&lt;/h1&gt;;
+      }
+
+      const container = document.getElementById('root');
+      ReactDOM.render(&lt;Hello name="Tim" /&gt;, container);
+    </code>
+
+section
+  h2 Class Component
+  ul
+    li Is an ES6 class that extends <span class="component red">React.Component</span>
+    li Implements a <span class="component red">render()</span> method that returns a React element
+    li Can have state
+
+section
+  pre.
+    <code class="javascript" data-trim>
+      import React from 'react';
+      import ReactDOM from 'react-dom';
+
+      class Hello extends React.Component {
+        render() {
+          return &lt;h1&gt;Hello {this.props.name}!&lt;/h1&gt;;
+        }
+      }
+
+      const container = document.getElementById('root');
+      ReactDOM.render(&lt;Hello name="Tim" /&gt;, container);
+    </code>
+
+section
+  h2 Component Specifications
+
+section
+  p Component Features:
+  ul
+    li methods
+      ul
+        li <span class="component red">render()</span>
+        li <span class="component red">constructor()</span>
+        li lifecycle methods (advanced usage)
+    li properties
+      ul
+        li <span class="component red">props</span>, <span class="component red">defaultProps</span>, & <span class="component red">propTypes</span>
+        li <span class="component red">state</span> & <span class="component red">setState()</span>
+
+section
+  h2.lower render()
+  ul
+    li Required
+    li Returns a single child component that is either a virtual representation of a native DOM component or composite component
+    li Or returns null or false to render nothing
+
+section
+  h2.lower render()
+  ul
+    li Should not modify component state
+    li Should return the same result each time it is invoked
+    li Should not read from or write to the DOM
+    li Work should be performed in <span class="component red">componentDidMount()</span> or the other lifecycle methods
+
+section
+  h2.lower constructor()
+  ul
+    li Invoked at object creation
+    li Receives "props"
+    li This is a great place to setup your initial state
+
+section
+  pre.
+    <code class="javascript" data-trim>
+      constructor(props) {
+        super(props)
+        this.state = {
+          saveText: 'Update',
+          employee: {},
+          errors: {}
+        }
+      }
     </code>
 
 section
@@ -211,97 +181,110 @@ section
   p These methods are called when an instance of a component is being created and inserted into the DOM:
   ol
     li <span class="component red">constructor()</span>
-    li <span class="component red">componentWillMount()</span>
     li <span class="component red">render()</span>
     li <span class="component red">componentDidMount()</span>
-
-section
-  h3.lower componentWillMount()
-  ul
-    li Invoked immediately before mounting occurs -- before <span class="component red">render()</span>
-    li If you call <span class="component red">setState()</span> within this method, <span class="component red">render()</span> will see the updated state
-    li Since it happens before <span class="component red">render()</span>, <span class="component red">setState()</span> won't cause a "re-render"
-
-section
-  h3.lower render()
-
-section
-  h3.lower componentDidMount()
-  ul
-    li Invoked immediately after the initial rendering occurs
-    li Setting state via <span class="component red">this.setState()</span> will cause "re-render"
-    li Place to integrate with other JS frameworks
-    li Place to make AJAX requests
 
 section
   h2 Updating:
   p An update can be caused by changes to props or state.
   ol
-    li <span class="component red">componentWillReceiveProps()</span>
     li <span class="component red">shouldComponentUpdate()</span>
-    li <span class="component red">componentWillUpdate()</span>
     li <span class="component red">render()</span>
     li <span class="component red">componentDidUpdate()</span>
 
 section
-  h4.lower componentWillReceiveProps(object nextProps)
-  ul
-    li Invoked when a component is receiving new props
-    li This method is not called for the initial render
+  h2 Unmounting:
+  p This method is called when an instance of a component is being destroyed and removed from the DOM:
+  ol
+    li <span class="component red">componentWillUnmount()</span>
 
 section
-  h4.lower componentWillReceiveProps(object nextProps)
+  h2.lower props
   ul
-    li Used to react to a prop transition
-    li This happens before <span class="component red">render()</span> is called when updating the state using <span class="component red">this.setState()</span>
-    li The old props can be accessed via <span class="component red">this.props</span>
-    li Calling <span class="component red">this.setState()</span> within this function will not trigger an additional render
+    li contains the props that were defined by the caller of the component
+    li has a special prop, <span class="component red">props.children</span>, defined by the child tags in the JSX
+    li should never be modified by their own component
 
 section
-  h4.lower shouldComponentUpdate(object nextProps, object nextState)
-  ul
-    li Invoked before rendering when new props or state are being received
-    li This method is not called for the initial render or when <span class="component red">forceUpdate</span> is used
+  pre.
+    <code class="javascript" data-trim>
+      import React from 'react';
+      import ReactDOM from 'react-dom';
+
+      class Hello extends React.Component {
+        render() {
+          return (
+            &lt;div&gt;
+              &lt;h1&gt;Hello { this.props.name }!&lt;/h1&gt;
+              { ...this.props.children }
+            &lt;/div&gt;
+          );
+        }
+      }
+
+      const container = document.getElementById('root');
+      ReactDOM.render(
+          &lt;Hello name="Tim"&gt;
+            &lt;p&gt;Content&lt;/p&gt;
+          &lt;/Hello&gt;,
+        container);
+
+      /* renders:
+       * &lt;div&gt;
+       *   &lt;h1&gt;Hello Tim!&lt;/h1&gt;
+       *   &lt;p&gt;Content&lt;/p&gt;
+       * &lt;/div&gt;
+       */
+    </code>
 
 section
-  h4.lower shouldComponentUpdate(object nextProps, object nextState)
+  h2.lower defaultProps
   ul
-    li Return <span class="component red">false</span> when you're certain that the transition to the new props and state will not require a component update
-    li <span class="component red">render()</span> will be completely skipped until the next state change
-    li <span class="component red">componentWillUpdate()</span> and <span class="component red">componentDidUpdate()</span> will not be called
+    li Values in the mapping will be set on <span class="component red">this.props</span> if that prop is not specified by the parent component
+    li This is invoked before any instances are created and therefore it can't rely on <span class="component red">this.props</span>
 
 section
-  h4.lower componentWillUpdate(object nextProps, object nextState)
-  ul
-    li Invoked immediately before rendering when new props or state are being received
-    li Not called for the initial render
+  pre.
+    <code class="javascript" data-trim>
+      class Foo extends React.Component {
+        render() {
+          return &lt;div&gt;{this.props.foo}&lt;/div&gt;;
+        }
+      }
+      Foo.defaultProps = {
+        foo: ‘Foo’
+      };
+    </code>
 
 section
-  h4.lower componentWillUpdate(object nextProps, object nextState)
+  h2.lower propTypes: {}
   ul
-    li Cannot use <span class="component red">this.setState()</span> in this method
-    li If you need to update state in response to a prop change, use <span class="component red">componentWillReceiveProps()</span> instead
+    li The <span class="component red">propTypes</span> object allows you to validate props being passed to your components
+    li Defined in a similar matter to <span class="component red">defaultProps</span>
 
 section
-  h4.lower render()
+  pre.
+    <code class="javascript" data-trim>
+      import PropTypes from ‘prop-types’;
+      ...
+      Foo.propTypes: {
+        max:        PropTypes.number.isRequired,
+        maxVisible: PropTypes.number,
+        onChange:   PropTypes.func.isRequired
+      };
+    </code>
 
 section
-  h4.lower componentDidUpdate(object prevProps, object prevState)
+  h2.lower state
   ul
-    li Invoked immediately after the component's updates are flushed to the DOM
-    li Not called for the initial render
-    li Setting state will cause "re-render"
-    li Operate on the DOM when the component has been updated
+    li contains data specific to the component that may change over time
+    li should never be mutated directly, use <span class="component red">setState()</span> instead
 
 section
-  h2.lower Unmounting:
-  h3.lower componentWillUnmount()
+  h2.lower setState()
   ul
-    li Invoked immediately before a component is unmounted from the DOM
-    li Perform any necessary cleanup in this method
-  ul
-    li Invalidate timers if necessary
-    li Clean up any DOM elements that were created in <span class="component red">componentDidMount()</span>
+    li queues up changes to <span class="component red">state</span>, tells React that the component and its children must be re-rendered
+    li executes asynchronously, a callback may be provided that will execute on update
 
 section
   h1.lower Test Helpers
@@ -317,7 +300,7 @@ section
 section
   pre.
     <code class="javascript" data-trim>
-    import { shallow, mount } from 'enzyme'
+      import { shallow, mount } from 'enzyme'
     </code>
 
 section
@@ -335,15 +318,14 @@ section
 section
   pre.
     <code class="javascript" data-trim>
-    element = shallow(
-      &lt;EmployeeForm employee={employee}
-        errors={errors}
-        validate={spies.validate}
-        hasErrors={spies.hasErrors}
-        toggleAdmin={spies.toggleAdmin}
-        onSave={spies.onSave} /&gt;
-    )
-
+      element = shallow(
+        &lt;EmployeeForm employee={employee}
+          errors={errors}
+          validate={spies.validate}
+          hasErrors={spies.hasErrors}
+          toggleAdmin={spies.toggleAdmin}
+          onSave={spies.onSave} /&gt;
+      )
     </code>
 
 section
@@ -360,8 +342,7 @@ section
     li Test that the component renders successfully
   pre.
     <code class="javascript" data-trim>
-    expect(shallow(<Hello />)).toHaveLength(1)
-
+      expect(shallow(&lt;Hello /&gt;)).toHaveLength(1)
     </code>
 
 section
@@ -378,8 +359,7 @@ section
     li Returns true if the text is anywhere in the component
   pre.
     <code class="javascript" data-trim>
-    expect(shallow(&lt;Hello />)).toIncludeText('Howdy')
-
+      expect(shallow(&lt;Hello /&gt;)).toIncludeText('Howdy')
     </code>
 
 section
@@ -388,8 +368,7 @@ section
     li Returns true if the JSX element is in the component
   pre.
     <code class="javascript" data-trim>
-    expect(shallow(&lt;Hello />)).toContainReact(&lt;td>Howdy&lt;/td>)
-
+      expect(shallow(&lt;Hello /&gt;)).toContainReact(&lt;td>Howdy&lt;/td&gt;)
     </code>
 
 section
@@ -398,11 +377,10 @@ section
     li To verify that shallow rendered children have correct values passed into them
   pre.
     <code class="javascript" data-trim>
-    //Find first Route in rendered App
-    const route = shallow(&lt;App />).find('Route').at(0)
+      //Find first Route in rendered App
+      const route = shallow(&lt;App /&gt;).find('Route').at(0)
 
-    expect(route).toHaveProp('path', '/projects')
-
+      expect(route).toHaveProp('path', '/projects')
     </code>
 
 section
@@ -414,9 +392,8 @@ section
     li Find all nodes that match the selector
   pre.
     <code class="javascript" data-trim>
-    //Finds all rows with css class 'odd'
-    expect(comp.find('tr.odd')).toHaveLength(1)
-
+      //Finds all rows with css class 'odd'
+      expect(comp.find('tr.odd')).toHaveLength(1)
     </code>
 
 section

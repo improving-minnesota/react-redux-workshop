@@ -36,6 +36,19 @@ section
     li moxios is for mocking axios requests while testing
 
 section
+  p Making a request
+  pre.
+    <code class="javascript" data-trim>
+      axios.get('/api/users')
+        .then(function(response) {
+          console.log(response);
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    </code>
+
+section
   p Stubbing a request
   pre.
     <code class="javascript" data-trim>
