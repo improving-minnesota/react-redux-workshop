@@ -1,5 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
+require('dotenv').config();
 
 const ENV = process.env.NODE_ENV;
 
@@ -70,6 +72,13 @@ module.exports = function webpackConfig() {
       ]
     },
     plugins: [
+      new webpack.DefinePlugin({
+        'process.env': {
+          NODE_ENV: JSON.stringify(ENV),
+          WORKSHOP_CLIENT: JSON.stringify(process.env.WORKSHOP_CLIENT),
+          WORKSHOP_DATE: JSON.stringify(process.env.WORKSHOP_DATE)
+        }
+      }),
       new HtmlWebpackPlugin({
         template: path.join(__dirname, 'src/public/index.pug'),
         chunksSortMode: 'dependency'
