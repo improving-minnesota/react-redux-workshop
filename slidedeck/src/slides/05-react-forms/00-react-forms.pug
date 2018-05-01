@@ -4,17 +4,14 @@ section
 section
   ul
     li React Form Inputs hold internal state from user interactions
-  pre.
-    <code class="html" data-trim>
-    &lt;form>
-      &lt;label>
+  script(type="text/plain", class="language-jsx").
+    <form>
+      <label>
         Name:
-        &lt;input type="text" name="name" />
-      &lt;/label>
-      &lt;input type="submit" value="Submit" />
-    &lt;/form>
-
-    </code>
+        <input type="text" name="name" />
+      </label>
+      <input type="submit" value="Submit" />
+    </form>
 
 section
   ul
@@ -32,30 +29,28 @@ section
     li React controls state and display
     li Any <span class="component red">&lt;input&gt;</span> with value set is a controlled component
     li Value of the rendered element will always reflect the <span class="component red">value</span> prop
-  pre.
-    <code class="javascript" data-trim>handleCityChange(event) {
+  script(type="text/plain", class="language-jsx").
+    handleCityChange(event) {
       this.setState({city: {value: event.target.value}});
     }
 
-    &lt;input type="text" value={this.state.city.value}
+    <input type="text" value={this.state.city.value}
            onChange={this.handleCityChange} />
-    </code>
 
 section
   h2 React Bootstrap
   ul
     li Bootstrap Form components for React
-  pre.
-    <code class="javascript" data-trim>&lt;FormGroup controlId="firstName">
-      &lt;ControlLabel>First Name&lt;/ControlLabel>
-      &lt;FormControl
+  script(type="text/plain", class="language-jsx").
+    <FormGroup controlId="firstName">
+      <ControlLabel>First Name</ControlLabel>
+      <FormControl
         type="text"
         value={this.state.firstName.value}
         placeholder="Enter firstName"
         onChange={(e) => this.handleFirstNameChange(e.target.value)}
       />
-    &lt;/FormGroup>
-    </code>
+    </FormGroup>
 
 section
   h2 React Bootstrap Validation
@@ -65,25 +60,24 @@ section
 
 section
   h3 Validation
-  pre.
-    <code class="javascript" data-trim>&lt;FormGroup
+  script(type="text/plain", class="language-jsx").
+    FormGroup
       controlId="firstName"
       validationState={this.getFirstNameValidationState()}
     >
-      &lt;ControlLabel>First Name&lt;/ControlLabel>
-      &lt;FormControl
+      <ControlLabel>First Name</ControlLabel>
+      <FormControl
         type="text"
         value={this.state.firstName.value}
         placeholder="Enter firstName"
         onChange={(e) => this.handleFirstNameChange(e.target.value)}
       />
-      &lt;FormControl.Feedback />
-    &lt;/FormGroup>
-    </code>
+      <FormControl.Feedback />
+    </FormGroup>
 
 section
-  pre.
-    <code class="javascript" data-trim>getFirstNameValidationState() {
+  script(type="text/plain", class="language-jsx").
+    getFirstNameValidationState() {
       if (!this.state) return;
       if (this.state.firstName.valid === true) return 'success';
       else if (this.state.firstName.valid === false) return 'error';
@@ -95,7 +89,6 @@ section
         { firstName: {value: value, valid: isValid }}
       );
     }
-    </code>
 
 section
   h3 Uncontrolled Components
@@ -105,15 +98,14 @@ section
     li Good for co-existing with non-React libraries
     li Use a <span class="component red">ref</span> function to get input value from DOM
     li Optionally, use <span class="component red">defaultValue</span> instead of <span class="component red">value</span>, <span class="component red">defaultChecked</span> instead of <span class="component red">checked</span>
-  pre.
-    <code class="javascript" data-trim>&lt;form onSubmit={this.handleSubmit}&gt;
-      &lt;input type="text" ref={(input) => this.name = input} />
-    &lt;/form&gt;
+  script(type="text/plain", class="language-jsx").
+    <form onSubmit={this.handleSubmit}>
+      <input type="text" ref={(input) => this.name = input} />
+    </form>
 
     handleSubmit(event) {
       console.log(`Input value: ${this.name}`)
     }
-    </code>
 
 section
   h1 Lab 5

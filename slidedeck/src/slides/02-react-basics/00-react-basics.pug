@@ -35,15 +35,13 @@ section
     li That child may have an arbitrarily deep child structure
 
 section
-  pre.
-    <code class="javascript" data-trim>
+  script(type="text/plain", class="language-jsx").
     import React, { Component } from 'react'
     class Hello extends Component {
       render() {...}
     }
 
     export default Hello
-    </code>
 
 section
   h2 Component Specifications
@@ -78,8 +76,7 @@ section
     li This is a great place to setup your initial state
 
 section
-  pre.
-    <code class="javascript" data-trim>
+  script(type="text/plain", class="language-jsx").
     constructor(props) {
       super(props)
       this.state = {
@@ -88,7 +85,6 @@ section
         errors: {}
       }
     }
-    </code>
 
 section
   h2.lower defaultProps
@@ -97,17 +93,15 @@ section
     li This is invoked before any instances are created and therefore it can't rely on <span class="component red">this.props</span>
 
 section
-  pre.
-    <code class="javascript" data-trim>
+  script(type="text/plain", class="language-jsx").
     class Foo extends React.Component {
         render() {
-            return (&lt;div>{this.props.foo}&lt;/div>)
+            return (<div>{this.props.foo}</div>)
         }
     }
     Foo.defaultProps = {
         foo: ‘Foo’
     }
-    </code>
 
 section
   h2.lower propTypes: {}
@@ -116,8 +110,7 @@ section
     li Defined in a similar matter to <span class="component red">defaultProps</span>
 
 section
-  pre.
-    <code class="javascript" data-trim>
+  script(type="text/plain", class="language-jsx").
     import PropTypes from ‘prop-types’
     ...
     Foo.propTypes: {
@@ -125,8 +118,6 @@ section
        maxVisible: PropTypes.number,
        onChange:   PropTypes.func.isRequired
     }
-
-    </code>
 
 section
   h1 JSX
@@ -137,18 +128,15 @@ section
     li Compiles to actual JavaScript that you'll be able to see during labs
 
 section
-  pre.
-    <code class="javascript" data-trim>
+  script(type="text/plain", class="language-jsx").
     render() {
       return (
-        &lt;div className="ui message"&gt;
-          &lt;div className="ui huge header"&gt;{this.state.greeting}&lt;/div&gt;
-          &lt;div className="ui large header"&gt;{this.props.friend}&lt;/div&gt;
-        &lt;/div&gt;
+        <div className="ui message">
+          <div className="ui huge header">{this.state.greeting}</div>
+          <div className="ui large header">{this.props.friend}</div>
+        </div>
       );
     }
-
-    </code>
 
 section
   p React's JSX uses the upper vs. lower case convention to distinguish between local component classes and HTML tags
@@ -182,22 +170,19 @@ section
     li They pass their state as props to their children components
 
 section
-  pre.
-    <code class="javascript" data-trim>
+  script(type="text/plain", class="language-jsx").
     render() {
       return (
-        &lt;EmployeeForm employee={this.state.employee}
+        <EmployeeForm employee={this.state.employee}
           errors={this.state.errors}
           validateAll={this.validateAll}
           hasErrors={this.hasErrors}
           saveText={this.state.saveText}
           onSave={this.saveEmployee}
           validate={this.validate}
-          toggleAdmin={this.toggleAdmin} /&gt;
+          toggleAdmin={this.toggleAdmin} />
       )
     }
-
-    </code>
 
 section
   h2 Component Lifecycle
@@ -315,10 +300,8 @@ section
       a(href="http://airbnb.io/enzyme/index.html") airbnb.io/enzyme
 
 section
-  pre.
-    <code class="javascript" data-trim>
+  script(type="text/plain", class="language-jsx").
     import { shallow, mount } from 'enzyme'
-    </code>
 
 section
   h4.lower Enzyme render testing
@@ -333,18 +316,15 @@ section
         li Test DOM interactions
 
 section
-  pre.
-    <code class="javascript" data-trim>
+  script(type="text/plain", class="language-jsx").
     element = shallow(
-      &lt;EmployeeForm employee={employee}
+      <EmployeeForm employee={employee}
         errors={errors}
         validate={spies.validate}
         hasErrors={spies.hasErrors}
         toggleAdmin={spies.toggleAdmin}
-        onSave={spies.onSave} /&gt;
+        onSave={spies.onSave} />
     )
-
-    </code>
 
 section
   h2.lower Jest Expect
@@ -358,11 +338,8 @@ section
   h4.lower Minimal Component Test
   ul
     li Test that the component renders successfully
-  pre.
-    <code class="javascript" data-trim>
+  script(type="text/plain", class="language-jsx").
     expect(shallow(<Hello />)).toHaveLength(1)
-
-    </code>
 
 section
   h2.lower Enzyme Matchers
@@ -376,34 +353,25 @@ section
   h4.lower toIncludeText(text)
   ul
     li Returns true if the text is anywhere in the component
-  pre.
-    <code class="javascript" data-trim>
-    expect(shallow(&lt;Hello />)).toIncludeText('Howdy')
-
-    </code>
+  script(type="text/plain", class="language-jsx").
+    expect(shallow(<Hello />)).toIncludeText('Howdy')
 
 section
   h4.lower toContainReact(jsx)
   ul
     li Returns true if the JSX element is in the component
-  pre.
-    <code class="javascript" data-trim>
-    expect(shallow(&lt;Hello />)).toContainReact(&lt;td>Howdy&lt;/td>)
-
-    </code>
+  script(type="text/plain", class="language-jsx").
+    expect(shallow(<Hello />)).toContainReact(<td>Howdy</td>)
 
 section
   h4.lower toHaveProp(propName, value)
   ul
     li To verify that shallow rendered children have correct values passed into them
-  pre.
-    <code class="javascript" data-trim>
+  script(type="text/plain", class="language-jsx").
     //Find first Route in rendered App
-    const route = shallow(&lt;App />).find('Route').at(0)
+    const route = shallow(<App />).find('Route').at(0)
 
     expect(route).toHaveProp('path', '/projects')
-
-    </code>
 
 section
   h2 DOM Query Methods
@@ -412,12 +380,9 @@ section
   h4.lower find(selector)
   ul
     li Find all nodes that match the selector
-  pre.
-    <code class="javascript" data-trim>
+  script(type="text/plain", class="language-jsx").
     //Finds all rows with css class 'odd'
     expect(comp.find('tr.odd')).toHaveLength(1)
-
-    </code>
 
 section
   h1 Lab 02
