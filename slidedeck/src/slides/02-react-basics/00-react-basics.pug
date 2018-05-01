@@ -16,33 +16,29 @@ section
 
 section
   p Returning JSX elements
-  pre.
-    <code class="javascript" data-trim>
-      function Hello(props) {
-        return (
-          &lt;header&gt;
-            &lt;h1 className="title"&gt;Hello {props.name}!&lt;/h1&gt;
-          &lt;/header&gt;
-        );
-      }
-    </code>
+  script(type="text/plain", class="language-jsx").
+    function Hello(props) {
+      return (
+        <header>
+          <h1 className="title">Hello {props.name}!</h1>
+        </header>
+      );
+    }
 
 section
   p Returning the same elements without JSX
-  pre.
-    <code class="javascript" data-trim>
-      function Hello(props) {
-        return React.createElement(
-          'header',
-          {},
-          React.createElement(
-            'h1',
-            { className: 'title' },
-            `Hello ${props.name}!`
-          )
-        );
-      }
-    </code>
+  script(type="text/plain", class="language-jsx").
+    function Hello(props) {
+      return React.createElement(
+        'header',
+        {},
+        React.createElement(
+          'h1',
+          { className: 'title' },
+          `Hello ${props.name}!`
+        )
+      );
+    }
 
 section
   p React's JSX uses the upper vs. lower case convention to distinguish between React Component classes and HTML tags
@@ -83,17 +79,15 @@ section
     li Doesn't hold on to any state
 
 section
-  pre.
-    <code class="javascript" data-trim>
-      import ReactDOM from 'react-dom';
+  script(type="text/plain", class="language-jsx").
+    import ReactDOM from 'react-dom';
 
-      function Hello(props) {
-        return &lt;h1&gt;Hello {props.name}!&lt;/h1&gt;;
-      }
+    function Hello(props) {
+      return <h1>Hello {props.name}!</h1>;
+    }
 
-      const container = document.getElementById('root');
-      ReactDOM.render(&lt;Hello name="Tim" /&gt;, container);
-    </code>
+    const container = document.getElementById('root');
+    ReactDOM.render(<Hello name="Tim" />, container);
 
 section
   h2 Class Component
@@ -103,20 +97,18 @@ section
     li Can have state
 
 section
-  pre.
-    <code class="javascript" data-trim>
-      import React from 'react';
-      import ReactDOM from 'react-dom';
+  script(type="text/plain", class="language-jsx").
+    import React from 'react';
+    import ReactDOM from 'react-dom';
 
-      class Hello extends React.Component {
-        render() {
-          return &lt;h1&gt;Hello {this.props.name}!&lt;/h1&gt;;
-        }
+    class Hello extends React.Component {
+      render() {
+        return <h1>Hello {this.props.name}!</h1>;
       }
+    }
 
-      const container = document.getElementById('root');
-      ReactDOM.render(&lt;Hello name="Tim" /&gt;, container);
-    </code>
+    const container = document.getElementById('root');
+    ReactDOM.render(<Hello name="Tim" />, container);
 
 section
   h2 Component Specifications
@@ -157,17 +149,15 @@ section
     li This is a great place to setup your initial state
 
 section
-  pre.
-    <code class="javascript" data-trim>
-      constructor(props) {
-        super(props)
-        this.state = {
-          saveText: 'Update',
-          employee: {},
-          errors: {}
-        }
+  script(type="text/plain", class="language-jsx").
+    constructor(props) {
+      super(props)
+      this.state = {
+        saveText: 'Update',
+        employee: {},
+        errors: {}
       }
-    </code>
+    }
 
 section
   h2 Component Lifecycle
@@ -206,36 +196,34 @@ section
     li should never be modified by their own component
 
 section
-  pre.
-    <code class="javascript" data-trim>
-      import React from 'react';
-      import ReactDOM from 'react-dom';
+  script(type="text/plain", class="language-jsx").
+    import React from 'react';
+    import ReactDOM from 'react-dom';
 
-      class Hello extends React.Component {
-        render() {
-          return (
-            &lt;div&gt;
-              &lt;h1&gt;Hello { this.props.name }!&lt;/h1&gt;
-              { ...this.props.children }
-            &lt;/div&gt;
-          );
-        }
+    class Hello extends React.Component {
+      render() {
+        return (
+          <div>
+            <h1>Hello { this.props.name }!</h1>
+            { ...this.props.children }
+          </div>
+        );
       }
+    }
 
-      const container = document.getElementById('root');
-      ReactDOM.render(
-          &lt;Hello name="Tim"&gt;
-            &lt;p&gt;Content&lt;/p&gt;
-          &lt;/Hello&gt;,
-        container);
+    const container = document.getElementById('root');
+    ReactDOM.render(
+        <Hello name="Tim">
+          <p>Content</p>
+        </Hello>,
+      container);
 
-      /* renders:
-       * &lt;div&gt;
-       *   &lt;h1&gt;Hello Tim!&lt;/h1&gt;
-       *   &lt;p&gt;Content&lt;/p&gt;
-       * &lt;/div&gt;
-       */
-    </code>
+    /* renders:
+     * <div>
+     *   <h1>Hello Tim!</h1>
+     *   <p>Content</p>
+     * </div>
+     */
 
 section
   h2.lower defaultProps
@@ -244,17 +232,15 @@ section
     li This is invoked before any instances are created and therefore it can't rely on <span class="component red">this.props</span>
 
 section
-  pre.
-    <code class="javascript" data-trim>
-      class Foo extends React.Component {
-        render() {
-          return &lt;div&gt;{this.props.foo}&lt;/div&gt;;
-        }
+  script(type="text/plain", class="language-jsx").
+    class Foo extends React.Component {
+      render() {
+        return <div>{this.props.foo}</div>;
       }
-      Foo.defaultProps = {
-        foo: ‘Foo’
-      };
-    </code>
+    }
+    Foo.defaultProps = {
+      foo: ‘Foo’
+    };
 
 section
   h2.lower propTypes: {}
@@ -263,16 +249,14 @@ section
     li Defined in a similar matter to <span class="component red">defaultProps</span>
 
 section
-  pre.
-    <code class="javascript" data-trim>
-      import PropTypes from ‘prop-types’;
-      ...
-      Foo.propTypes: {
-        max:        PropTypes.number.isRequired,
-        maxVisible: PropTypes.number,
-        onChange:   PropTypes.func.isRequired
-      };
-    </code>
+  script(type="text/plain", class="language-jsx").
+    import PropTypes from ‘prop-types’;
+    ...
+    Foo.propTypes: {
+      max:        PropTypes.number.isRequired,
+      maxVisible: PropTypes.number,
+      onChange:   PropTypes.func.isRequired
+    };
 
 section
   h2.lower state
@@ -298,10 +282,8 @@ section
       a(href="http://airbnb.io/enzyme/index.html") airbnb.io/enzyme
 
 section
-  pre.
-    <code class="javascript" data-trim>
-      import { shallow, mount } from 'enzyme'
-    </code>
+  script(type="text/plain", class="language-jsx").
+    import { shallow, mount } from 'enzyme'
 
 section
   h4.lower Enzyme render testing
@@ -316,17 +298,15 @@ section
         li Test DOM interactions
 
 section
-  pre.
-    <code class="javascript" data-trim>
-      element = shallow(
-        &lt;EmployeeForm employee={employee}
-          errors={errors}
-          validate={spies.validate}
-          hasErrors={spies.hasErrors}
-          toggleAdmin={spies.toggleAdmin}
-          onSave={spies.onSave} /&gt;
-      )
-    </code>
+  script(type="text/plain", class="language-jsx").
+    element = shallow(
+      <EmployeeForm employee={employee}
+        errors={errors}
+        validate={spies.validate}
+        hasErrors={spies.hasErrors}
+        toggleAdmin={spies.toggleAdmin}
+        onSave={spies.onSave} />
+    )
 
 section
   h2.lower Jest Expect
@@ -340,10 +320,8 @@ section
   h4.lower Minimal Component Test
   ul
     li Test that the component renders successfully
-  pre.
-    <code class="javascript" data-trim>
-      expect(shallow(&lt;Hello /&gt;)).toHaveLength(1)
-    </code>
+  script(type="text/plain", class="language-jsx").
+    expect(shallow(<Hello />)).toHaveLength(1)
 
 section
   h2.lower Enzyme Matchers
@@ -357,31 +335,25 @@ section
   h4.lower toIncludeText(text)
   ul
     li Returns true if the text is anywhere in the component
-  pre.
-    <code class="javascript" data-trim>
-      expect(shallow(&lt;Hello /&gt;)).toIncludeText('Howdy')
-    </code>
+  script(type="text/plain", class="language-jsx").
+    expect(shallow(<Hello />)).toIncludeText('Howdy')
 
 section
   h4.lower toContainReact(jsx)
   ul
     li Returns true if the JSX element is in the component
-  pre.
-    <code class="javascript" data-trim>
-      expect(shallow(&lt;Hello /&gt;)).toContainReact(&lt;td>Howdy&lt;/td&gt;)
-    </code>
+  script(type="text/plain", class="language-jsx").
+    expect(shallow(<Hello />)).toContainReact(<td>Howdy</td>)
 
 section
   h4.lower toHaveProp(propName, value)
   ul
     li To verify that shallow rendered children have correct values passed into them
-  pre.
-    <code class="javascript" data-trim>
-      //Find first Route in rendered App
-      const route = shallow(&lt;App /&gt;).find('Route').at(0)
+  script(type="text/plain", class="language-jsx").
+    //Find first Route in rendered App
+    const route = shallow(<App />).find('Route').at(0)
 
-      expect(route).toHaveProp('path', '/projects')
-    </code>
+    expect(route).toHaveProp('path', '/projects')
 
 section
   h2 DOM Query Methods
@@ -390,11 +362,9 @@ section
   h4.lower find(selector)
   ul
     li Find all nodes that match the selector
-  pre.
-    <code class="javascript" data-trim>
-      //Finds all rows with css class 'odd'
-      expect(comp.find('tr.odd')).toHaveLength(1)
-    </code>
+  script(type="text/plain", class="language-jsx").
+    //Finds all rows with css class 'odd'
+    expect(comp.find('tr.odd')).toHaveLength(1)
 
 section
   h1 Lab 02
