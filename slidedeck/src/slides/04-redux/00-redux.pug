@@ -62,19 +62,17 @@ section
   h3 Action Creators
   ul
     li Function that creates and returns an action
-  pre(style="width:100%").
-    <code class="javascript" data-trim>
-      // action type
-      const ADD_AGENT = 'ADD_AGENT'
+  script(type="text/plain", class="language-jsx", style="width:100%").
+    // action type
+    const ADD_AGENT = 'ADD_AGENT'
 
-      // action creator
-      function addAgent(agent) {
-        return {
-          type: ADD_AGENT,
-          payload: agent
-        }
+    // action creator
+    function addAgent(agent) {
+      return {
+        type: ADD_AGENT,
+        payload: agent
       }
-    </code>
+    }
 
 section
   h3 Reducers
@@ -83,22 +81,20 @@ section
     li Takes the previous state and an action and returns the next state
     li.
       <span class="component red">(previousState, action) => newState</span>
-    pre(style="width:100%").
-      <code class="javascript" data-trim>
-        const initialState = {
-          agents: []
-        }
+    script(type="text/plain", class="language-jsx", style="width:100%").
+      const initialState = {
+        agents: []
+      }
 
-        function agentReducer(state = initialState, action) {
-          switch (action.type) {
-            case ADD_EMPLOYEE:
-              return Object.assign({}, state, {
-                examples: state.agents.concat([action.payload])
-              })
-              ...
-          }
+      function agentReducer(state = initialState, action) {
+        switch (action.type) {
+          case ADD_EMPLOYEE:
+            return Object.assign({}, state, {
+              examples: state.agents.concat([action.payload])
+            })
+            ...
         }
-      </code>
+      }
 
 section
   h3 Store
@@ -109,13 +105,11 @@ section
 
 section
   h3 Store instantiation
-  pre(style="width:100%").
-    <code class="javascript" data-trim>
-      import { createStore } from 'redux'
-      import agentReducer from './reducers'
+  script(type="text/plain", class="language-jsx", style="width:100%").
+    import { createStore } from 'redux'
+    import agentReducer from './reducers'
 
-      const store = createStore(agentReducer)
-    </code>
+    const store = createStore(agentReducer)
 
 section
   h3 Store API
@@ -129,30 +123,28 @@ section
 
 section
   h3 A store in action
-  pre(style="width:100%").
-    <code class="javascript" style="max-height: 600px;" data-trim>
-      import {addEmployee} from './actions'
-      import { createStore } from 'redux'
-      import employeeReducer from './reducers'
+  script(type="text/plain", class="language-jsx", style="width: 100%; max-height: 600px;").
+    import {addEmployee} from './actions'
+    import { createStore } from 'redux'
+    import employeeReducer from './reducers'
 
-      // Create the store from the reducer from before
-      const store = createStore(employeeReducer)
+    // Create the store from the reducer from before
+    const store = createStore(employeeReducer)
 
-      // Start listening to state changes
-      // It will print out the state when it changes
-      const unsubscribe = store.subscribe(() =>
-        console.log(store.getState())
-      )
+    // Start listening to state changes
+    // It will print out the state when it changes
+    const unsubscribe = store.subscribe(() =>
+      console.log(store.getState())
+    )
 
-      // Dispatch some actions
-      // These will go through the reducer to update the store
-      store.dispatch(addEmployee({name: 'Sterling Archer', title: 'Agent'})
-      store.dispatch(addEmployee({name: 'Lana Kane', title: 'Agent'})
-      store.dispatch(addEmployee({name: 'Cyril Figgis', title: 'Comptroller'})
+    // Dispatch some actions
+    // These will go through the reducer to update the store
+    store.dispatch(addEmployee({name: 'Sterling Archer', title: 'Agent'})
+    store.dispatch(addEmployee({name: 'Lana Kane', title: 'Agent'})
+    store.dispatch(addEmployee({name: 'Cyril Figgis', title: 'Comptroller'})
 
-      // Stop listening to state changes
-      unsubscribe()
-    </code>
+    // Stop listening to state changes
+    unsubscribe()
 
 section
   h3 Data Flow
@@ -201,36 +193,32 @@ section
 
 section
   h3 Middleware - Simple Logger
-  pre(style="width:100%").
-    <code class="javascript" data-trim>
-      const logger = store => next => action => {
-        console.log('ACTION =>', action)
-        let result = next(action)
-        console.log('NEXT =>' , store.getState())
-        return result
-      }
+  script(type="text/plain", class="language-jsx", style="width:100%").
+    const logger = store => next => action => {
+      console.log('ACTION =>', action)
+      let result = next(action)
+      console.log('NEXT =>' , store.getState())
+      return result
+    }
 
-      export default logger
-    </code>
+    export default logger
 
 section
   h3 Middleware in action
-  pre(style="width:100%").
-    <code class="javascript" data-trim>
-      import { createStore, combineReducers, applyMiddleware } from 'redux'
-      import { agentReducer } from 'agent/modules'
-      import { cyborgReducer } from 'cyborg/modules'
-      import logger from 'middleware/logger'
+  script(type="text/plain", class="language-jsx", style="width:100%").
+    import { createStore, combineReducers, applyMiddleware } from 'redux'
+    import { agentReducer } from 'agent/modules'
+    import { cyborgReducer } from 'cyborg/modules'
+    import logger from 'middleware/logger'
 
-      const reducers = combineReducers(agentReducer, cyborgReducer)
+    const reducers = combineReducers(agentReducer, cyborgReducer)
 
-      const store = createStore(
-        reducers,
-        applyMiddleware(logger)
-      )
+    const store = createStore(
+      reducers,
+      applyMiddleware(logger)
+    )
 
-      export default store
-    </code>
+    export default store
 
 
 section
@@ -259,19 +247,16 @@ section
 
 section
   h3 Async Actions
-  pre(style="width:100%").
-    <code class="javascript" data-trim>
-      // separate types
-      { type: 'app/agent/FETCH_AGENTS_REQUEST' }
-      { type: 'app/agent/FETCH_AGENTS_FAILURE', error: 'Oops' }
-      { type: 'app/agent/FETCH_AGENTS_SUCCESS', response: { ... } }
+  script(type="text/plain", class="language-jsx", style="width:100%").
+    // separate types
+    { type: 'app/agent/FETCH_AGENTS_REQUEST' }
+    { type: 'app/agent/FETCH_AGENTS_FAILURE', error: 'Oops' }
+    { type: 'app/agent/FETCH_AGENTS_SUCCESS', response: { ... } }
 
-      // status field
-      { type: 'app/agent/FETCH_AGENTS' }
-      { type: 'app/agent/FETCH_AGENTS', status: 'error', error: 'Oops' }
-      { type: 'app/agent/FETCH_AGENTS', status: 'success', response: { ... } }
-
-    </code>
+    // status field
+    { type: 'app/agent/FETCH_AGENTS' }
+    { type: 'app/agent/FETCH_AGENTS', status: 'error', error: 'Oops' }
+    { type: 'app/agent/FETCH_AGENTS', status: 'success', response: { ... } }
 
 section
   h2 Async Action Creators
@@ -300,49 +285,45 @@ section
 
 section
   h3 Thunk example
-  pre(style="width:100%").
-    <code class="javascript" style="max-height: 700px;" data-trim>
-      import axios from 'axios'
+  script(type="text/plain", class="language-jsx", style="width: 100%; max-height: 700px;").
+    import axios from 'axios'
 
-      export const FETCH_AGENTS_REQUEST = 'app/agent/FETCH_AGENTS_REQUEST'
-      export const FETCH_AGENTS_FAILURE = 'app/agent/FETCH_AGENTS_FAILURE'
-      export const FETCH_AGENTS_SUCCESS = 'app/agent/FETCH_AGENTS_SUCCESS'
+    export const FETCH_AGENTS_REQUEST = 'app/agent/FETCH_AGENTS_REQUEST'
+    export const FETCH_AGENTS_FAILURE = 'app/agent/FETCH_AGENTS_FAILURE'
+    export const FETCH_AGENTS_SUCCESS = 'app/agent/FETCH_AGENTS_SUCCESS'
 
-      const requestAgents = () => {
-        return {
-          type: FETCH_AGENTS_REQUEST
-        }
+    const requestAgents = () => {
+      return {
+        type: FETCH_AGENTS_REQUEST
       }
+    }
 
-      const requestAgentsSuccess = (agents) => {
-        return {
-          type: FETCH_AGENTS_SUCCESS,
-          payload: agents
-        }
+    const requestAgentsSuccess = (agents) => {
+      return {
+        type: FETCH_AGENTS_SUCCESS,
+        payload: agents
       }
+    }
 
-      const requestAgentsError = (error) => {
-        return {
-          type: FETCH_AGENTS_FAILURE,
-          error: error
-        }
+    const requestAgentsError = (error) => {
+      return {
+        type: FETCH_AGENTS_FAILURE,
+        error: error
       }
-    </code>
+    }
 
 section
   h3 Thunk example (cont.)
-  pre(style="width:100%").
-    <code class="javascript" data-trim>
-      export const fetchAgents = () => {
-        return (dispatch) => {
-          dispatch(requestAgents())
-          return axios.get('api/agents')
-            .then(response => response.data)
-            .then(agents => dispatch(requestAgentsSuccess(agents)))
-            .catch(error => dispatch(requestAgentsError(error)))
-        }
+  script(type="text/plain", class="language-jsx", style="width:100%").
+    export const fetchAgents = () => {
+      return (dispatch) => {
+        dispatch(requestAgents())
+        return axios.get('api/agents')
+          .then(response => response.data)
+          .then(agents => dispatch(requestAgentsSuccess(agents)))
+          .catch(error => dispatch(requestAgentsError(error)))
       }
-    </code>
+    }
 
 section
   h2 axios
@@ -375,27 +356,25 @@ section
 
 section
   h4 Example functional stateless component
-  pre(style="width:100%").
-    <code class="javascript" style="max-height: 700px;" data-trim>
-      import React from 'react'
-      import PropTypes from 'prop-types'
+  script(type="text/plain", class="language-jsx", style="width: 100%; max-height: 700px;").
+    import React from 'react'
+    import PropTypes from 'prop-types'
 
-      const AgentDetails  = ( { agent, onClick } ) => (
-        &lt;li onClick={onClick}&gt;
-          {agent.name} - {agent.title}
-        &lt;/li&gt;
-      )
+    const AgentDetails  = ( { agent, onClick } ) => (
+      <li onClick={onClick}>
+        {agent.name} - {agent.title}
+      </li>
+    )
 
-      AgentDetails.propTypes = {
-        onClick: PropTypes.func.isRequired,
-        agent: PropTypes.shape({
-          name: PropTypes.string.isRequired,
-          title: PropTypes.string.isRequired,
-        })
-      }
+    AgentDetails.propTypes = {
+      onClick: PropTypes.func.isRequired,
+      agent: PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        title: PropTypes.string.isRequired,
+      })
+    }
 
-      export default AgentDetails
-    </code>
+    export default AgentDetails
 
 section
   h3 Container components
@@ -434,54 +413,49 @@ section
 
 section
   h3 Example container component
-  pre(style="width:100%").
-    <code class="javascript" style="max-height: 700px;" data-trim>
-      import React, {Component} from 'react'
-      import PropTypes from 'prop-types'
+  script(type="text/plain", class="language-jsx", style="width: 100%; max-height: 700px;").
+    import React, {Component} from 'react'
+    import PropTypes from 'prop-types'
 
-      import AgentDetails from '../components/AgentDetails'
+    import AgentDetails from '../components/AgentDetails'
 
-      class AgentList extends Component {
+    class AgentList extends Component {
 
-        render() {
-          return (
-            &lt;ul&gt;{this.props.agents.map(
-            agent => (&lt;AgentDetails agent={agent} onClick={this.props.onAgentClick}/&gt;))}&lt;/ul&gt;
-          )
-        }
-
+      render() {
+        return (
+          <ul>{this.props.agents.map(
+          agent => (<AgentDetails agent={agent} onClick={this.props.onAgentClick}/>))}</ul>
+        )
       }
 
-      AgentList.propTypes = {
-        agents: PropTypes.array.isRequired
-      }
+    }
 
-      export default AgentList
+    AgentList.propTypes = {
+      agents: PropTypes.array.isRequired
+    }
 
-    </code>
+    export default AgentList
 
 section
   h3 Connecting with connect()
-  pre(style="width:100%").
-    <code class="javascript" style="max-height: 700px;" data-trim>
-      import {connect} from 'react-redux'
-      import {onAgentClick} from '../actions/agentActions'
-      import AgentList from '../components/AgentList'
+  script(type="text/plain", class="language-jsx", style="width: 100%; max-height: 700px;").
+    import {connect} from 'react-redux'
+    import {onAgentClick} from '../actions/agentActions'
+    import AgentList from '../components/AgentList'
 
-      const mapStateToProps = (state) => {
-        return {
-          agents: state.agents
-        }
+    const mapStateToProps = (state) => {
+      return {
+        agents: state.agents
       }
+    }
 
-      const mapDispatchToProps = {
-        onAgentClick
-      }
+    const mapDispatchToProps = {
+      onAgentClick
+    }
 
-      const ConnectedAgentList = connect(mapStateToProps, mapDispatchToProps)(AgentList)
+    const ConnectedAgentList = connect(mapStateToProps, mapDispatchToProps)(AgentList)
 
-      export default ConnectedAgentList
-    </code>
+    export default ConnectedAgentList
 
 section
   h3 Presentational vs. container components

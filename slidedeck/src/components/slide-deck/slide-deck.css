@@ -23,9 +23,3 @@
 .reveal.component.red {
   color: #c82506;
 }
-pre code {
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
-}

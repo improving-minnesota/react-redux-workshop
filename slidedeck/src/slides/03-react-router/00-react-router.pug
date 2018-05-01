@@ -52,12 +52,11 @@ section
 
 section
   h3.plain &lt;Route&gt; config properties we'll cover
-  pre(style="width:100%").
-    <code class="html" data-trim data-noescape>
+  pre(style="width: 100%;").
+    <code class="language-jsx">
       &lt;Route <mark>exact</mark> path="/employees" component={Employees}/&gt;
       &lt;Route <mark>path</mark>='/employees/detail/:_id' component={EmployeesDetail} /&gt;
       &lt;Route path='/employees/create' <mark>component</mark>={EmployeesCreate} /&gt;
-
     </code>
 
 section
@@ -102,30 +101,24 @@ section
 section
   h2.lower.component &lt;Redirect&gt;
   p Navigates to a new location. <br/><br/>
-  pre.
-    <code class="html" data-trim data-noescape>
-      &lt;Redirect from='/employee-list' to='/employees'/&gt;
-
-    </code>
+  script(type="text/plain", class="language-jsx").
+    <Redirect from='/employee-list' to='/employees'/>
 
 section
   h2.lower.component &lt;Switch&gt;
   p Renders the first child Route/Redirect that matches.<br/><br/>
-  pre(style="width:100%").
-    <code class="html" data-trim data-noescape>
-      &lt;Switch&gt;
-        &lt;Redirect from='/employee-list' to='/employees'/&gt;
+  script(type="text/plain", class="language-jsx", style="width: 100%;").
+    <Switch>
+      <Redirect from='/employee-list' to='/employees'/>
 
-        &lt;Route path='/employees/details/:_id' component={EmployeeDetail} /&gt;
+      <Route path='/employees/details/:_id' component={EmployeeDetail} />
 
-        &lt;Route path="/employees" component={Employees}/&gt;
+      <Route path="/employees" component={Employees}/>
 
-        {/* Unreachable: inside Switch && /employees is not exact */}
-        &lt;Route path="/employees/depts" component={EmployeesByDept}/&gt;
+      {/* Unreachable: inside Switch && /employees is not exact */}
+      <Route path="/employees/depts" component={EmployeesByDept}/>
 
-      &lt;/Switch&gt;
-
-    </code>
+    </Switch>
 
 section
   h2.lower.component &lt;Link&gt;
@@ -146,18 +139,15 @@ section
 
 section
   h3.lower &lt;Link&gt; Examples
-  pre(style="width:100%").
-    <code class="html" data-trim>
-    &lt;Link className={projectsClasses} to="projects"&gt;Projects&lt;/Link&gt;
-    &lt;Link to="{`${employees}/${id}`}" replace=true &gt;Employees&lt;/Link&gt;
-    &lt;Link className={timesheetsClasses} to={{
+  script(type="text/plain", class="language-jsx", style="width:100%").
+    <Link className={projectsClasses} to="projects">Projects</Link>
+    <Link to="{`${employees}/${id}`}" replace=true >Employees</Link>
+    <Link className={timesheetsClasses} to={{
         pathname: '/timesheets',
         search: '?sort=startDate',
         hash: '#id-12345',
         state: { highlightUser: this.state.user._id }
-      }} &gt;Timesheets&lt;/Link&gt;
-
-    </code>
+      }} >Timesheets</Link>
 
 section
   h2 Using react-router in your components
@@ -198,8 +188,7 @@ section
 section
   h3.lower location
   p Represents where the app is, was or will be.
-  pre.
-    <code class="javascript" data-trim>
+  script(type="text/plain", class="language-jsx").
     {
       key: 'd34cf',
       pathname: '/employees'
@@ -209,8 +198,6 @@ section
         [userDefined]: true
       }
     }
-
-    </code>
 
 section
   p Where we are
