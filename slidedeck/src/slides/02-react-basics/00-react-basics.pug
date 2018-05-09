@@ -171,6 +171,7 @@ section
   p These methods are called when an instance of a component is being created and inserted into the DOM:
   ol
     li <span class="component red">constructor()</span>
+    li <span class="component red">static getDerivedStateFromProps()</span>
     li <span class="component red">render()</span>
     li <span class="component red">componentDidMount()</span>
 
@@ -178,8 +179,10 @@ section
   h2 Updating:
   p An update can be caused by changes to props or state.
   ol
+    li <span class="component red">static getDerivedStateFromProps()</span>
     li <span class="component red">shouldComponentUpdate()</span>
     li <span class="component red">render()</span>
+    li <span class="component red">getSnapshotBeforeUpdate()</span>
     li <span class="component red">componentDidUpdate()</span>
 
 section
@@ -269,6 +272,26 @@ section
   ul
     li queues up changes to <span class="component red">state</span>, tells React that the component and its children must be re-rendered
     li executes asynchronously, a callback may be provided that will execute on update
+
+section
+  h2 JSX Expression Bindings
+  p Embeds any javascript expression in JSX by wrapping it in curly braces
+  script(type="text/plain", class="language-jsx").
+    // Usages:
+
+    // string value (escaped automatically)
+    <div>{ `Hello ${this.props.name}!` }</div>
+
+    // attribute value
+    <div onclick={this.props.handleClick} />
+
+    // element
+    const element = <p>description</p>;
+    <div>{ element }</div>
+
+    // elements
+    const elements = [ <h1>title</h1>, <Component text="ex" /> ];
+    <div>{ ...elements }</div>
 
 section
   h1.lower Test Helpers

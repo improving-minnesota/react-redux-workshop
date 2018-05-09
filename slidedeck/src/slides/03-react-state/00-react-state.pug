@@ -1,0 +1,107 @@
+section
+  h1 React and Local State
+
+section
+  h2 What is State?
+  ul
+    li <span class="component red">state</span> is your component's internally scoped ... state
+    li Used for the behavior of your component: open, disabled, submitted, etc.
+
+section
+  ul
+    li One exception: "Controller" components
+    li They will have a state that represents the application data
+    li They pass their state as props to their children components
+
+section
+  script(type="text/plain", class="language-jsx").
+    render() {
+      return (
+        <EmployeeForm employee={this.state.employee}
+          errors={this.state.errors}
+          validateAll={this.validateAll}
+          hasErrors={this.hasErrors}
+          saveText={this.state.saveText}
+          onSave={this.saveEmployee}
+          validate={this.validate}
+          toggleAdmin={this.toggleAdmin} />;
+      )
+    }
+
+section
+  h2 Initializing State
+  p Should be done in the <span class="component red">constructor()</span> and/or in <span class="component red">getDerivedStateFromProps()</span>
+  script(type="text/plain", class="language-jsx").
+    class Name extends React.Component {
+      constructor(props) {
+        super(props);
+        this.state = {
+          clearButtonText: 'Clear (0)',
+          clearCount: 0
+        };
+      }
+
+      static getDerivedStateFromProps(nextProps, prevState) {
+        if (prevState.name === undefined || prevState.name === null) {
+          return { name: nextProps.default };
+        }
+        return null;  // no updates
+      }
+    }
+
+section
+  h2 Updating State
+  p Never update <span class="component red">state</span> directly, call <span class="component red">setState(...)</span> instead
+  script(type="text/plain", class="language-jsx").
+    class Name extends React.Component {
+      ...
+
+      render() {
+        return <div>
+            <input type="text" value={this.state.name} onChange={this.handleChange.bind(this)} />
+            <button onClick={this.handleClick.bind(this)}>{this.state.clearButtonText}</button>
+          </div>;
+      }
+
+      handleChange(event) {
+        this.setState({ name: event.target.value });
+      }
+
+      handleClick(event) {
+        this.setState((prevState, props) => {
+          const clearCount = prevState.clearCount + 1;
+          return {
+            clearButtonText: `Clear (${clearCount})`,
+            clearCount: clearCount
+          };
+        });
+      }
+    }
+
+section
+  h2 Lifting State Up
+  p In the last example, our <span class="component red">Name</span> component wasn't very useful. The name value wasn't exposed for use by a parent form. Let's fix that...
+
+section
+  script(type="text/plain", class="language-jsx").
+    class Name extends React.Component {
+      constructor(props) {
+        super(props);
+        this.state = {
+          ...
+        };
+      }
+
+      render() {
+        return <div>
+          <input type="text" value={this.props.name} onChange={this.handleChange.bind(this)} />
+          ...
+        </div>;
+      }
+
+      handleChange(event) {
+        this.props.onNameChange(event.target.value);
+      }
+
+      ...
+    }
