@@ -208,7 +208,7 @@ section
         return (
           <div>
             <h1>Hello { this.props.name }!</h1>
-            { ...this.props.children }
+            { this.props.children }
           </div>
         );
       }
@@ -277,13 +277,11 @@ section
   h2 JSX Expression Bindings
   p Embeds any javascript expression in JSX by wrapping it in curly braces
   script(type="text/plain", class="language-jsx").
-    // Usages:
-
     // string value (escaped automatically)
     <div>{ `Hello ${this.props.name}!` }</div>
 
     // attribute value
-    <div onclick={this.props.handleClick} />
+    <div onClick={this.props.handleClick} />
 
     // element
     const element = <p>description</p>;
@@ -291,7 +289,7 @@ section
 
     // elements
     const elements = [ <h1>title</h1>, <Component text="ex" /> ];
-    <div>{ ...elements }</div>
+    <div>{ elements }</div>
 
 section
   h1.lower Test Helpers

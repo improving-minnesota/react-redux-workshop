@@ -9,7 +9,7 @@ section
 
 section
   ul
-    li One exception: "Controller" components
+    li One exception: Container components
     li They will have a state that represents the application data
     li They pass their state as props to their children components
 
@@ -30,7 +30,7 @@ section
 
 section
   h2 Initializing State
-  p Should be done in the <span class="component red">constructor()</span> and/or in <span class="component red">getDerivedStateFromProps()</span>
+  p Should be done in the <span class="component red">constructor()</span>
   script(type="text/plain", class="language-jsx").
     class Name extends React.Component {
       constructor(props) {
@@ -41,24 +41,25 @@ section
         };
       }
 
-      static getDerivedStateFromProps(nextProps, prevState) {
-        if (prevState.name === undefined || prevState.name === null) {
-          return { name: nextProps.default };
-        }
-        return null;  // no updates
-      }
+      ...
     }
 
 section
   h2 Updating State
-  p Never update <span class="component red">state</span> directly, call <span class="component red">setState(...)</span> instead
+  p Never update <span class="component red">state</span> directly
+  script(type="text/plain", class="language-jsx").
+    this.state = { name: 'Tim' }; // <- this is bad
+
+section
+  h2 Updating State
+  p Call <span class="component red">setState(...)</span> instead
   script(type="text/plain", class="language-jsx").
     class Name extends React.Component {
       ...
 
       render() {
         return <div>
-            <input type="text" value={this.state.name} onChange={this.handleChange.bind(this)} />
+            <input type="text" onChange={this.handleChange.bind(this)} value={this.state.name} />
             <button onClick={this.handleClick.bind(this)}>{this.state.clearButtonText}</button>
           </div>;
       }
@@ -84,6 +85,8 @@ section
 
 section
   script(type="text/plain", class="language-jsx").
+    import PropTypes from 'prop-types';
+
     class Name extends React.Component {
       constructor(props) {
         super(props);
@@ -92,9 +95,14 @@ section
         };
       }
 
+      static propTypes = {
+        name: PropTypes.string,
+        onNameChange: PropTypes.func.isRequired
+      }
+
       render() {
         return <div>
-          <input type="text" value={this.props.name} onChange={this.handleChange.bind(this)} />
+          <input type="text" onChange={this.handleChange.bind(this)} value={this.props.name} />
           ...
         </div>;
       }
