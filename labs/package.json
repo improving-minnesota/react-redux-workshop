@@ -1,8 +1,8 @@
 {
-  "name": "gatsby-starter-default",
-  "description": "Gatsby default starter",
+  "name": "react-redux-workshop-labs",
+  "description": "The labs for react-redux-workshop",
   "version": "1.0.0",
-  "author": "Kyle Mathews <mathews.kyle@gmail.com>",
+  "author": "Dustin Schau <dustin.schau@objectpartners.com>",
   "dependencies": {
     "@objectpartners/components": "~0.0.2",
     "emotion": "~9.1.3",
