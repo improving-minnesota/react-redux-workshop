@@ -4,11 +4,15 @@ module.exports = {
   siteMetadata: {
     links: [
       {
-        title: 'Slidedeck',
+        title: 'External Links',
         links: [
           {
             href: '/slidedeck',
-            title: 'Link to Slides',
+            title: 'Slidedeck',
+          },
+          {
+            href: 'https://github.com/objectpartners/react-redux-timesheet',
+            title: 'React Timesheet(s)',
           },
         ],
       },
