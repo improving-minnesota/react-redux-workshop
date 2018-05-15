@@ -10,19 +10,27 @@ const Container = styled.div({
   },
 });
 
-// TODO: add prev/next navigation
-export default function Lab({ data }) {
-  const { lab } = data;
+export default function Content({ data }) {
+  const { content } = data;
   return (
     <Container>
-      <div dangerouslySetInnerHTML={{ __html: lab.html }} />
+      <div dangerouslySetInnerHTML={{ __html: content.html }} />
     </Container>
   );
 }
 
 export const pageQuery = graphql`
+  fragment ContentFragment on MarkdownRemark {
+    fields {
+      slug
+    }
+    frontmatter {
+      title
+    }
+  }
+
   query LabQuery($slug: String!) {
-    lab: markdownRemark(fields: { slug: { eq: $slug } }) {
+    content: markdownRemark(fields: { slug: { eq: $slug } }) {
       html
     }
   }

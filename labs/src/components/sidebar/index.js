@@ -75,7 +75,20 @@ const LinkIcon = styled(ExternalLinkIcon)({
   marginLeft: '0.5rem',
 });
 
-export function Sidebar({ labs, links }) {
+const Group = ({ title, items }) => (
+  <div className={title.toLowerCase()}>
+    <Title>{title}</Title>
+    {items.map(({ node }) => {
+      return (
+        <Link to={node.fields.slug} key={node.fields.slug}>
+          {node.frontmatter.title}
+        </Link>
+      );
+    })}
+  </div>
+);
+
+export function Sidebar({ agendas, labs, links, tips }) {
   return (
     <Container>
       {links.map(({ title, links: subLinks }) => (
@@ -89,14 +102,9 @@ export function Sidebar({ labs, links }) {
           ))}
         </React.Fragment>
       ))}
-      <Title>Labs</Title>
-      {labs.map(({ node: lab }) => {
-        return (
-          <Link to={lab.fields.slug} key={lab.fields.slug}>
-            {lab.frontmatter.title}
-          </Link>
-        );
-      })}
+      <Group title="Agenda" items={agendas} />
+      <Group title="Tips" items={tips} />
+      <Group title="Labs" items={labs} />
     </Container>
   );
 }

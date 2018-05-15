@@ -228,7 +228,7 @@ npm ERR! Test failed.  See above for more details.
 import Hello from './hello/Hello';
 ```
 
-```
+```jsx
   render() {
     return (
       <div className="App">
@@ -252,7 +252,7 @@ import Hello from './hello/Hello';
 * Since we didn't set the `friend` prop on our component, the default value is displayed.
 * To override it, we just add the prop as an attribute to our JSX in the render method.
 
-```javascript
+```jsx
 <Hello friend="WoooHooo!" />
 ```
 
@@ -279,16 +279,14 @@ Try creating a Snapshot test inside Hello.test.js, or:
 
 <details><summary>Click here for an example Hello.test.js test</summary><p>
 
-```
-  import renderer from 'react-test-renderer';
+```jsx
+import renderer from 'react-test-renderer';
 
-  it('should render to match the snapshot', function () {
-    const component = renderer.create(
-      <Hello friend="Luke"/>
-    );
+it('should render to match the snapshot', function() {
+  const component = renderer.create(<Hello friend="Luke" />);
 
-    expect(component.toJSON()).toMatchSnapshot();
-  });
+  expect(component.toJSON()).toMatchSnapshot();
+});
 ```
 
 </p></details>

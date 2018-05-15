@@ -53,10 +53,14 @@ $ npm config set strict-ssl false
 
 ## Checkout the Github repository
 
-Checkout project from Github
+Fork project from Github
+
+![Fork repo](./images/fork.png)
+
+then clone the new fork!
 
 ```
-$ git clone https://github.com/objectpartners/react-redux-timesheet.git
+$ git clone https://github.com/yourusername/react-redux-timesheet.git
 ```
 
 You should get output similar to below:
@@ -86,6 +90,12 @@ $ git checkout lab-01-project-setup-start
 ## Install the application dependencies
 
 Install the NPM dependencies
+
+```
+$ yarn
+```
+
+**OR**
 
 ```
 $ npm install

@@ -4,12 +4,38 @@ const slugify = require('limax');
 module.exports = function createPages({ boundActionCreators, graphql }) {
   const { createPage } = boundActionCreators;
 
-  const labTemplate = path.resolve('src/templates/lab.js');
+  const contentTemplate = path.resolve('src/templates/content.js');
 
   return graphql(`
     {
       labs: allMarkdownRemark(
         filter: { fields: { type: { eq: "lab" } } }
+        limit: 1000
+      ) {
+        edges {
+          node {
+            fields {
+              slug
+            }
+          }
+        }
+      }
+
+      agenda: allMarkdownRemark(
+        filter: { fields: { type: { eq: "agenda" } } }
+        limit: 1000
+      ) {
+        edges {
+          node {
+            fields {
+              slug
+            }
+          }
+        }
+      }
+
+      tips: allMarkdownRemark(
+        filter: { fields: { type: { eq: "tip" } } }
         limit: 1000
       ) {
         edges {
@@ -26,16 +52,22 @@ module.exports = function createPages({ boundActionCreators, graphql }) {
       return Promise.reject(result.errors);
     }
 
-    const { labs } = result.data;
+    const { agenda, labs, tips } = result.data;
 
-    labs.edges.forEach(({ node }) => {
-      createPage({
-        path: node.fields.slug,
-        component: labTemplate,
-        context: {
-          slug: node.fields.slug,
-        },
+    const createPages = page => {
+      page.edges.forEach(({ node }) => {
+        createPage({
+          path: node.fields.slug,
+          component: contentTemplate,
+          context: {
+            slug: node.fields.slug,
+          },
+        });
       });
-    });
+    };
+
+    createPages(agenda);
+    createPages(labs);
+    createPages(tips);
   });
 };
