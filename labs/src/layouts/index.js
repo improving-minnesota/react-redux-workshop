@@ -10,7 +10,7 @@ import { Header, Footer } from '@objectpartners/components';
 
 import 'normalize.css';
 
-import { LabsPicker } from '../components';
+import { Sidebar } from '../components';
 
 const HEADER_HEIGHT = 102;
 const FOOTER_HEIGHT = 148;
@@ -56,10 +56,11 @@ export default function Layout({ children, data }) {
   return (
     <Container>
       <Helmet
-        title={data.site.siteMetadata.title}
+        titleTemplate={`%s | Object Partners`}
+        title={data.meta.title}
         meta={[
-          { name: 'description', content: 'Sample' },
-          { name: 'keywords', content: 'sample, something' },
+          { name: 'description', content: data.meta.description },
+          { name: 'keywords', content: data.meta.keywords.join(', ') },
         ]}
       />
       <Header
@@ -80,7 +81,7 @@ export default function Layout({ children, data }) {
         title="React Training"
       />
       <SidebarContainer>
-        <LabsPicker labs={data.labs.edges} />
+        <Sidebar labs={data.labs.edges} links={data.site.siteMetadata.links} />
         <Content>{children()}</Content>
       </SidebarContainer>
       <Footer />
@@ -110,9 +111,21 @@ export const query = graphql`
       }
     }
 
+    meta: contentYaml {
+      description
+      keywords
+      title
+    }
+
     site {
       siteMetadata {
-        title
+        links {
+          title
+          links {
+            href
+            title
+          }
+        }
       }
     }
   }

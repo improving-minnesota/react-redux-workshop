@@ -2,12 +2,23 @@ const path = require('path');
 
 module.exports = {
   siteMetadata: {
-    title: 'React Training - Object Partners',
+    links: [
+      {
+        title: 'Slidedeck',
+        links: [
+          {
+            href: '/slidedeck',
+            title: 'Link to Slides',
+          },
+        ],
+      },
+    ],
   },
   plugins: [
     'gatsby-plugin-react-helmet',
     'gatsby-plugin-react-next',
     'gatsby-plugin-emotion',
+    'gatsby-transformer-yaml',
     {
       resolve: 'gatsby-transformer-remark',
       options: {

@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'react-emotion';
 import GatsbyLink from 'gatsby-link';
+import ExternalLinkIcon from 'react-icons/lib/fa/external-link-square';
 
 const Container = styled.div({
   display: 'flex',
@@ -56,6 +57,8 @@ Link.defaultProps = {
   activeClassName: 'active',
 };
 
+const A = styled(Link)({}).withComponent('a');
+
 const Title = styled.h2({
   color: 'white',
   display: 'none',
@@ -68,9 +71,24 @@ const Title = styled.h2({
   },
 });
 
-export function LabsPicker({ labs }) {
+const LinkIcon = styled(ExternalLinkIcon)({
+  marginLeft: '0.5rem',
+});
+
+export function Sidebar({ labs, links }) {
   return (
     <Container>
+      {links.map(({ title, links: subLinks }) => (
+        <React.Fragment key={title}>
+          <Title>{title}</Title>
+          {subLinks.map(({ title: subTitle, href }) => (
+            <A href={href} key={href} target="_blank" rel="noopener">
+              {subTitle}
+              <LinkIcon />
+            </A>
+          ))}
+        </React.Fragment>
+      ))}
       <Title>Labs</Title>
       {labs.map(({ node: lab }) => {
         return (

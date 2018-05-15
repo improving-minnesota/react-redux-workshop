@@ -1,1 +1,1 @@
-export * from './labs-picker';
+export * from './sidebar';
