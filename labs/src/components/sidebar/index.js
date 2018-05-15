@@ -9,10 +9,20 @@ const Container = styled.div({
   backgroundColor: '#1a1a1a',
   fontFamily: 'Roboto, sans-serif',
   padding: '1rem 0.5rem',
+  whiteSpace: 'nowrap',
+  '.links': {
+    display: 'none',
+    '&.labs': {
+      display: 'inline-block',
+    },
+  },
   '@media only screen and (min-width: 768px)': {
     flexDirection: 'column',
     overflowX: 'auto',
     minWidth: 250,
+    '.links': {
+      display: 'inline-block',
+    },
   },
 });
 
@@ -76,7 +86,7 @@ const LinkIcon = styled(ExternalLinkIcon)({
 });
 
 const Group = ({ title, items }) => (
-  <div className={title.toLowerCase()}>
+  <div className={`links ${title.toLowerCase()}`}>
     <Title>{title}</Title>
     {items.map(({ node }) => {
       return (
@@ -92,7 +102,7 @@ export function Sidebar({ agendas, labs, links, tips }) {
   return (
     <Container>
       {links.map(({ title, links: subLinks }) => (
-        <React.Fragment key={title}>
+        <div className="links sub" key={title}>
           <Title>{title}</Title>
           {subLinks.map(({ title: subTitle, href }) => (
             <A href={href} key={href} target="_blank" rel="noopener">
@@ -100,7 +110,7 @@ export function Sidebar({ agendas, labs, links, tips }) {
               <LinkIcon />
             </A>
           ))}
-        </React.Fragment>
+        </div>
       ))}
       <Group title="Agenda" items={agendas} />
       <Group title="Tips" items={tips} />
