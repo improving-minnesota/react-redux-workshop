@@ -1,0 +1,19 @@
+{
+  "name": "react-redux-workshop",
+  "private": true,
+  "version": "1.0.0",
+  "main": "N/A",
+  "repository": "git@github.com:objectpartners/react-redux-workshop.git",
+  "contributors": [
+    "Scott Bock",
+    "Derek Eskens",
+    "Sean Lomax",
+    "Mike Hostetler",
+    "Justin Perinovic",
+    "Jeff Sheets",
+    "Travis Martensen",
+    "Dustin Schau <dustin.schau@objectpartners.com>",
+    "Derek Meyer"
+  ],
+  "license": "MIT"
+}

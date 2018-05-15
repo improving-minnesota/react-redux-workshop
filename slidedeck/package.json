@@ -2,17 +2,6 @@
   "name": "@objectpartners/react-redux-workshop-slides",
   "version": "1.0.0",
   "main": "dist/index.js",
-  "contributors": [
-    "Scott Bock",
-    "Derek Eskens",
-    "Sean Lomax",
-    "Mike Hostetler",
-    "Justin Perinovic",
-    "Jeff Sheets",
-    "Travis Martensen",
-    "Dustin Schau <dustin.schau@objectpartners.com>",
-    "Derek Meyer"
-  ],
   "license": "MIT",
   "scripts": {
     "precommit": "pretty-quick --staged",
