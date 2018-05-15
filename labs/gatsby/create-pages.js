@@ -26,17 +26,14 @@ module.exports = function createPages({ boundActionCreators, graphql }) {
       return Promise.reject(result.errors);
     }
 
-    const {
-      labs,
-      slides
-    } = result.data;
+    const { labs } = result.data;
 
     labs.edges.forEach(({ node }) => {
       createPage({
         path: node.fields.slug,
         component: labTemplate,
         context: {
-          slug: node.fields.slug
+          slug: node.fields.slug,
         },
       });
     });

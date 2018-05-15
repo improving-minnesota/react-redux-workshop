@@ -1,4 +1,4 @@
 [build]
   base    = "labs/"
-  publish = "public"
+  publish = "labs/public"
   command = "yarn build && cd ../slidedeck && yarn && yarn build && mkdir -p ../labs/public/slidedeck && cp -r dist/. ../labs/public/slidedeck && cd ../labs"
