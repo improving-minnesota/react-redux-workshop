@@ -2,22 +2,13 @@
   "name": "@objectpartners/react-redux-workshop-slides",
   "version": "1.0.0",
   "main": "dist/index.js",
-  "contributors": [
-    "Scott Bock",
-    "Derek Eskens",
-    "Sean Lomax",
-    "Mike Hostetler",
-    "Justin Perinovic",
-    "Jeff Sheets",
-    "Travis Martensen",
-    "Dustin Schau <dustin.schau@objectpartners.com>",
-    "Derek Meyer"
-  ],
   "license": "MIT",
   "scripts": {
     "precommit": "pretty-quick --staged",
     "prebuild": "del-cli \"dist/**/*\"",
     "build": "cross-env NODE_ENV=production webpack --env.environment",
+    "prebuild:public": "npm run build && mkdir -p ../public/slidedeck",
+    "build:public": "cp -r dist/. ../public/slidedeck",
     "start": "cross-env NODE_ENV=development webpack-dev-server",
     "test": "echo \"We should probably write some tests\""
   },
