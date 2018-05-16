@@ -81,7 +81,12 @@ export default function Layout({ children, data }) {
         title="React Training"
       />
       <SidebarContainer>
-        <Sidebar labs={data.labs.edges} links={data.site.siteMetadata.links} />
+        <Sidebar
+          labs={data.labs.edges}
+          agendas={data.agendas.edges}
+          links={data.site.siteMetadata.links}
+          tips={data.tips.edges}
+        />
         <Content>{children()}</Content>
       </SidebarContainer>
       <Footer />
@@ -101,12 +106,29 @@ export const query = graphql`
     ) {
       edges {
         node {
-          fields {
-            slug
-          }
-          frontmatter {
-            title
-          }
+          ...ContentFragment
+        }
+      }
+    }
+
+    agendas: allMarkdownRemark(
+      filter: { fields: { type: { eq: "agenda" } } }
+      sort: { fields: [fileAbsolutePath], order: ASC }
+    ) {
+      edges {
+        node {
+          ...ContentFragment
+        }
+      }
+    }
+
+    tips: allMarkdownRemark(
+      filter: { fields: { type: { eq: "tip" } } }
+      sort: { fields: [fileAbsolutePath], order: ASC }
+    ) {
+      edges {
+        node {
+          ...ContentFragment
         }
       }
     }

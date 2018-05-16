@@ -3,6 +3,14 @@ const path = require('path');
 
 const handleNodeSourceType = ({ createNodeField }) => {
   return {
+    Agenda(node) {
+      createNodeField({ node, name: 'type', value: 'agenda' });
+      createNodeField({
+        node,
+        name: 'slug',
+        value: `/agenda/${slugify(node.frontmatter.title)}`,
+      });
+    },
     Lab(node) {
       createNodeField({ node, name: 'type', value: 'lab' });
       createNodeField({
@@ -11,15 +19,12 @@ const handleNodeSourceType = ({ createNodeField }) => {
         value: `/labs/${slugify(node.frontmatter.title)}`,
       });
     },
-    Slide(node) {
-      const folder = path
-        .basename(path.dirname(node.fileAbsolutePath))
-        .replace(/^\d+-/, '');
-      createNodeField({ node, name: 'type', value: 'slide' });
+    Tip(node) {
+      createNodeField({ node, name: 'type', value: 'tip' });
       createNodeField({
         node,
         name: 'slug',
-        value: `/slides/${slugify(folder)}/${slugify(node.frontmatter.title)}`,
+        value: `/tips/${slugify(node.frontmatter.title)}`,
       });
     },
   };

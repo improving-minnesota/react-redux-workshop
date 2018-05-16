@@ -9,6 +9,7 @@ const Container = styled.div({
   backgroundColor: '#1a1a1a',
   fontFamily: 'Roboto, sans-serif',
   padding: '1rem 0.5rem',
+  whiteSpace: 'nowrap',
   '@media only screen and (min-width: 768px)': {
     flexDirection: 'column',
     overflowX: 'auto',
@@ -57,6 +58,22 @@ Link.defaultProps = {
   activeClassName: 'active',
 };
 
+const Links = styled.div(
+  {
+    display: 'none',
+    '@media only screen and (min-width: 768px)': {
+      display: 'inline-block',
+    },
+  },
+  ({ type }) => ({
+    ...(type === 'labs'
+      ? {
+          display: 'inline-block',
+        }
+      : {}),
+  })
+);
+
 const A = styled(Link)({}).withComponent('a');
 
 const Title = styled.h2({
@@ -75,11 +92,24 @@ const LinkIcon = styled(ExternalLinkIcon)({
   marginLeft: '0.5rem',
 });
 
-export function Sidebar({ labs, links }) {
+const Group = ({ title, items }) => (
+  <Links type={title.toLowerCase()}>
+    <Title>{title}</Title>
+    {items.map(({ node }) => {
+      return (
+        <Link to={node.fields.slug} key={node.fields.slug}>
+          {node.frontmatter.title}
+        </Link>
+      );
+    })}
+  </Links>
+);
+
+export function Sidebar({ agendas, labs, links, tips }) {
   return (
     <Container>
       {links.map(({ title, links: subLinks }) => (
-        <React.Fragment key={title}>
+        <Links type="sub" key={title}>
           <Title>{title}</Title>
           {subLinks.map(({ title: subTitle, href }) => (
             <A href={href} key={href} target="_blank" rel="noopener">
@@ -87,16 +117,11 @@ export function Sidebar({ labs, links }) {
               <LinkIcon />
             </A>
           ))}
-        </React.Fragment>
+        </Links>
       ))}
-      <Title>Labs</Title>
-      {labs.map(({ node: lab }) => {
-        return (
-          <Link to={lab.fields.slug} key={lab.fields.slug}>
-            {lab.frontmatter.title}
-          </Link>
-        );
-      })}
+      <Group title="Agenda" items={agendas} />
+      <Group title="Tips" items={tips} />
+      <Group title="Labs" items={labs} />
     </Container>
   );
 }
