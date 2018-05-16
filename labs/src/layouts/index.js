@@ -37,6 +37,7 @@ const Content = styled.div({
   margin: 'auto',
   padding: '1rem',
   height: '100%',
+  maxWidth: '100%',
   position: 'relative',
   '@media only screen and (min-width: 768px)': {
     width: '65%',
