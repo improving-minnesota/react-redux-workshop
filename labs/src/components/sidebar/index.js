@@ -10,19 +10,10 @@ const Container = styled.div({
   fontFamily: 'Roboto, sans-serif',
   padding: '1rem 0.5rem',
   whiteSpace: 'nowrap',
-  '.links': {
-    display: 'none',
-    '&.labs': {
-      display: 'inline-block',
-    },
-  },
   '@media only screen and (min-width: 768px)': {
     flexDirection: 'column',
     overflowX: 'auto',
     minWidth: 250,
-    '.links': {
-      display: 'inline-block',
-    },
   },
 });
 
@@ -67,6 +58,22 @@ Link.defaultProps = {
   activeClassName: 'active',
 };
 
+const Links = styled.div(
+  {
+    display: 'none',
+    '@media only screen and (min-width: 768px)': {
+      display: 'inline-block',
+    },
+  },
+  ({ type }) => ({
+    ...(type === 'labs'
+      ? {
+          display: 'inline-block',
+        }
+      : {}),
+  })
+);
+
 const A = styled(Link)({}).withComponent('a');
 
 const Title = styled.h2({
@@ -86,7 +93,7 @@ const LinkIcon = styled(ExternalLinkIcon)({
 });
 
 const Group = ({ title, items }) => (
-  <div className={`links ${title.toLowerCase()}`}>
+  <Links type={title.toLowerCase()}>
     <Title>{title}</Title>
     {items.map(({ node }) => {
       return (
@@ -95,14 +102,14 @@ const Group = ({ title, items }) => (
         </Link>
       );
     })}
-  </div>
+  </Links>
 );
 
 export function Sidebar({ agendas, labs, links, tips }) {
   return (
     <Container>
       {links.map(({ title, links: subLinks }) => (
-        <div className="links sub" key={title}>
+        <Links type="sub" key={title}>
           <Title>{title}</Title>
           {subLinks.map(({ title: subTitle, href }) => (
             <A href={href} key={href} target="_blank" rel="noopener">
@@ -110,7 +117,7 @@ export function Sidebar({ agendas, labs, links, tips }) {
               <LinkIcon />
             </A>
           ))}
-        </div>
+        </Links>
       ))}
       <Group title="Agenda" items={agendas} />
       <Group title="Tips" items={tips} />

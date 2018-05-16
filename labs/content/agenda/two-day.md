@@ -118,6 +118,6 @@ In this section, we'll have a few hours to tailor the discussion towards client 
 
 * NodeJS LTS (8.9.0 at the time of this writing)
 * NPM 5
-* Yarn is a _nice to have_ would we'd recommend it
+* Yarn is a _nice to have_ but is not required--although we would strongly recommend it!
 
 We'll send out an e-mail a week or so before the workshop with various links, including the repository for the workshops where a setup script can be run to validate environment setup. The less time we spend debugging specific environment issues, the more time we'll have for actual content 😄
