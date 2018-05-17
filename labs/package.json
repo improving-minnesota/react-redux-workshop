@@ -24,9 +24,7 @@
     "typography": "~0.16.17",
     "typography-plugin-code": "~0.16.11"
   },
-  "keywords": [
-    "gatsby"
-  ],
+  "keywords": ["gatsby"],
   "license": "MIT",
   "scripts": {
     "build": "gatsby build",
