@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "author": "Dustin Schau <dustin.schau@objectpartners.com>",
   "dependencies": {
-    "@objectpartners/components": "~0.0.4",
+    "@objectpartners/components": "~0.0.5",
     "emotion": "~9.1.3",
     "emotion-server": "~9.1.3",
     "gatsby": "^1.9.247",
@@ -24,7 +24,9 @@
     "typography": "~0.16.17",
     "typography-plugin-code": "~0.16.11"
   },
-  "keywords": ["gatsby"],
+  "keywords": [
+    "gatsby"
+  ],
   "license": "MIT",
   "scripts": {
     "build": "gatsby build",
