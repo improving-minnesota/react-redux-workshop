@@ -17,6 +17,9 @@ module.exports = function createPages({ boundActionCreators, graphql }) {
             fields {
               slug
             }
+            frontmatter {
+              title
+            }
           }
         }
       }
@@ -55,11 +58,13 @@ module.exports = function createPages({ boundActionCreators, graphql }) {
     const { agenda, labs, tips } = result.data;
 
     const createPages = page => {
-      page.edges.forEach(({ node }) => {
+      page.edges.forEach(({ node }, index) => {
+        const next = page.edges[index + 1] || {};
         createPage({
           path: node.fields.slug,
           component: contentTemplate,
           context: {
+            next,
             slug: node.fields.slug,
           },
         });
