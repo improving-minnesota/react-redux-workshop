@@ -13,7 +13,7 @@ git checkout lab-04-redux-start
 git pull
 ```
 
-If not running, start the `npm start` task. Otherwise, restart the running task to pick up any changes in the lab-04-redux-start branch.
+If not running, start the `yarn start` task. Otherwise, restart the running task to pick up any changes in the lab-04-redux-start branch.
 
 &nbsp;
 
@@ -478,14 +478,14 @@ export default EmployeeRow;
 
 If you haven't already done so,
 
-* In a terminal windows run: `npm start` to fire off the build.
+* In a terminal windows run: `yarn start` to fire off the build.
 * Navigate to [http://localhost:3000](http://localhost:3000) in your favorite browser.
 
 Did your application display any data? Look at your console to see the reported "Proxy error". This gives us a clue that we need to start our backend server to start supplying the data to our application.
 
 ## Checkout the API repository
 
-* Keep your `npm start` frontend running, but now open a 2nd console window
+* Keep your `yarn start` frontend running, but now open a 2nd console window
 * Change directories to a folder separate from the existing project. The parent directory above the react-redux-timesheet project would work nicely
 
 Checkout the backend API server project from Github.
@@ -515,13 +515,13 @@ $ cd react-redux-api
 Install the backend API NPM dependencies
 
 ```
-$ npm install
+$ yarn
 ```
 
 Run the backend API server
 
 ```
-$ npm start
+$ yarn start
 ```
 
 ## See the results
