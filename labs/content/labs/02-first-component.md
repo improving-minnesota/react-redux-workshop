@@ -11,10 +11,10 @@ title: Your First React Component
 ```
 git checkout lab-02-first-component-start
 git pull
-npm install
+yarn
 ```
 
-If not running, start the `npm start` task. Otherwise, restart the running tasks to pick up any changes in the lab-02-first-component-start branch.
+If not running, start the `yarn start` task. Otherwise, restart the running tasks to pick up any changes in the lab-02-first-component-start branch.
 
 &nbsp;
 
@@ -193,9 +193,9 @@ describe('Hello World:', () => {
   * We test that default props work ('Partner')
   * and that passed-in props work ('Fred')
 
-* If it's not already running, open your terminal and run the test (`npm test`) command.
+* If it's not already running, open your terminal and run the test (`yarn test`) command.
 
-![](./images/npm.test.png)
+![](./images/yarn.test.png)
 
 * Did your test pass?
 
@@ -205,7 +205,7 @@ describe('Hello World:', () => {
 Error: Error watching file for changes: EMFILE
     at exports._errnoException (util.js:953:11)
     at FSEvent.FSWatcher._handle.onchange (fs.js:1400:11)
-npm ERR! Test failed.  See above for more details.
+yarn ERR! Test failed.  See above for more details.
 ```
 
 * There are many more assertions that are possible!
@@ -244,7 +244,7 @@ import Hello from './hello/Hello';
 
 ## Run the application and see your work.
 
-* In a terminal windows run: `npm start` to fire off the build.
+* In a terminal windows run: `yarn start` to fire off the build.
 * Navigate to [http://localhost:3000](http://localhost:3000) in your favorite browser.
 
 ![](./images/howdy.partner.png)

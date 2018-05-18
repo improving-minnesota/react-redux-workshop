@@ -35,8 +35,6 @@ Check if you have node installed. `$ node --version`
   * [https://www.python.org/downloads/](https://www.python.org/downloads/)
   * [https://www.visualstudio.com/downloads/](https://www.visualstudio.com/downloads/)
 * Restart
-* Open a GitBash terminal
-* Update the npm CLI client `$ npm install npm --global`
 
 #### Mac
 
@@ -44,6 +42,18 @@ Check if you have node installed. `$ node --version`
   * Check for existing install. `$ brew --version`
   * Install Hombrew as needed [http://brew.sh](http://brew.sh)
   * Install Node w/ Hombrew. `$ brew install node`
+
+## Yarn
+
+Check if you have yarn installed. `$ yarn --version`
+
+#### Windows
+
+* Install Yarn using the installer [https://yarnpkg.com/lang/en/docs/install/](https://yarnpkg.com/lang/en/docs/install/#windows-stable)
+
+#### Mac
+
+* Install via Homebrew `$ brew install yarn`
 
 **NOTE:** If you have errors, try running this first:
 
@@ -89,16 +99,10 @@ $ git checkout lab-01-project-setup-start
 
 ## Install the application dependencies
 
-Install the NPM dependencies
+Install the Yarn dependencies
 
 ```
 $ yarn
-```
-
-**OR**
-
-```
-$ npm install
 ```
 
 ## Start the server
@@ -106,10 +110,10 @@ $ npm install
 Run the start script
 
 ```
-$ npm start
+$ yarn start
 ```
 
-![](./images/npm.start.png)
+![](./images/yarn.start.png)
 
 * This kicks off a Node server and serves up our `index.html` page.
 

@@ -13,7 +13,7 @@ git checkout lab-03-routing-start
 git pull
 ```
 
-If not running, start the `npm start` task. Otherwise, restart the running task to pick up any changes in the lab-03-routing-start branch.
+If not running, start the `yarn start` task. Otherwise, restart the running task to pick up any changes in the lab-03-routing-start branch.
 
 ### Check it out!
 
@@ -184,7 +184,7 @@ it('should instantiate the Navigation Component', () => {
 
 ## Run the tests
 
-* Run `npm test` and verify that all the tests pass.
+* Run `yarn test` and verify that all the tests pass.
   * Since the rest of your team has already implemented a bunch of tests, you may have to do a little searching to find the tests you just wrote.
 
 &nbsp;
@@ -193,7 +193,7 @@ it('should instantiate the Navigation Component', () => {
 
 If you haven't already done so,
 
-* In a terminal window run: `npm start` to fire off the build.
+* In a terminal window run: `yarn start` to fire off the build.
 * Navigate to [http://localhost:3000](http://localhost:3000) in your favorite browser.
 * You should be able to click around the navbar and see the routes change.
   * I'm sure it worked fine for **Timesheets** and **Projects**, but we still need to implement **Employees**.
@@ -395,7 +395,7 @@ it('should contain a correct employee', () => {
 
 If you haven't already done so,
 
-* In a terminal windows run: `npm start` to fire off the build.
+* In a terminal windows run: `yarn start` to fire off the build.
 * Navigate to [http://localhost:3000](http://localhost:3000) in your favorite browser.
 
 * Click around and enjoy the result of your hard work during this lab.

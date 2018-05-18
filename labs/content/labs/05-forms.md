@@ -13,7 +13,7 @@ git checkout lab-05-form-validation-start
 git pull
 ```
 
-If not running, start the `npm start` task. Otherwise, restart the running tasks to pick up any changes in the lab-05-form-validation-start branch.
+If not running, start the `yarn start` task. Otherwise, restart the running tasks to pick up any changes in the lab-05-form-validation-start branch.
 
 ### Check it out!
 
