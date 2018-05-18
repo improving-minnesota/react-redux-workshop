@@ -204,11 +204,11 @@ describe('synchronous actions', () => {
 });
 
 describe('async actions', () => {
-  beforeEach( => {
+  beforeEach(() => {
     moxios.install();
   });
 
-  afterEach( => {
+  afterEach(() => {
     moxios.uninstall();
   });
 
