@@ -167,21 +167,21 @@ EmployeesDetail.propTypes = {
 * Next, let's hook up to the Redux architecture. The only thing we'll need from the Redux state is the employee, like so:
 
 ```jsx
-function mapStateToProps(state) {
+const mapStateToProps = state => {
   return {
     employee: state.employees.employee,
   };
-}
+};
 ```
 
 * This component will also need the ability to update the Redux state through using the `EmployeeActions`, like so:
 
 ```jsx
-function mapDispatchToProps(dispatch) {
+const mapDispatchToProps = dispatch => {
   return {
     actions: bindActionCreators(EmployeeActions, dispatch),
   };
-}
+};
 ```
 
 * Next, let's update the render function to include the `EmployeeForm`, and pass it all the props it needs:
@@ -236,7 +236,7 @@ constructor(props) {
 * Update the test labeled `should instantiate the Employees Detail Component`:
 
 ```jsx
-it('should instantiate the Employees Detail Component', function() {
+it('should instantiate the Employees Detail Component', () => {
   const component = mount(
     <MemoryRouter>
       <EmployeesDetail store={mockStore} />

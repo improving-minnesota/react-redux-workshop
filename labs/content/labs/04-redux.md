@@ -58,19 +58,19 @@ import Axios from 'axios';
 * Now let's implement the functions that will be used to update the state of our application.
 
 ```javascript
-export function list(employees) {
+export const list = employees => {
   return {
     type: EmployeeActionTypes.LIST,
     employees: employees,
   };
-}
+};
 
-export function get(employee) {
+export const get = employee => {
   return {
     type: EmployeeActionTypes.GET,
     employee: employee,
   };
-}
+};
 ```
 
 * Next we'll implement the asynchronous methods that will be used to make our http Requests, along with a helper method to build the url.
@@ -87,8 +87,8 @@ const url = employeeId => {
   return url;
 };
 
-export function listEmployees() {
-  return function(dispatch) {
+export const listEmployees = () => {
+  return dispatch => {
     return Axios.get(url())
       .then(response => {
         dispatch(list(response.data));
@@ -98,16 +98,16 @@ export function listEmployees() {
         console.log('Error attempting to retrieve employees.', error);
       });
   };
-}
+};
 
 export const getEmployee = id => {
   return dispatch => {
     return Axios.get(url(id))
-      .then(function(res) {
+      .then(res => {
         dispatch(get(res.data));
         return true;
       })
-      .catch(function(x) {
+      .catch(error => {
         console.log('There was an error getting the employee');
       });
   };
@@ -116,12 +116,12 @@ export const getEmployee = id => {
 export const updateEmployee = employee => {
   return dispatch => {
     return Axios.put(url(employee._id), employee)
-      .then(function(res) {
+      .then(res => {
         dispatch(get(res.data));
         console.log('Employee : ' + employee.name + ', updated.');
         return true;
       })
-      .catch(function(x) {
+      .catch(error => {
         console.log('There was an error updating employee.');
       });
   };
@@ -132,12 +132,12 @@ export const removeEmployee = employee => {
     employee.deleted = true;
 
     return Axios.put(url(employee._id), employee)
-      .then(function(res) {
+      .then(res => {
         dispatch(get(res.data));
         console.log('Employee : ' + res.data.name + ', was deleted.');
         return true;
       })
-      .catch(function(x) {
+      .catch(error => {
         console.log('Error attempting to delete employee.');
       });
   };
@@ -148,12 +148,12 @@ export const restoreEmployee = employee => {
     employee.deleted = false;
 
     return Axios.put(url(employee._id), employee)
-      .then(function(res) {
+      .then(res => {
         dispatch(get(res.data));
         console.log('Employee : ' + res.data.name + ', was restored.');
         return true;
       })
-      .catch(function(x) {
+      .catch(error => {
         console.log('Error attempting to restore employee.');
       });
   };
@@ -162,12 +162,12 @@ export const restoreEmployee = employee => {
 export const createEmployee = employee => {
   return dispatch => {
     return Axios.put(url(), employee)
-      .then(function(res) {
+      .then(res => {
         dispatch(get(res.data));
         console.log('Employee : ' + res.data.name + ', created.');
         return true;
       })
-      .catch(function(x) {
+      .catch(error => {
         console.log('There was an error creating employee.');
       });
   };
@@ -204,11 +204,11 @@ describe('synchronous actions', () => {
 });
 
 describe('async actions', () => {
-  beforeEach(function() {
+  beforeEach(() => {
     moxios.install();
   });
 
-  afterEach(function() {
+  afterEach(() => {
     moxios.uninstall();
   });
 
@@ -353,17 +353,17 @@ import * as EmployeeActions from '../../actions/EmployeeActionCreator';
 * Next lets add the **mapStateToProps** and **mapDispatchToProps** methods between the component and the export.
 
 ```javascript
-function mapStateToProps(state) {
+const mapStateToProps = state => {
   return {
     employees: state.employees.employees,
   };
-}
+};
 
-function mapDispatchToProps(dispatch) {
+const mapDispatchToProps = dispatch => {
   return {
     actions: bindActionCreators(EmployeeActions, dispatch),
   };
-}
+};
 ```
 
 * Then we'll modify the export to **connect** the methods to the component using the **redux** connect() method we imported above
@@ -394,7 +394,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(Employees);
 ```javascript
 const actions = this.props.actions;
 
-let employeeRows = this.props.employees.map(function(employee) {
+let employeeRows = this.props.employees.map(employee => {
   return (
     <EmployeeRow employee={employee} key={employee._id} actions={actions} />
   );
