@@ -79,9 +79,18 @@ export class SlideDeck extends Component {
             return (
               <section key={deckIndex}>
                 {deck.map((html, slideIndex) => {
+                  const key = `${deckIndex}-${slideIndex}`;
+                  if (html.default) {
+                    const Slide = html.default;
+                    return (
+                      <section key={key}>
+                        <Slide />
+                      </section>
+                    );
+                  }
                   return (
                     <section
-                      key={`${deckIndex}-${slideIndex}`}
+                      key={key}
                       dangerouslySetInnerHTML={{ __html: html }} // #yolo
                     />
                   );

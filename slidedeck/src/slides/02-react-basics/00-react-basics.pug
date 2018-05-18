@@ -263,122 +263,38 @@ section
     li queues up changes to <span class="component red">state</span>, tells React that the component and its children must be re-rendered
     li executes asynchronously, a callback may be provided that will execute on update
 
+section
+  script(type="text/plain", class="language-jsx").
+    import React from 'react';
+
+    export class Counter extends React.Component {
+      constructor(props) {
+        super(props);
+
+        this.state = { count: 0 };
+      }
+
+      decrement() {
+        this.setState(state => ({
+          count: state.count - 1
+        }));
+      }
+
+      increment() {
+        this.setState(state => ({
+          count: state.count + 1
+        }));
+      }
+
+      render() {
+        return (
+          <div>
+            <h1>{this.state.count}</h1>
+            <button onClick={this.decrement}>-</button>
+            <button onClick={this.increment}>+</button>
+          </div>
+        );
+      }
+    }
+
 //- TODO: add a live example here
-
-section
-  h2 JSX Expression Bindings
-  p Embeds any javascript expression in JSX by wrapping it in curly braces
-  script(type="text/plain", class="language-jsx").
-    // string value (escaped automatically)
-    <div>{ `Hello ${this.props.name}!` }</div>
-
-    // attribute value
-    <div onClick={this.props.handleClick} />
-
-    // element
-    const element = <p>description</p>;
-    <div>{ element }</div>
-
-    // elements
-    const elements = [ <h1>title</h1>, <Component text="ex" /> ];
-    <div>{ elements }</div>
-
-section
-  h1.lower Test Helpers
-
-section
-  h2.lower Enzyme
-  ul
-    li Testing utility to assert, manipulate, and traverse your React Components' output
-    li (from Airbnb Engineering)
-    li
-      a(href="http://airbnb.io/enzyme/index.html") airbnb.io/enzyme
-
-section
-  script(type="text/plain", class="language-jsx").
-    import { shallow, mount } from 'enzyme'
-
-section
-  h4.lower Enzyme render testing
-  ul
-    li <span class="component red">shallow()</span>
-      ul
-        li Isolate your test by not rendering any child components
-    li <span class="component red">mount()</span>
-      ul
-        li More of an 'integration' test
-        li Test child component rendering
-        li Test DOM interactions
-
-section
-  script(type="text/plain", class="language-jsx").
-    element = shallow(
-      <EmployeeForm employee={employee}
-        errors={errors}
-        validate={spies.validate}
-        hasErrors={spies.hasErrors}
-        toggleAdmin={spies.toggleAdmin}
-        onSave={spies.onSave} />
-    )
-
-section
-  h2.lower Jest Expect
-  ul
-    li Default set of <span class="component red">expect()</span> assertions included in Jest
-    li <span class="component red">toBeTruthy(), toBeFalsy(), toHaveLength(), toEqual()</span>, etc...
-    li
-      a(href="http://facebook.github.io/jest/docs/expect.html") Jest Expect API
-
-section
-  h4.lower Minimal Component Test
-  ul
-    li Test that the component renders successfully
-  script(type="text/plain", class="language-jsx").
-    expect(shallow(<Hello />)).toHaveLength(1)
-
-section
-  h2.lower Enzyme Matchers
-  ul
-    li Custom assertion library for Enzyme
-    li
-      a(href="https://github.com/FormidableLabs/enzyme-matchers") github.com/FormidableLabs/enzyme-matchers
-
-section
-  h4.lower toIncludeText(text)
-  ul
-    li Returns true if the text is anywhere in the component
-  script(type="text/plain", class="language-jsx").
-    expect(shallow(<Hello />)).toIncludeText('Howdy')
-
-section
-  h4.lower toContainReact(jsx)
-  ul
-    li Returns true if the JSX element is in the component
-  script(type="text/plain", class="language-jsx").
-    expect(shallow(<Hello />)).toContainReact(<td>Howdy</td>)
-
-section
-  h4.lower toHaveProp(propName, value)
-  ul
-    li To verify that shallow rendered children have correct values passed into them
-  script(type="text/plain", class="language-jsx").
-    //Find first Route in rendered App
-    const route = shallow(<App />).find('Route').at(0)
-
-    expect(route).toHaveProp('path', '/projects')
-
-section
-  h2 DOM Query Methods
-
-section
-  h4.lower find(selector)
-  ul
-    li Find all nodes that match the selector
-  script(type="text/plain", class="language-jsx").
-    //Finds all rows with css class 'odd'
-    expect(comp.find('tr.odd')).toHaveLength(1)
-
-section
-  h1
-    a(href="/labs/your-first-react-component") Lab 02
-  h2 Your First React Component

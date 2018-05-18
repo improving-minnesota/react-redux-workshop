@@ -8,6 +8,7 @@ module.exports = {
         }
       }
     ],
+    'babel-preset-stage-2',
     'babel-preset-react'
   ]
 };
