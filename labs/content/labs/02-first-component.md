@@ -128,7 +128,7 @@ import { shallow } from 'enzyme';
 
 import Hello from './Hello';
 
-describe('Hello World:', function() {});
+describe('Hello World:', () => {});
 ```
 
 * Now we need to set up our components that we'll be testing.
@@ -138,14 +138,14 @@ it('renders without exploding', () => {
   expect(shallow(<Hello />)).toHaveLength(1);
 });
 
-it('should render with default text', function() {
+it('should render with default text', () => {
   const component = shallow(<Hello />);
 
   expect(component).toIncludeText('Howdy');
   expect(component).toIncludeText('Partner');
 });
 
-it('should render with our props', function() {
+it('should render with our props', () => {
   const component = shallow(<Hello friend="Fred" />);
 
   expect(component).toIncludeText('Howdy');
@@ -164,19 +164,19 @@ import { shallow } from 'enzyme';
 
 import Hello from './Hello';
 
-describe('Hello World:', function() {
+describe('Hello World:', () => {
   it('renders without exploding', () => {
     expect(shallow(<Hello />)).toHaveLength(1);
   });
 
-  it('should render with default text', function() {
+  it('should render with default text', () => {
     const component = shallow(<Hello />);
 
     expect(component).toIncludeText('Howdy');
     expect(component).toIncludeText('Partner');
   });
 
-  it('should render with our props', function() {
+  it('should render with our props', () => {
     const component = shallow(<Hello friend="Fred" />);
 
     expect(component).toIncludeText('Howdy');
@@ -282,7 +282,7 @@ Try creating a Snapshot test inside Hello.test.js, or:
 ```jsx
 import renderer from 'react-test-renderer';
 
-it('should render to match the snapshot', function() {
+it('should render to match the snapshot', () => {
   const component = renderer.create(<Hello friend="Luke" />);
 
   expect(component.toJSON()).toMatchSnapshot();

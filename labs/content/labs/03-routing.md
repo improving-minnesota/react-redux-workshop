@@ -175,7 +175,7 @@ beforeEach(() => {
   );
 });
 
-it('should instantiate the Navigation Component', function() {
+it('should instantiate the Navigation Component', () => {
   expect(nav).toHaveLength(1);
 });
 ```
@@ -240,7 +240,7 @@ If you haven't already done so,
   * Feel free to add actual properties to the employee object and test for their existence in a `<td/>`.
 
 ```javascript
-it('should instantiate the Employee Table', function() {
+it('should instantiate the Employee Table', () => {
   const employee = {
     username: 'fflintstone',
     email: 'fred.flintstone@slatequarry.com',
@@ -270,7 +270,7 @@ it('should instantiate the Employee Table', function() {
 ```javascript
   render() {
 
-    let employeeRows = this.props.employees.map(function (employee) {
+    let employeeRows = this.props.employees.map(employee => {
       return (
         <EmployeeRow employee={employee} key={employee._id} />
       );
@@ -314,7 +314,7 @@ EmployeeTable.propTypes = {
 * Add the following to the **Employee Table Component** suite:
 
 ```javascript
-it('should instantiate the Employee Table', function() {
+it('should instantiate the Employee Table', () => {
   const employees = [
     {
       username: 'fflintstone',
@@ -374,13 +374,13 @@ import { PageHeader, Grid, Row } from 'react-bootstrap';
 * Add the code below to the **Employees Component** suite
 
 ```javascript
-it('should instantiate the Employee Component', function() {
+it('should instantiate the Employee Component', () => {
   const component = shallow(<Employees />);
 
   expect(component).toHaveLength(1);
 });
 
-it('should contain a correct employee', function() {
+it('should contain a correct employee', () => {
   const component = mount(<Employees />);
 
   expect(component).toIncludeText('admin@mixtape.com');
