@@ -1,0 +1,20 @@
+.react-live {
+  display: flex;
+}
+
+.react-live-preview {
+  background-color: white;
+  font-size: 16px !important;
+}
+
+.prism-code {
+  padding: 1rem !important;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+
+.prism-code,
+.react-live-preview {
+  flex: 1;
+  width: 100%;
+}
