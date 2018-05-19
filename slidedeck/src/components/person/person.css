@@ -1,0 +1,42 @@
+.person {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.person-avatar {
+  display: block;
+  height: 300px;
+  border-radius: 500px;
+  filter: grayscale(1);
+  transition: 175ms ease-in-out;
+}
+
+.person-avatar:hover {
+  transform: scale(1.1);
+}
+
+.person-name {
+  font-size: 40px !important;
+}
+
+.person-title {
+  font-size: 32px !important;
+  color: #333 !important;
+}
+
+.person-twitter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-family: League Gothic, Impact, sans-serif !important;
+  font-size: 28px !important;
+  font-weight: 700;
+  color: #333 !important;
+}
+
+.person-twitter .icon {
+  margin-right: 0.25rem;
+}
