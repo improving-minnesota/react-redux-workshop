@@ -23,6 +23,18 @@ section
     }
 
 section
+  script(type="text/plain", class="language-jsx").
+    function List(props) {
+      return (
+        <ul>
+          {
+            props.items.map(item => <li key={item}>{item}</li>)
+          }
+        </ul>
+      );
+    }
+
+section
   h3 Callbacks/events
   script(type="text/plain", class="language-jsx").
     function Hello(props) {
