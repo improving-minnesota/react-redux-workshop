@@ -1,7 +1,7 @@
 import CodePlayground from '../../components/code-playground';
 
 <CodePlayground code={`
-class PostList extends React.Component {
+class Posts extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -10,20 +10,18 @@ class PostList extends React.Component {
     }
   }
 
-  fetchPosts() {
+  componentDidMount() {
     setTimeout(() => {
       this.setState({
         posts: ['Post 1', 'Post 2']
       });
-    }, 1000);
-  }
+    }, 1500);
 
-  fetchComments() {
     setTimeout(() => {
       this.setState({
         comments: ['Comment Uno', 'Comment Dos', 'Comment Catorce']
       });
-    }, 1000);
+    }, 3000);
   }
 
   render() {
@@ -33,8 +31,6 @@ class PostList extends React.Component {
         {this.state.posts.map(post => <div key={post}>{post}</div>)}
         <h3>Comments</h3>
         {this.state.comments.map(comment => <div key={comment}>{comment}</div>)}
-        <button onClick={() => this.fetchPosts()}>Get posts</button>
-        <button onClick={() => this.fetchComments()}>Get comments</button>
       </div>
     );
   }

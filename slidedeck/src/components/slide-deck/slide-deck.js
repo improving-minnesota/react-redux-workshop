@@ -15,6 +15,7 @@ import './slide-deck.css';
 
 export class SlideDeck extends Component {
   componentDidMount() {
+    loadLanguages(['json', 'jsx']);
     require.ensure(
       [
         'reveal.js',
@@ -29,11 +30,10 @@ export class SlideDeck extends Component {
         require('reveal.js/lib/js/html5shiv.js');
 
         window.Reveal = Reveal;
-        loadLanguages(['json', 'jsx']);
 
         Reveal.initialize({
           history: true,
-          margin: 0.2,
+          margin: 0.1,
           dependencies: [
             {
               async: true,
