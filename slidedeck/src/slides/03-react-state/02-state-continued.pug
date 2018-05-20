@@ -1,0 +1,26 @@
+section
+  h2 Initializing State
+  script(type="text/plain", class="language-jsx").
+    class Name extends React.Component {
+      constructor(props) {
+        super(props);
+        this.state = {
+          name: 'Sterling Archer'
+        };
+      }
+    }
+
+section
+  h2 Updating State
+  h3 The right way
+  script(type="text/plain", class="language-jsx").
+    this.setState({
+      name: 'Tim'
+    });
+
+  h3 The wrong way
+  script(type="text/plain", class="language-jsx").
+    this.state.name = 'Tim';
+
+section
+  h2 Lifting State Up

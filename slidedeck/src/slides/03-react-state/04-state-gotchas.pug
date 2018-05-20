@@ -1,0 +1,36 @@
+section
+  h2 State updates may be asyncronous
+
+section
+  h3 Good
+  script(type="text/plain", class="language-jsx").
+    this.setState(prevState => ({
+      counter: prevState.counter + 1
+    }));
+
+  h3 Bad
+  script(type="text/plain", class="language-jsx").
+    this.setState({
+      counter: this.state.counter + 1
+    });
+
+section
+  h2 State updates are merged
+
+section
+  h3 Given this state initialization
+  script(type="text/plain", class="language-jsx").
+    constructor(props) {
+      super(props);
+      this.state = {
+        posts: [],
+        comments: []
+      };
+    }
+
+section
+  h3 Merges with the existing state
+  script(type="text/plain", class="language-jsx").
+    this.setState({
+      comments: ['Hello', 'Another one']
+    });
