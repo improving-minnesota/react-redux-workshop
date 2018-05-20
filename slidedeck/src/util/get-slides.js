@@ -1,5 +1,5 @@
 export function getSlides() {
-  const context = require.context('../slides', true, /\.md|markdown|\.pug$/);
+  const context = require.context('../slides', true, /\.md|markdown|\.pug|js$/);
 
   return context
     .keys()

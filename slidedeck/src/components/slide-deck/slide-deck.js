@@ -1,5 +1,11 @@
 import React, { Component } from 'react';
 
+import 'prismjs';
+import loadLanguages from 'prismjs/components/index.js';
+import 'prismjs/plugins/keep-markup/prism-keep-markup.js';
+import 'prismjs/plugins/normalize-whitespace/prism-normalize-whitespace.js';
+import 'prismjs/plugins/unescaped-markup/prism-unescaped-markup.js';
+
 import 'reveal.js/css/reveal.css';
 import '@objectpartners/revealjs-theme';
 import 'prismjs/themes/prism-okaidia.css';
@@ -14,12 +20,7 @@ export class SlideDeck extends Component {
         'reveal.js',
         'reveal.js/lib/js/classList.js',
         'reveal.js/lib/js/head.min.js',
-        'reveal.js/lib/js/html5shiv.js',
-        'prismjs',
-        'prismjs/components/index.js',
-        'prismjs/plugins/keep-markup/prism-keep-markup.js',
-        'prismjs/plugins/normalize-whitespace/prism-normalize-whitespace.js',
-        'prismjs/plugins/unescaped-markup/prism-unescaped-markup.js'
+        'reveal.js/lib/js/html5shiv.js'
       ],
       () => {
         const Reveal = require('reveal.js');
@@ -28,12 +29,7 @@ export class SlideDeck extends Component {
         require('reveal.js/lib/js/html5shiv.js');
 
         window.Reveal = Reveal;
-        const Prism = require('prismjs');
-        const loadLanguages = require('prismjs/components/index.js');
         loadLanguages(['json', 'jsx']);
-        require('prismjs/plugins/keep-markup/prism-keep-markup.js');
-        require('prismjs/plugins/normalize-whitespace/prism-normalize-whitespace.js');
-        require('prismjs/plugins/unescaped-markup/prism-unescaped-markup.js');
 
         Reveal.initialize({
           history: true,
@@ -50,12 +46,6 @@ export class SlideDeck extends Component {
             {
               async: true,
               src: require('reveal.js/plugin/notes/notes.js')
-            },
-            {
-              src: '',
-              callback() {
-                Prism.highlightAll();
-              }
             }
           ]
         });
