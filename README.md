@@ -2,13 +2,7 @@
 
 ---
 
-## Forking
-
-We would recommend forking the `react-redux-workshop` to your own personal account. You can do that like so:
-
-1.  Fork from the GitHub web UI (top right "Fork" button)
-1.  Use the new git repo URL that was created. For instance, `https://github.com/myaccountname/react-redux-workshop.git`
-1.  Follow the other steps as normal
+The repository for the react-redux content, primarily [labs](./labs) and the [slidedeck](./slidedeck).
 
 ## Additional Info
 
