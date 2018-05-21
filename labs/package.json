@@ -37,6 +37,7 @@
     "gatsby-plugin-react-next": "~1.0.11",
     "gatsby-plugin-typography": "~1.7.18",
     "gatsby-remark-prismjs": "~2.0.2",
+    "gatsby-remark-smartypants": "~1.4.12",
     "gatsby-source-filesystem": "~1.5.35",
     "gatsby-transformer-remark": "~1.7.41",
     "gatsby-transformer-yaml": "~1.5.16",
