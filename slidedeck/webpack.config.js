@@ -58,7 +58,7 @@ module.exports = function webpackConfig() {
           use: ['babel-loader', 'mdx-loader']
         },
         {
-          test: /\.(jpe?g|png|gif|mp4)/,
+          test: /\.(jpe?g|png|gif|svg|mp4)/,
           use: ['url-loader']
         }
       ]

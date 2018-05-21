@@ -7,7 +7,7 @@ section
     li Used to making binding React components to Redux a little easier
 
 section
-  h2 Tenets
+  h2 Component types
   ul
     li Presentational (dumb) components vs. container (smart) components
     li Avoid using state or React lifecycle methods in components if possible
@@ -15,22 +15,24 @@ section
 section
   h3 Presentational components
   ul
-    li Don't know about Redux
-    li Get data from props
-    li.
+    li.fragment Neither know nor care about Redux
+    li.fragment Get data from props
+    li.fragment.
       Can be implemented as <span class="component red">functional stateless components</span>
 
 section
   h4 Example functional stateless component
   script(type="text/plain", class="language-jsx", style="width: 100%; max-height: 700px;").
-    import React from 'react'
-    import PropTypes from 'prop-types'
+    import React from 'react';
+    import PropTypes from 'prop-types';
 
-    const AgentDetails  = ( { agent, onClick } ) => (
-      <li onClick={onClick}>
-        {agent.name} - {agent.title}
-      </li>
-    )
+    function AgentDetails(props) {
+      return (
+        <li onClick={onClick}>
+          {agent.name} - {agent.title}
+        </li>
+      );
+    }
 
     AgentDetails.propTypes = {
       onClick: PropTypes.func.isRequired,
@@ -38,9 +40,9 @@ section
         name: PropTypes.string.isRequired,
         title: PropTypes.string.isRequired,
       })
-    }
+    };
 
-    export default AgentDetails
+    export default AgentDetails;
 
 section
   h3 Container components

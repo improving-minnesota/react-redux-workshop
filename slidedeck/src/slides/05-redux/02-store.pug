@@ -1,0 +1,234 @@
+section
+  h3 Store
+  ul
+    li The "glue" between actions and reducers
+    li Contains the current state value
+    li Only one store in a Redux application
+
+section
+  h3 Store instantiation
+  script(type="text/plain", class="language-jsx", style="width:100%").
+    import { createStore } from 'redux'
+    import agentReducer from './reducers'
+
+    const store = createStore(agentReducer)
+
+section
+  h3 Store API
+  ul
+    li.
+      <span class="component red">getState()</span> - allows access to the state
+    li.
+      <span class="component red">dispatch(action)</span> - allows state to be updated
+    li.
+      <span class="component red">subscribe(listener)</span> - registers a listener to the state and returns a function that will allow the listener to unsubscribe
+
+section
+  h3 A store in action
+  script(type="text/plain", class="language-jsx").
+    import {addEmployee} from './actions'
+    import { createStore } from 'redux'
+    import employeeReducer from './reducers'
+
+    // Create the store from the reducer from before
+    const store = createStore(employeeReducer)
+
+    // Start listening to state changes
+    // It will print out the state when it changes
+    const unsubscribe = store.subscribe(() =>
+      console.log(store.getState())
+    )
+
+    // Dispatch some actions
+    // These will go through the reducer to update the store
+    store.dispatch(addEmployee({name: 'Sterling Archer', title: 'Agent'})
+    store.dispatch(addEmployee({name: 'Lana Kane', title: 'Agent'})
+    store.dispatch(addEmployee({name: 'Cyril Figgis', title: 'Comptroller'})
+
+    // Stop listening to state changes
+    unsubscribe()
+
+section
+  h3 Data Flow
+  h4 Redux follows a strict unidirectional data flow
+
+section
+  h4 Action is called via store.dispatch(action)
+  h4.fragment Calls the reducer function
+  h4.fragment Store saves the result from the reducer
+  h4.fragment The store is updated
+  h4.fragment ...
+  h4.fragment Profit
+
+section
+  img(src="~./images/redux-diagram.png")
+
+  p.attribution https://medium.com/the-web-tub/managing-your-react-state-with-redux-affab72de4b1
+
+section
+  h2 Advanced Topics
+
+section
+  h2 Middleware
+
+section
+  h3 Middleware
+  ul
+    li Used to run code after an action is dispatched but before it gets to the reducer
+    li Applies configured middleware in a chain that will get run in order
+    li Can inspect both actions and state, modify action data, send other actions, stop actions completely, etc.
+
+section
+  h3 Middleware
+  ul
+    li.
+      Usually in the form of <span class="component red">middleware = store => next => action</span>
+  ul
+    li.
+      <span class="component red">store</span> - the store
+    li.
+      <span class="component red">next</span> - the next piece of middleware in the chain
+    li.
+      <span class="component red">action</span> - the current action
+
+section
+  h3 Middleware - Simple Logger
+  script(type="text/plain", class="language-jsx", style="width:100%").
+    const logger = store => next => action => {
+      console.log('ACTION =>', action)
+      let result = next(action)
+      console.log('NEXT =>' , store.getState())
+      return result
+    }
+
+    export default logger
+
+section
+  h3 Middleware in action
+  script(type="text/plain", class="language-jsx", style="width:100%").
+    import { createStore, combineReducers, applyMiddleware } from 'redux'
+    import { agentReducer } from 'agent/modules'
+    import { cyborgReducer } from 'cyborg/modules'
+    import logger from 'middleware/logger'
+
+    const reducers = combineReducers(agentReducer, cyborgReducer)
+
+    const store = createStore(
+      reducers,
+      applyMiddleware(logger)
+    )
+
+    export default store
+
+
+section
+  h3 How do we get data from a REST API?
+  img(src="https://media.giphy.com/media/a5viI92PAF89q/giphy.gif")
+
+section
+  h2 Async Actions
+
+section
+  h3 Async Actions
+  ul
+    li Important events when you call an async action
+    ul
+      li.fragment When a call starts
+      li.fragment When a call succeeds
+      li.fragment When a call fails
+
+section
+  h3 Async Actions
+  ul
+    li Therefore, you need three actions tell the reducer(s):
+    ul
+      li When an async request starts
+      li When the request succeeds
+      li When the request fails
+
+section
+  h3 Async Actions
+  script(type="text/plain", class="language-jsx", style="width:100%").
+    // separate types
+    { type: 'FETCH_AGENTS_REQUEST' }
+    { type: 'FETCH_AGENTS_FAILURE', error: 'Oops' }
+    { type: 'FETCH_AGENTS_SUCCESS', response: { ... } }
+
+    // status field
+    { type: 'FETCH_AGENTS' }
+    { type: 'FETCH_AGENTS', status: 'error', error: 'Oops' }
+    { type: 'FETCH_AGENTS', status: 'success', response: { ... } }
+
+section
+  h2 Async Action Creators
+
+section
+  h3 Async Action Creators
+  ul
+    li.
+      Standard way to create an async action creator is to use a <span class="component red">thunk</span>
+      using the <span class="component red">react-thunk</span> middleware
+    li Alternate mechanisms exist
+      ul
+        li.fragment redux-saga
+        li.fragment redux-pack
+        li.fragment etc.
+
+section
+  h3 Thunks in Redux
+  ul
+    li.
+      Action creators return a function with <span class="component red">dispatch</span> as a single argument
+    li.
+      The <span class="component red">react-thunk</span> middleware knows how to handle action creators that return a function
+      and passes the store's <span class="component red">dispatch()</span> to the function
+    li.
+      The function called by the middleware returns a value, like a <span class="component red">Promise</span> object.
+
+section
+  h3 Thunk example
+  script(type="text/plain", class="language-jsx", style="width: 100%; max-height: 700px;").
+    import axios from 'axios'
+
+    export const FETCH_AGENTS_REQUEST = 'FETCH_AGENTS_REQUEST'
+    export const FETCH_AGENTS_FAILURE = 'FETCH_AGENTS_FAILURE'
+    export const FETCH_AGENTS_SUCCESS = 'FETCH_AGENTS_SUCCESS'
+
+    const requestAgents = () => {
+      return {
+        type: FETCH_AGENTS_REQUEST
+      }
+    }
+
+    const requestAgentsSuccess = agents => {
+      return {
+        type: FETCH_AGENTS_SUCCESS,
+        payload: agents
+      }
+    }
+
+    const requestAgentsError = error => {
+      return {
+        type: FETCH_AGENTS_FAILURE,
+        error: error
+      }
+    }
+
+section
+  h3 Thunk example (cont.)
+  script(type="text/plain", class="language-jsx", style="width:100%").
+    export const fetchAgents = () => {
+      return dispatch => {
+        dispatch(requestAgents())
+        return axios.get('api/agents')
+          .then(response => response.data)
+          .then(agents => dispatch(requestAgentsSuccess(agents)))
+          .catch(error => dispatch(requestAgentsError(error)))
+      }
+    }
+
+section
+  h3 Caveat(s)
+  h4.fragment Redux can be challenging to begin to wrap your head around
+  h4.fragment The benefits are worth it
+  h4.fragment Most applications of non-trivial size will benefit from Redux
