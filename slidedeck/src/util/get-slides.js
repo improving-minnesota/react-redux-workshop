@@ -1,5 +1,5 @@
 export function getSlides() {
-  const context = require.context('../slides', true, /\.md|markdown|\.pug$/);
+  const context = require.context('../slides', true, /\.md|markdown|\.pug|js$/);
 
   return context
     .keys()
@@ -43,7 +43,7 @@ export function getSlides() {
 
       //To help with reworking React Workshop, allow for single file with multiple slides
       const slide = context(key);
-      if (slide.indexOf('<section>') !== -1) {
+      if (slide.indexOf && slide.indexOf('<section>') !== -1) {
         const sections = slide
           .replace(/\<section\>/g, '')
           .split('</section>')

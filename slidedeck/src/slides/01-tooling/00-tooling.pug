@@ -39,7 +39,7 @@ section
 section
   ul
     li Yarn performs the same functions as NPM and has nearly the same command line interface
-    li Its advantage over NPM is improved speed and reliability
+    li Its advantage over NPM is it claims to make more efficient use of the network and deterministic dependency resolution
 
 section
   h3 package.json
@@ -51,18 +51,18 @@ section
       "main": "index.js",
       "author": "Sterling Archer",
       "dependencies": {
-        "grunt": "0.4.2"
+        "react": "^16.3.0"
       }
     }
 
 section
   ul
     li When checking out a fresh project from GitHub, simply run:
-      strong  'npm install'
-      |  or
       strong  'yarn'
+      |  or
+      strong  'npm install'
       |  to install all the dependencies required to run the project
 
     li You can visit the
       a(href='https://docs.npmjs.com/getting-started/what-is-npm')  NPM website
-      |&nbsp;to learn more about them
+      |&nbsp;to learn more about it

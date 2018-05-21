@@ -1,0 +1,44 @@
+section
+  h2 JSX Expression Bindings
+  p Embeds any javascript expression in JSX by wrapping it in curly braces
+
+section
+  h3 String values
+  script(type="text/plain", class="language-jsx").
+    function Hello(props) {
+      return (
+        <h1>Hello {props.name}</h1>
+      );
+    }
+
+section
+  h3 React elements
+  script(type="text/plain", class="language-jsx").
+    function Hello(props) {
+      return (
+        <div>
+          {props.children}
+        </div>
+      );
+    }
+
+section
+  script(type="text/plain", class="language-jsx").
+    function List(props) {
+      return (
+        <ul>
+          {
+            props.items.map(item => <li key={item}>{item}</li>)
+          }
+        </ul>
+      );
+    }
+
+section
+  h3 Callbacks/events
+  script(type="text/plain", class="language-jsx").
+    function Hello(props) {
+      return (
+        <h1 onClick={props.onClick}>Hello {props.name}!</h1>
+      );
+    }

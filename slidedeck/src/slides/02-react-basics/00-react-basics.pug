@@ -12,10 +12,10 @@ section
 section
   ul
     li JavaScript syntax extension that looks similar to HTML
-    li Compiles to actual JavaScript that you'll be able to see during labs
+    li HTML-like syntax compiles to JavaScript function calls with Babel
 
 section
-  p Returning JSX elements
+  h3 Our first React component
   script(type="text/plain", class="language-jsx").
     function Hello(props) {
       return (
@@ -26,7 +26,7 @@ section
     }
 
 section
-  p Returning the same elements without JSX
+  h3 Transpiles (with Babel) to:
   script(type="text/plain", class="language-jsx").
     function Hello(props) {
       return React.createElement(
@@ -41,13 +41,22 @@ section
     }
 
 section
-  p React's JSX uses the upper vs. lower case convention to distinguish between React Component classes and HTML tags
+  p React's JSX uses the upper vs. lower case convention to distinguish between React components vs. HTML tags
   ul
     li UpperCase = Component
-    li lowercase = tag
+    li lowercase = HTML tag
+  script(type="text/plain", class="language-jsx").
+    function Hello(props) {
+      return (
+        <div>
+          <SomeComponent />
+        </div>
+      );
+    }
 
 section
-  p Since JSX is a superset of JavaScript, identifiers like class and for as XML attribute names is discouraged
+  h3 Gotchas!
+  p Since JSX is a superset of JavaScript, identifiers like class and for as attributes (or props!) is discouraged
   ul
     li <span class="component red">htmlFor</span> instead of <span class="component red">for</span>
     li <span class="component red">className</span> instead of  <span class="component red">class</span>
@@ -59,7 +68,7 @@ section
   ul
     li Replica of the Browser DOM
     li React redraws the entire screen on change
-    li React calculates the minimum amount of changes required
+    li Efficiently diffs (and updates!) what is on screen vs. the redrawn DOM
   p
     a(href="https://facebook.github.io/react/docs/reconciliation.html") More info?
 
@@ -76,7 +85,7 @@ section
   h2 Functional Component
   ul
     li Is just a JavaScript function
-    li Doesn't hold on to any state
+    li Doesn't hold on to any state (we'll come back to this!)
 
 section
   script(type="text/plain", class="language-jsx").
@@ -120,7 +129,7 @@ section
       ul
         li <span class="component red">render()</span>
         li <span class="component red">constructor()</span>
-        li lifecycle methods (advanced usage)
+        li lifecycle methods
     li properties
       ul
         li <span class="component red">props</span>, <span class="component red">defaultProps</span>, & <span class="component red">propTypes</span>
@@ -130,16 +139,15 @@ section
   h2.lower render()
   ul
     li Required
-    li Returns a single child component that is either a virtual representation of a native DOM component or composite component
+    li Returns a child component or components
     li Or returns null or false to render nothing
 
 section
   h2.lower render()
   ul
-    li Should not modify component state
-    li Should return the same result each time it is invoked
+    li Does not mutate component state
+    li Should return the same result each time it is invoked (rendering consistency!)
     li Should not read from or write to the DOM
-    li Work should be performed in <span class="component red">componentDidMount()</span> or the other lifecycle methods
 
 section
   h2.lower constructor()
@@ -171,7 +179,6 @@ section
   p These methods are called when an instance of a component is being created and inserted into the DOM:
   ol
     li <span class="component red">constructor()</span>
-    li <span class="component red">static getDerivedStateFromProps()</span>
     li <span class="component red">render()</span>
     li <span class="component red">componentDidMount()</span>
 
@@ -179,10 +186,8 @@ section
   h2 Updating:
   p An update can be caused by changes to props or state.
   ol
-    li <span class="component red">static getDerivedStateFromProps()</span>
     li <span class="component red">shouldComponentUpdate()</span>
     li <span class="component red">render()</span>
-    li <span class="component red">getSnapshotBeforeUpdate()</span>
     li <span class="component red">componentDidUpdate()</span>
 
 section
@@ -196,60 +201,45 @@ section
   ul
     li contains the props that were defined by the caller of the component
     li has a special prop, <span class="component red">props.children</span>, defined by the child tags in the JSX
-    li should never be modified by their own component
+    li should never be modified by consuming component
 
 section
-  script(type="text/plain", class="language-jsx").
-    import React from 'react';
-    import ReactDOM from 'react-dom';
+  h2.lower props.children
 
-    class Hello extends React.Component {
-      render() {
-        return (
-          <div>
-            <h1>Hello { this.props.name }!</h1>
-            { this.props.children }
-          </div>
-        );
-      }
+  script(type="text/plain", class="language-jsx").
+    function Hello(props) {
+      return (
+        <div>
+          {props.children}
+        </div>
+      );
     }
 
-    const container = document.getElementById('root');
-    ReactDOM.render(
-        <Hello name="Tim">
-          <p>Content</p>
-        </Hello>,
-      container);
-
-    /* renders:
-     * <div>
-     *   <h1>Hello Tim!</h1>
-     *   <p>Content</p>
-     * </div>
-     */
+    <Hello><h1>Hello World</h1></Hello>
 
 section
   h2.lower defaultProps
   ul
-    li Values in the mapping will be set on <span class="component red">this.props</span> if that prop is not specified by the parent component
-    li This is invoked before any instances are created and therefore it can't rely on <span class="component red">this.props</span>
+    li Prop defaults (as name would imply) will be set if not explicitly passed by parent component
 
 section
   script(type="text/plain", class="language-jsx").
-    class Foo extends React.Component {
+    class Hello extends React.Component {
       render() {
-        return <div>{this.props.foo}</div>;
+        return <h1>Hello {this.props.name}</h1>;
       }
     }
-    Foo.defaultProps = {
-      foo: ‘Foo’
+
+    Hello.defaultProps = {
+      name: 'World'
     };
 
 section
   h2.lower propTypes: {}
   ul
     li The <span class="component red">propTypes</span> object allows you to validate props being passed to your components
-    li Defined in a similar matter to <span class="component red">defaultProps</span>
+    li Defined in a similar manner to <span class="component red">defaultProps</span>
+    li Think of it like your component's API!
 
 section
   script(type="text/plain", class="language-jsx").
@@ -270,124 +260,41 @@ section
 section
   h2.lower setState()
   ul
-    li queues up changes to <span class="component red">state</span>, tells React that the component and its children must be re-rendered
+    li batches changes to <span class="component red">state</span>, tells React that the component and its children must be re-rendered
     li executes asynchronously, a callback may be provided that will execute on update
 
 section
-  h2 JSX Expression Bindings
-  p Embeds any javascript expression in JSX by wrapping it in curly braces
   script(type="text/plain", class="language-jsx").
-    // string value (escaped automatically)
-    <div>{ `Hello ${this.props.name}!` }</div>
+    import React from 'react';
 
-    // attribute value
-    <div onClick={this.props.handleClick} />
+    export class Counter extends React.Component {
+      constructor(props) {
+        super(props);
 
-    // element
-    const element = <p>description</p>;
-    <div>{ element }</div>
+        this.state = { count: 0 };
+      }
 
-    // elements
-    const elements = [ <h1>title</h1>, <Component text="ex" /> ];
-    <div>{ elements }</div>
+      decrement() {
+        this.setState(state => ({
+          count: state.count - 1
+        }));
+      }
 
-section
-  h1.lower Test Helpers
+      increment() {
+        this.setState(state => ({
+          count: state.count + 1
+        }));
+      }
 
-section
-  h2.lower Enzyme
-  ul
-    li Testing utility to assert, manipulate, and traverse your React Components' output
-    li (from Airbnb Engineering)
-    li
-      a(href="http://airbnb.io/enzyme/index.html") airbnb.io/enzyme
+      render() {
+        return (
+          <div>
+            <h1>{this.state.count}</h1>
+            <button onClick={this.decrement}>-</button>
+            <button onClick={this.increment}>+</button>
+          </div>
+        );
+      }
+    }
 
-section
-  script(type="text/plain", class="language-jsx").
-    import { shallow, mount } from 'enzyme'
-
-section
-  h4.lower Enzyme render testing
-  ul
-    li <span class="component red">shallow()</span>
-      ul
-        li Isolate your test by not rendering any child components
-    li <span class="component red">mount()</span>
-      ul
-        li More of an 'integration' test
-        li Test child component rendering
-        li Test DOM interactions
-
-section
-  script(type="text/plain", class="language-jsx").
-    element = shallow(
-      <EmployeeForm employee={employee}
-        errors={errors}
-        validate={spies.validate}
-        hasErrors={spies.hasErrors}
-        toggleAdmin={spies.toggleAdmin}
-        onSave={spies.onSave} />
-    )
-
-section
-  h2.lower Jest Expect
-  ul
-    li Default set of <span class="component red">expect()</span> assertions included in Jest
-    li <span class="component red">toBeTruthy(), toBeFalsy(), toHaveLength(), toEqual()</span>, etc...
-    li
-      a(href="http://facebook.github.io/jest/docs/expect.html") Jest Expect API
-
-section
-  h4.lower Minimal Component Test
-  ul
-    li Test that the component renders successfully
-  script(type="text/plain", class="language-jsx").
-    expect(shallow(<Hello />)).toHaveLength(1)
-
-section
-  h2.lower Enzyme Matchers
-  ul
-    li Custom assertion library for Enzyme
-    li (from Hudl's Blaine Kasten)
-    li
-      a(href="https://github.com/blainekasten/enzyme-matchers") github.com/blainekasten/enzyme-matchers
-
-section
-  h4.lower toIncludeText(text)
-  ul
-    li Returns true if the text is anywhere in the component
-  script(type="text/plain", class="language-jsx").
-    expect(shallow(<Hello />)).toIncludeText('Howdy')
-
-section
-  h4.lower toContainReact(jsx)
-  ul
-    li Returns true if the JSX element is in the component
-  script(type="text/plain", class="language-jsx").
-    expect(shallow(<Hello />)).toContainReact(<td>Howdy</td>)
-
-section
-  h4.lower toHaveProp(propName, value)
-  ul
-    li To verify that shallow rendered children have correct values passed into them
-  script(type="text/plain", class="language-jsx").
-    //Find first Route in rendered App
-    const route = shallow(<App />).find('Route').at(0)
-
-    expect(route).toHaveProp('path', '/projects')
-
-section
-  h2 DOM Query Methods
-
-section
-  h4.lower find(selector)
-  ul
-    li Find all nodes that match the selector
-  script(type="text/plain", class="language-jsx").
-    //Finds all rows with css class 'odd'
-    expect(comp.find('tr.odd')).toHaveLength(1)
-
-section
-  h1
-    a(href="/labs/your-first-react-component") Lab 02
-  h2 Your First React Component
+//- TODO: add a live example here

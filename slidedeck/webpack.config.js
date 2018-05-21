@@ -50,23 +50,12 @@ module.exports = function webpackConfig() {
           use: ['style-loader', 'css-loader', 'postcss-loader']
         },
         {
-          test: /\.(pug|jade)/,
+          test: /\.(pug|jade)$/,
           use: ['html-loader', 'pug-html-loader']
         },
         {
-          test: /\.(md|markdown)/,
-          use: [
-            'html-loader',
-            {
-              loader: 'markdown-loader',
-              options: {
-                highlight(code) {
-                  return require('highlight.js').highlightAuto(code).value;
-                },
-                sanitize: false
-              }
-            }
-          ]
+          test: /\.(md|markdown)$/,
+          use: ['babel-loader', 'mdx-loader']
         },
         {
           test: /\.(jpe?g|png|gif|mp4)/,

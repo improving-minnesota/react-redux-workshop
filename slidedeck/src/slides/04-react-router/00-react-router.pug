@@ -53,10 +53,10 @@ section
 section
   h3.plain &lt;Route&gt; config properties we'll cover
   pre(style="width: 100%;").
-    <code class="language-jsx">
-      &lt;Route <mark>exact</mark> path="/employees" component={Employees}/&gt;
-      &lt;Route <mark>path</mark>='/employees/detail/:_id' component={EmployeesDetail} /&gt;
-      &lt;Route path='/employees/create' <mark>component</mark>={EmployeesCreate} /&gt;
+    script(type="text/plain", class="language-jsx").
+      <Route exact path="/employees" component={Employees}/>
+      <Route path='/employees/detail/:_id' component={EmployeesDetail} />
+      <Route path='/employees/create' component={EmployeesCreate} />
     </code>
 
 section
