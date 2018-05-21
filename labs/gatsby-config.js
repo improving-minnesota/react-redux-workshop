@@ -34,6 +34,7 @@ module.exports = {
       options: {
         plugins: [
           'gatsby-remark-prismjs',
+          'gatsby-remark-smartypants',
           {
             resolve: 'gatsby-remark-images',
             options: {
