@@ -47,7 +47,8 @@ section
   ul
     li.
       Plain JavaScript objects that have a <span class="component red">type</span> that describes the action being performed
-    li Objects can contain just about anything else, but we tend to use Flux Standard Actions
+    li Objects can contain just about anything else, but we tend to use
+      a(href="https://github.com/redux-utilities/flux-standard-action") Flux Standard Actions
 
 section
   h3 Action Creators
@@ -67,23 +68,20 @@ section
 
 section
   h3 Reducers
-  ul
-    li Pure function that changes the state in response to an action
-    li <span class="component red">(previousState, action) => newState</span>
-    script(type="text/plain", class="language-jsx", style="width:100%").
-      const initialState = {
-        agents: []
-      }
+  script(type="text/plain", class="language-jsx", style="width:100%").
+    const initialState = {
+      agents: []
+    }
 
-      function agentReducer(state = initialState, action) {
-        switch (action.type) {
-          case ADD_EMPLOYEE:
-            return Object.assign({}, state, {
-              examples: state.agents.concat(action.payload)
-            })
-            ...
-        }
+    function agentReducer(state = initialState, action) {
+      switch (action.type) {
+        case 'ADD_EMPLOYEE':
+          return Object.assign({}, state, {
+            examples: state.agents.concat(action.payload)
+          })
+          ...
       }
+    }
 
 section
   h3 Immutability
