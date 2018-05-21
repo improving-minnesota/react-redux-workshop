@@ -41,17 +41,17 @@ section
   h2 react-router components we'll be covering...
 
 section
-  h2.lower.component &lt;BrowserRouter&gt;
-  p A type of <span class="component red">&lt;Router&gt;</span> that uses the HTML5 history API to keep your UI in sync with the URL.<br/><br/>
+  h2.lower.component BrowserRouter
+  p A type of <span class="component red">Router</span> that uses the HTML5 history API to keep your UI in sync with the URL.<br/><br/>
   p One of 5 different types of Routers available in the react-router library.
 
 
 section
-  h2.lower.component &lt;Route&gt;
+  h2.lower.component Route
   p The core path routing component. Renders some UI when the location matches the Route path.
 
 section
-  h3.plain &lt;Route&gt; config properties we'll cover
+  h3.plain Route config properties we'll cover
   script(type="text/plain", class="language-jsx").
     <Route exact path="/employees" component={Employees}/>
     <Route path='/employees/detail/:_id' component={EmployeesDetail} />
@@ -82,7 +82,7 @@ section
         li <span class="component red">children</span> - for complex rendering logic needs
 
 section
-  h3.lower exact & strict
+  h3.lower exact &amp; strict
   ul
     li.
       <span class="component red">exact</span> - only matches if an
@@ -97,13 +97,13 @@ section
       Check the <a href="https://reacttraining.com/react-router/web/api/Route/exact-bool">docs</a> for more info
 
 section
-  h2.lower.component &lt;Redirect&gt;
+  h2.lower.component Redirect
   p Navigates to a new location. <br/><br/>
   script(type="text/plain", class="language-jsx").
     <Redirect from='/employee-list' to='/employees'/>
 
 section
-  h2.lower.component &lt;Switch&gt;
+  h2.lower.component Switch
   p Renders the first child Route/Redirect that matches.<br/><br/>
   script(type="text/plain", class="language-jsx", style="width: 100%;").
     <Switch>
@@ -119,16 +119,16 @@ section
     </Switch>
 
 section
-  h2.lower.component &lt;Link&gt;
+  h2.lower.component Link
   p Declarative navigation integrated with the router.
 
 section
   ul
-    li Renders an <span class="component red">&lt;a&gt;</span> tag
+    li Renders an <span class="component red">a</span> tag
     li Links to a route in the application
     li If you change the path of your route, <br/>you don't have to change your links as well
     li.
-      <span class="component red">&lt;NavLink&gt;</span> is a specialized version of <span class="component red">&lt;Link&gt;</span>
+      <span class="component red">NavLink</span> is a specialized version of <span class="component red">Link</span>
     ul
       li Knows when the route it links to is active
       li Dynamic
@@ -136,16 +136,16 @@ section
       li Has exact and strict params like a Route
 
 section
-  h3.lower &lt;Link&gt; Examples
+  h3.lower Link Examples
   script(type="text/plain", class="language-jsx", style="width:100%").
     <Link className={projectsClasses} to="projects">Projects</Link>
-    <Link to="{`${employees}/${id}`}" replace=true >Employees</Link>
+    <Link to={`/employees/${id}`} replace>Employees</Link>
     <Link className={timesheetsClasses} to={{
         pathname: '/timesheets',
         search: '?sort=startDate',
         hash: '#id-12345',
         state: { highlightUser: this.state.user._id }
-      }} >Timesheets</Link>
+    }}>Timesheets</Link>
 
 section
   h2 Using react-router in your components
@@ -168,12 +168,12 @@ section
     li
       <span class="component red">path</span> - Path pattern on the Route that matched
       <br/>
-      span(style="margin-left:1em; color:#656565;") e.g.&nbsp;
+      span(style="margin-left:1em; color:#656565;") e.g.
         span.component(style="font-size:0.95em;") /employee/:id
     li
       <span class="component red">url</span> - URL segment that was matched
       <br/>
-      span(style="margin-left:1em;color:#656565;") e.g.&nbsp;
+      span(style="margin-left:1em;color:#656565;") e.g.
         span.component(style="font-size:0.95em;") /employee/2
     li
       <span class="component red">params</span> - key/values for the dynamic parts of URL
@@ -203,7 +203,7 @@ section
   p Where we were
   p.component.red this.props.history...
   p Where we are going
-  p.component.red &lt;Link to={location}/&gt;
+  p.component.red Link to={location}
 
 
 section
