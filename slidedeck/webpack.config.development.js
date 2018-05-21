@@ -4,6 +4,7 @@ module.exports = function webpackDevConfig(baseConfig) {
   return Object.assign({}, baseConfig, {
     mode: 'development',
     devServer: {
+      open: true,
       port: 9998,
       contentBase: ['src/public', '.'].map(contentPath =>
         path.join(__dirname, contentPath)

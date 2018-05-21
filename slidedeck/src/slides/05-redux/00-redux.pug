@@ -9,6 +9,16 @@ section
     li Changes are made with pure functions called <span class="component red">reducers</span>
 
 section
+  h3 What is a pure function?
+
+  script(type="text/plain", class="language-js").
+    function add(a, b) {
+      return a + b;
+    }
+
+    add(2, 2); // always 4
+
+section
   h2 Benefits
 
 section
@@ -40,25 +50,6 @@ section
     li Objects can contain just about anything else, but we tend to use Flux Standard Actions
 
 section
-  h3 Flux Standard Action
-  ul
-    li An action MUST
-    ul
-      li be a plain JavaScript object
-      li.
-        have a <span class="component red">type</span> property
-    li An action MAY
-    ul
-      li.
-        have an <span class="component red">error</span> property
-      li.
-        have a <span class="component red">payload</span> property
-      li.
-        have a <span class="component red">meta</span> property
-    li.
-      An action MUST NOT include properties other than <span class="component red">type</span>, <span class="component red">payload</span>, <span class="component red">error</span>, and <span class="component red">meta</span>
-
-section
   h3 Action Creators
   ul
     li Function that creates and returns an action
@@ -88,244 +79,22 @@ section
         switch (action.type) {
           case ADD_EMPLOYEE:
             return Object.assign({}, state, {
-              examples: state.agents.concat([action.payload])
+              examples: state.agents.concat(action.payload)
             })
             ...
         }
       }
 
 section
-  h3 Store
-  ul
-    li The "glue" between actions and reducers
-    li Contains the current state value
-    li Only one store in a Redux application
+  h3 Immutability
+  h4 Good
+  script(type="text/plain", class="language-js").
+    return Object.assign({}, state, {
+      examples: state.gents.concat(action.payload)
+    });
 
-section
-  h3 Store instantiation
-  script(type="text/plain", class="language-jsx", style="width:100%").
-    import { createStore } from 'redux'
-    import agentReducer from './reducers'
-
-    const store = createStore(agentReducer)
-
-section
-  h3 Store API
-  ul
-    li.
-      <span class="component red">getState()</span> - allows access to the state
-    li.
-      <span class="component red">dispatch(action)</span> - allows state to be updated
-    li.
-      <span class="component red">subscribe(listener)</span> - registers a listener to the state and returns a function that will allow the listener to unsubscribe
-
-section
-  h3 A store in action
-  script(type="text/plain", class="language-jsx", style="width: 100%; max-height: 600px;").
-    import {addEmployee} from './actions'
-    import { createStore } from 'redux'
-    import employeeReducer from './reducers'
-
-    // Create the store from the reducer from before
-    const store = createStore(employeeReducer)
-
-    // Start listening to state changes
-    // It will print out the state when it changes
-    const unsubscribe = store.subscribe(() =>
-      console.log(store.getState())
-    )
-
-    // Dispatch some actions
-    // These will go through the reducer to update the store
-    store.dispatch(addEmployee({name: 'Sterling Archer', title: 'Agent'})
-    store.dispatch(addEmployee({name: 'Lana Kane', title: 'Agent'})
-    store.dispatch(addEmployee({name: 'Cyril Figgis', title: 'Comptroller'})
-
-    // Stop listening to state changes
-    unsubscribe()
-
-section
-  h3 Data Flow
-  ul
-    li.
-      Redux follows a strict unidirectional data flow
-    li.
-       Action is called via <span class="component red">store.dispatch(action)</span>
-    li The reducer function is called
-      ul
-        li.
-          There is only one reducer function, but it can be made up of several smaller reducers via
-        <span class="component red">combineReducers()</span> or some other method of combining reducers
-    li The store saves the result from the reducer(s)
-      ul
-        li.
-          All listeners registered via <span class="component red">store.subscribe(listener)</span> will be called
-        li.
-          Current state is now available by calling <span class="component red">store.getState()</span>
-
-section
-  h2 Advanced Topics
-
-section
-  h2 Middleware
-
-section
-  h3 Middleware
-  ul
-    li Used to run code after an action is dispatched but before it gets to the reducer
-    li Applies configured middleware in a chain that will get run in order
-    li Can inspect both actions and state, modify action data, send other actions, stop actions completely, etc.
-
-section
-  h3 Middleware
-  ul
-    li.
-      Usually in the form of <span class="component red">middleware = store => next => action</span>
-  ul
-    li.
-      <span class="component red">store</span> - the store
-    li.
-      <span class="component red">next</span> - the next piece of middleware in the chain
-    li.
-      <span class="component red">action</span> - the current action
-
-section
-  h3 Middleware - Simple Logger
-  script(type="text/plain", class="language-jsx", style="width:100%").
-    const logger = store => next => action => {
-      console.log('ACTION =>', action)
-      let result = next(action)
-      console.log('NEXT =>' , store.getState())
-      return result
-    }
-
-    export default logger
-
-section
-  h3 Middleware in action
-  script(type="text/plain", class="language-jsx", style="width:100%").
-    import { createStore, combineReducers, applyMiddleware } from 'redux'
-    import { agentReducer } from 'agent/modules'
-    import { cyborgReducer } from 'cyborg/modules'
-    import logger from 'middleware/logger'
-
-    const reducers = combineReducers(agentReducer, cyborgReducer)
-
-    const store = createStore(
-      reducers,
-      applyMiddleware(logger)
-    )
-
-    export default store
-
-
-section
-  h3 How do we get data from a REST API?
-  img(src="~resources/images/thinking.jpg")
-
-section
-  h2 Async Actions
-
-section
-  h3 Async Actions
-  ul
-    li Important events when you call an async action
-    ul
-      li When the call is started
-      li When a response or error is received
-
-section
-  h3 Async Actions
-  ul
-    li Therefore, you need three actions tell the reducer(s):
-    ul
-      li When an async request begins
-      li When the request finishes successfully
-      li When the request fails
-
-section
-  h3 Async Actions
-  script(type="text/plain", class="language-jsx", style="width:100%").
-    // separate types
-    { type: 'app/agent/FETCH_AGENTS_REQUEST' }
-    { type: 'app/agent/FETCH_AGENTS_FAILURE', error: 'Oops' }
-    { type: 'app/agent/FETCH_AGENTS_SUCCESS', response: { ... } }
-
-    // status field
-    { type: 'app/agent/FETCH_AGENTS' }
-    { type: 'app/agent/FETCH_AGENTS', status: 'error', error: 'Oops' }
-    { type: 'app/agent/FETCH_AGENTS', status: 'success', response: { ... } }
-
-section
-  h2 Async Action Creators
-
-section
-  h3 Async Action Creators
-  ul
-    li.
-      Standard way to create an async action creator is to use a <span class="component red">thunk</span>
-      using the <span class="component red">react-thunk</span> middleware
-
-section
-  h2 ???
-  img(src="~resources/images/grandma_what.jpg")
-
-section
-  h3 Thunks in Redux
-  ul
-    li.
-      Action creators return a function with <span class="component red">dispatch</span> as a single argument
-    li.
-      The <span class="component red">react-thunk</span> middleware knows how to handle action creators that return a function
-      and passes the store's <span class="component red">dispatch()</span> to the function
-    li.
-      The function called by the middleware returns a value, like a <span class="component red">Promise</span> object.
-
-section
-  h3 Thunk example
-  script(type="text/plain", class="language-jsx", style="width: 100%; max-height: 700px;").
-    import axios from 'axios'
-
-    export const FETCH_AGENTS_REQUEST = 'app/agent/FETCH_AGENTS_REQUEST'
-    export const FETCH_AGENTS_FAILURE = 'app/agent/FETCH_AGENTS_FAILURE'
-    export const FETCH_AGENTS_SUCCESS = 'app/agent/FETCH_AGENTS_SUCCESS'
-
-    const requestAgents = () => {
-      return {
-        type: FETCH_AGENTS_REQUEST
-      }
-    }
-
-    const requestAgentsSuccess = (agents) => {
-      return {
-        type: FETCH_AGENTS_SUCCESS,
-        payload: agents
-      }
-    }
-
-    const requestAgentsError = (error) => {
-      return {
-        type: FETCH_AGENTS_FAILURE,
-        error: error
-      }
-    }
-
-section
-  h3 Thunk example (cont.)
-  script(type="text/plain", class="language-jsx", style="width:100%").
-    export const fetchAgents = () => {
-      return (dispatch) => {
-        dispatch(requestAgents())
-        return axios.get('api/agents')
-          .then(response => response.data)
-          .then(agents => dispatch(requestAgentsSuccess(agents)))
-          .catch(error => dispatch(requestAgentsError(error)))
-      }
-    }
-
-section
-  h2 axios
-  ul
-    li Cool library to simplify HTTP calls
-    li
-      a(href="https://github.com/mzabriskie/axios") API on Github
+  h4 Bad
+  script(type="text/plain", class="language-js").
+    return Object.assign(state, {
+      examples: state.gents.concat(action.payload)
+    });

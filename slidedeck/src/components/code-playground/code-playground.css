@@ -21,6 +21,10 @@
   font-size: 32px;
 }
 
+.react-live-preview pre {
+  font-size: 32px;
+}
+
 .prism-code {
   padding: 1rem !important;
   word-wrap: break-word;
