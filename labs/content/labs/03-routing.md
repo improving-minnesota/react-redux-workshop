@@ -4,16 +4,15 @@ title: Routing and Components
 
 # Lab Three - Routing and Components
 
-## Checkout the Lab Branch
+## `cd` to the third lab
 
 * In a terminal:
 
 ```
-git checkout lab-03-routing-start
-git pull
+cd ../ # presuming still in first lab
+cd lab-03-routing
+yarn start
 ```
-
-If not running, start the `yarn start` task. Otherwise, restart the running task to pick up any changes in the lab-03-routing-start branch.
 
 ### Check it out!
 
@@ -29,7 +28,7 @@ If not running, start the `yarn start` task. Otherwise, restart the running task
 * Open **src/App.js**
 * Let's start by importing the component classes that we're going to use as the **Handlers** for our routes:
 
-```javascript
+```javascript:title=src/App.js
 import Projects from './components/projects/Projects';
 import Employees from './components/employees/Employees';
 import Timesheets from './components/timesheets/Timesheets';
@@ -111,7 +110,7 @@ export default App;
 * We first need to import the Bootstrap components that we are going to use
 * Also the **LinkContainer** from the react-router-bootstrap library that helps us integrate the router with bootstrap
 
-```javascript
+```javascript:title=src/components/nav/Navigation.js
 import { Navbar, Nav, NavItem } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 ```
@@ -164,7 +163,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 * Add the below code to the **Navigation.test.js**
   > Note that we need to wrap the Navigation in a **BrowserRouter**, so we use `mount` to render the nested Navigation element here
 
-```javascript
+```javascript:title=src/components/nav/Navigation.test.js
 let nav;
 
 beforeEach(() => {
@@ -219,7 +218,7 @@ If you haven't already done so,
 * The row should contain `<td/>`'s for each of the employee's properties.
 * Add the following to your EmployeeRow React class
 
-```javascript
+```javascript:title=src/components/employees/EmployeeRow.js
   render() {
     const employee = this.props.employee;
 
@@ -239,7 +238,7 @@ If you haven't already done so,
 * Open **src/components/employees/EmployeeRow.test.js** and add the tests below.
   * Feel free to add actual properties to the employee object and test for their existence in a `<td/>`.
 
-```javascript
+```javascript:title=src/components/employees/EmployeeRow.test.js
 it('should instantiate the Employee Table', () => {
   const employee = {
     username: 'fflintstone',
@@ -267,7 +266,7 @@ it('should instantiate the Employee Table', () => {
   * Iterates through the list of employees and instantiates a new **EmployeeRow** for each employee.
   * Collect all the rows into a variable and add that variable to the table body.
 
-```javascript
+```javascript:title=src/components/employees/EmployeeTable.js
   render() {
 
     let employeeRows = this.props.employees.map(employee => {
@@ -310,10 +309,10 @@ EmployeeTable.propTypes = {
 
 * Now let's test that our employee table renders correctly.
 * Can you write a test to check the number of **EmployeeRows** added to our table?
-* Open **components/employees/EmployeeTable.test.js**
+* Open **src/components/employees/EmployeeTable.test.js**
 * Add the following to the **Employee Table Component** suite:
 
-```javascript
+```javascript:title=src/components/employees/EmployeeTable.test.js
 it('should instantiate the Employee Table', () => {
   const employees = [
     {
@@ -345,7 +344,7 @@ it('should instantiate the Employee Table', () => {
 * Open **src/components/employees/Employees.js**
 * Add the imports for the **EmployeeTable** as well as the **PageHeader, Grid, and Row** from react-bootstrap
 
-```javascript
+```javascript:title=src/components/employees/Employees.js
 import EmployeeTable from './EmployeeTable';
 import { PageHeader, Grid, Row } from 'react-bootstrap';
 ```
@@ -373,7 +372,7 @@ import { PageHeader, Grid, Row } from 'react-bootstrap';
 * Test that our component renders as expected.
 * Add the code below to the **Employees Component** suite
 
-```javascript
+```javascript:title=src/components/employees/Employees.test.js
 it('should instantiate the Employee Component', () => {
   const component = shallow(<Employees />);
 
@@ -388,8 +387,6 @@ it('should contain a correct employee', () => {
 ```
 
 * Run the tests. Did your new one pass?
-
-&nbsp;
 
 ## Run the application and see your work.
 

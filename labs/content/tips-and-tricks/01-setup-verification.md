@@ -37,4 +37,10 @@ To validate, run `git remote -v` and you should see a remote and an origin like 
 
 ![Remote upstream](./images/upstream.png)
 
+From this point, it can be helpful--but not required--to fetch the `finished` branch (which contains the finished labs) into your `origin/finished` like so:
+
+```bash
+git checkout -b finished upstream/finished
+```
+
 [react-redux-timesheet]: https://github.com/objectpartners/react-redux-timesheet.git
