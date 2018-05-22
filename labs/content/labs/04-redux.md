@@ -4,18 +4,15 @@ title: Integrating Redux
 
 # Lab Four - Integrating Redux
 
-## Checkout the Lab Branch
+## `cd` to the fourth lab
 
 * In a terminal:
 
 ```
-git checkout lab-04-redux-start
-git pull
+cd ../ # presuming still in first lab
+cd lab-04-redux
+yarn start
 ```
-
-If not running, start the `yarn start` task. Otherwise, restart the running task to pick up any changes in the lab-04-redux-start branch.
-
-&nbsp;
 
 ### Check it out!
 
@@ -38,7 +35,7 @@ If not running, start the `yarn start` task. Otherwise, restart the running task
 * Open **src/actions/EmployeeActionTypes.js**
 * Let's add the constants for the list and get actions.
 
-```javascript
+```js:title=src/actions/EmployeeActionTypes.js
 export const LIST = 'LIST_EMPLOYEES';
 export const GET = 'GET_EMPLOYEE';
 ```
@@ -50,7 +47,7 @@ export const GET = 'GET_EMPLOYEE';
 * Now open **src/actions/EmployeeActionCreator.js** so we can create the actions.
 * We'll import the types we just created, and the [Axios](https://github.com/mzabriskie/axios) library to handle our http requests.
 
-```javascript
+```javascript:title=src/actions/EmployeeActionCreator.js
 import * as EmployeeActionTypes from './EmployeeActionTypes';
 import Axios from 'axios';
 ```
@@ -177,7 +174,7 @@ export const createEmployee = employee => {
 * Finally let's test that our functions do what we think they should:
 * Open **src/actions/EmployeeActionCreator.test.js** and replace the stubbed out test with the following:
 
-```javascript
+```javascript:title=src/actions/EmployeeActionCreator.test.js
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import * as actions from './EmployeeActionCreator';
@@ -302,7 +299,7 @@ describe('async actions', () => {
 * Open **src/reducers/employee-reducer.js**
 * Import the action types we created earlier and implement the reducing function.
 
-```javascript
+```javascript:title=src/reducers/employee-reducer.js
 import * as EmployeeActionTypes from '../actions/EmployeeActionTypes';
 
 export default (state = { employees: [], employee: {} }, action) => {
@@ -322,7 +319,7 @@ export default (state = { employees: [], employee: {} }, action) => {
 * Open **src/reducers/index.js**
 * Import the **employee-reducer**
 
-```javascript
+```javascript:title=src/reducers/index.js
 import employees from './employee-reducer';
 ```
 
@@ -344,7 +341,7 @@ const rootReducer = combineReducers({
 * Open **src/components/employees/Employees.js**
 * Import some **redux** libraries we need and the **EmployeeActionCreator**
 
-```javascript
+```javascript:title=src/components/employees/Employees.js
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as EmployeeActions from '../../actions/EmployeeActionCreator';
@@ -391,7 +388,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(Employees);
 
 * Next let's open the **src/components/employees/EmployeeTable.js** and update the render method to pass the actions to the **EmployeeRows**
 
-```javascript
+```javascript:title=src/components/employees/EmployeeTable.js
 const actions = this.props.actions;
 
 let employeeRows = this.props.employees.map(employee => {
@@ -410,7 +407,7 @@ let employeeRows = this.props.employees.map(employee => {
 * Now let's open the **src/components/employees/EmployeeRow.js** and add the delete functionality by - Importing the bootstrap **Button** component - Styling the deleted rows - Building the button - Rendering the button
 * The final file should look like this:
 
-```javascript
+```javascript:title=src/components/employees/EmployeeRow.js
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
@@ -485,8 +482,9 @@ Did your application display any data? Look at your console to see the reported 
 
 ## Checkout the API repository
 
-* Keep your `yarn start` frontend running, but now open a 2nd console window
+* Keep your `yarn start` frontend running, but now open a 2nd console window--or a separate tab
 * Change directories to a folder separate from the existing project. The parent directory above the react-redux-timesheet project would work nicely
+* This is to get a backend server running and available for local development
 
 Checkout the backend API server project from Github.
 
@@ -496,7 +494,7 @@ $ git clone https://github.com/objectpartners/react-redux-api.git
 
 You should get output similar to below:
 
-```javascript
+```bash
 Cloning into 'react-redux-api'...
 remote: Counting objects: 6272, done.
 remote: Compressing objects: 100% (2493/2493), done.
@@ -508,19 +506,19 @@ Checking connectivity... done.
 
 Change directories into the API main directory.
 
-```
+```bash
 $ cd react-redux-api
 ```
 
 Install the backend API NPM dependencies
 
-```
+```bash
 $ yarn
 ```
 
 Run the backend API server
 
-```
+```bash
 $ yarn start
 ```
 
@@ -542,5 +540,5 @@ $ yarn start
 
 ```
 git add .
-git commit -m 'Redux is in full effect'
+git commit -m 'I think I know redux now?!'
 ```

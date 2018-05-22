@@ -4,28 +4,24 @@ title: Your First React Component
 
 # Lab Two - Your First React Component
 
-## Checkout the Lab Branch
+## `cd` to the second lab
 
 * In a terminal:
 
 ```
-git checkout lab-02-first-component-start
-git pull
-yarn
+cd ../ # presuming still in first lab
+cd lab-02-first-component
+yarn start
 ```
-
-If not running, start the `yarn start` task. Otherwise, restart the running tasks to pick up any changes in the lab-02-first-component-start branch.
-
-&nbsp;
 
 ## Create the Hello World component
 
-* Open **/src/hello/Hello.js**
+* Open **src/hello/Hello.js**
 * This is going to be the component that we will render to the screen.
 
 * The first thing we want to do is `import` **React** and the React **Component** into our module. At the top of the page add:
 
-```javascript
+```javascript:title=src/hello/Hello.js
 import React, { Component } from 'react';
 ```
 
@@ -118,11 +114,11 @@ export default Hello;
 
 * Now that we've created our first component, let's test it to make sure that React can initialize and render it to the DOM.
 
-* Open **/src/hello/Hello.test.js**
+* Open **src/hello/Hello.test.js**
 * First, let's import our libraries for `React` `Hello` and the shallow `enzyme` renderer
 * Then, let's set up the Hello World test by adding a suite (describe block):
 
-```javascript
+```javascript:title=src/hello/Hello.test.js
 import React from 'react';
 import { shallow } from 'enzyme';
 
@@ -224,7 +220,7 @@ yarn ERR! Test failed.  See above for more details.
   * We first need to import our **Hello** component.
   * We then use the `render()` method to place it on our page:
 
-```javascript
+```javascript:title=src/App.js
 import Hello from './hello/Hello';
 ```
 

@@ -88,24 +88,34 @@ Checking connectivity... done.
 Change directories to the lab main directory.
 
 ```
-$ cd react-redux-timesheet
+cd react-redux-timesheet
 ```
 
-Now let's checkout the `lab-01-setup-start` branch.
+Each lab is distributed as part of the "monorepo" approach in origin/master. Each folder is the start of a React project, and the rest is left for you to fill in! To get started, first install the application dependencies with `yarn` like so
 
-```
-$ git checkout lab-01-project-setup-start
-```
-
-## Install the application dependencies
-
-Install the Yarn dependencies
-
-```
-$ yarn
+```bash
+yarn
 ```
 
-## Start the server
+we're using `yarn` workspaces, so running this command in the root of the repo will make it so that every lab from here on out will "just work!"
+
+`cd` into the first lab with 
+
+```bash
+cd lab-01-project-setup
+```
+
+------
+
+Note: these labs technically don't require `yarn` so if it's not installed, you will need to do this following for every lab to install the dependencies. If you have yarn, ignore, no need to run `yarn` or `yarn install` for the timesheet application again!
+
+```bash:title=If yarn is not installed...
+cd lab-01-project-setup # replace with whichever lab is current!
+
+npm install
+```
+
+## Start the local development server
 
 Run the start script
 
@@ -117,7 +127,7 @@ $ yarn start
 
 * This kicks off a Node server and serves up our `index.html` page.
 
-* This is a long running process..it only ends on an error.
+* This is a long running process..it only ends on an error--or killing of the server with Ctrl + C
 
 * Open your browser and navigate to [http://localhost:3000](http://localhost:3000)
 

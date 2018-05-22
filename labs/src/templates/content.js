@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'react-emotion';
+import styled, { injectGlobal } from 'react-emotion';
 import 'prismjs/themes/prism-okaidia.css';
 import GatsbyLink from 'gatsby-link';
 import ChevronRight from 'react-icons/lib/fa/chevron-right';
@@ -9,6 +9,9 @@ import { Button } from '@objectpartners/components';
 const Container = styled.div({
   fontFamily: 'sans-serif',
   maxWidth: '100%',
+  a: {
+    color: '#d8292f',
+  },
   pre: {
     wordWrap: 'break-word',
   },
@@ -71,5 +74,26 @@ export const pageQuery = graphql`
     content: markdownRemark(fields: { slug: { eq: $slug } }) {
       ...ContentFragment
     }
+  }
+`;
+
+injectGlobal`
+  .gatsby-code-title + .gatsby-highlight > pre {
+    border-radius: 0;
+    border-bottom-left-radius: 0.3em;
+    border-bottom-right-radius: 0.3em;
+  }
+
+  .gatsby-code-title {
+    margin-bottom: -0.6rem;
+    padding: 0.5em 1em;
+    font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
+   
+    background-color: black;
+    color: white;
+    z-index: 0;
+   
+    border-top-left-radius: 0.3em;
+    border-top-right-radius: 0.3em;
   }
 `;

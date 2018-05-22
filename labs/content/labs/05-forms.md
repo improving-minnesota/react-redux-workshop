@@ -4,16 +4,15 @@ title: Forms and Validation
 
 # Lab Five - Forms and Validation
 
-## Checkout the Lab Branch
+## `cd` to the fourth lab
 
 * In a terminal:
 
 ```
-git checkout lab-05-form-validation-start
-git pull
+cd ../ # presuming still in first lab
+cd lab-05-form-validation
+yarn start
 ```
-
-If not running, start the `yarn start` task. Otherwise, restart the running tasks to pick up any changes in the lab-05-form-validation-start branch.
 
 ### Check it out!
 
@@ -24,9 +23,9 @@ If not running, start the `yarn start` task. Otherwise, restart the running task
 ### Add the Routes for Creating and Updating
 
 * Before we can do anything, we need to add more routes to our application and tie them together with the appropriate handlers.
-* Open **/src/App.js** and add the routes below under the 'Switch' tag (on the same level as your other routes):
+* Open **src/App.js** and add the routes below under the 'Switch' tag (on the same level as your other routes):
 
-```jsx
+```jsx:title=src/App.js
 <Route path='/employees/detail/:_id' component={EmployeesDetail} />
 <Route path='/employees/create' component={EmployeesCreate} />
 
@@ -47,7 +46,7 @@ If not running, start the `yarn start` task. Otherwise, restart the running task
 ###### Before we get started, take the time to look at the custom form components already implemented for us.
 
 * The first component we need is a form to contain all of our employee's properties.
-* Open **/src/components/employees/EmployeeForm.js**.
+* Open **src/components/employees/EmployeeForm.js**.
 
 * Let's review the `props` of this component:
 
@@ -58,7 +57,7 @@ If not running, start the `yarn start` task. Otherwise, restart the running task
 * Next we need to act when the user clicks the cancel or save buttons.
 * First, add both buttons to the `render()` method of the EmployeeForm - these should be the final child elements of the `<form>`.
 
-```jsx
+```jsx:title=src/components/employees/EmployeeForm.js
 <Button bsStyle="success" onClick={this.handleSave} disabled={!this.validateAll()}> Save </Button>
 <LinkContainer to="/employees">
   <Button bsStyle="danger"> Cancel </Button>
@@ -105,13 +104,13 @@ validateAll(){
 
 ```jsx
 componentWillReceiveProps(nextProps) {
-  this.state = {
+  this.setState({
     username: {value: nextProps.employee.username, valid: null},
     email: {value: nextProps.employee.email, valid: null},
     firstName: {value: nextProps.employee.firstName, valid: null},
     lastName: {value: nextProps.employee.lastName, valid: null},
     admin: {value: nextProps.employee.admin, valid: null}
-  };
+  });
 }
 ```
 
@@ -285,11 +284,11 @@ showDetail(employee) {
 ###### Now let's take the time to look at the Timesheet form component and give it some new powers.
 
 * The first component we need is a form to contain all of our timesheet's properties.
-* Open **/src/components/timesheets/TimesheetForm.js**.
+* Open **src/components/timesheets/TimesheetForm.js**.
 * You'll notice there are a bunch of validation functions in here. For example:
 * This function will be called when the user selects a new employee. Once the user does so, the field will be marked as valid in the component's state.
 
-```jsx
+```jsx:title=src/components/timesheets/TimesheetForm.js
 handleEmployeeChange(value) {
   let isValid = false;
     if(value){
@@ -389,12 +388,12 @@ return (
 
 ```jsx
 componentWillReceiveProps(nextProps) {
-  this.state = {
+  this.setState({
     name: {value: nextProps.timesheet.name, valid: null},
     description: {value: nextProps.timesheet.description, valid: null},
     beginDate: {value: nextProps.timesheet.beginDate, valid: null},
     endDate: {value: nextProps.timesheet.endDate, valid: null}
-  };
+  });
 }
 ```
 
@@ -420,14 +419,14 @@ handleSave(){
 ## Add the Form into an Timesheet Detail Component
 
 * Now let's actually use the form we just built.
-* Open **/src/components/timesheets/TimesheetsDetail.js**
+* Open **src/components/timesheets/TimesheetsDetail.js**
 * Take a look at that cool `constructor` method - how is it retrieving the timesheet to be viewed?
 * We have two jobs to complete here!
   1.  Implement the dang `render` method
   2.  Implement the dang `handleSave` method
 * Here's what your `render` method should look like:
 
-```jsx
+```jsx:title=src/components/timesheets/TimesheetsDetail.js
 render() {
   return (
     <Grid>
@@ -470,10 +469,10 @@ handleSave(timesheet){
 
 ## Add ability to create a new timesheet
 
-* Navigate to **/src/components/timesheets/TimesheetsCreate.js**.
+* Navigate to **src/components/timesheets/TimesheetsCreate.js**.
 * Let's create a constructor and talk about it:
 
-```jsx
+```jsx:title=src/components/timesheets/TimesheetsCreate.js
 constructor(props) {
   super(props);
   this.props.employeeActions.listEmployees();
@@ -513,8 +512,6 @@ render() {
 ## Extra credit
 
 Are you a true champion? Make it possible to create a new employee. Hint: look at how it works in timesheets!
-
-&nbsp;
 
 ### Commit your changes to Git - congrats, you are a React/Redux Master.
 
