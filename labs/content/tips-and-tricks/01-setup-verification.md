@@ -43,4 +43,12 @@ From this point, it can be helpful--but not required--to fetch the `finished` br
 git checkout -b finished upstream/finished
 ```
 
+And then finally, to get back on the master branch run:
+
+```bash
+git checkout master
+```
+
+If needed, you can always run `git checkout master` to see the structure and result of the final version.
+
 [react-redux-timesheet]: https://github.com/objectpartners/react-redux-timesheet.git
