@@ -1,0 +1,51 @@
+section
+  h2 Static typing
+  h4 Build-time type checking for React applications
+
+section
+  h3 Flow
+
+section
+  script(type="text/plain", class="language-flow").
+    import * as React from 'react';
+
+    type Props {
+      name: string
+    }
+
+    export function Hello(props: Props) {
+      return <h1>{props.name}</h1>
+    }
+
+section
+  script(type="text/plain", class="language-flow").
+    import { Hello } from './hello';
+
+    function App() {
+      return <Hello />; // Error! You did not define a `name` prop
+    }
+
+section
+  h3 Setup?
+
+  h4 create-react-app supports it out of the box!
+
+section
+  h3 TypeScript
+
+section
+  h4 react-scripts-ts
+  script(type="text/plain", class="language-bash").
+    npx create-react-app my-app --scripts-version=react-scripts-ts
+
+section
+  script(type="text/plain", class="language-typescript").
+    import * as React from 'react';
+
+    interface Props {
+      name: string;
+    }
+
+    export function Hello(props: Props) {
+      return <h1>{props.name}</h1>;
+    }

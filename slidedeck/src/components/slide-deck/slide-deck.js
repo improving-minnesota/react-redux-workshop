@@ -15,7 +15,7 @@ import './slide-deck.css';
 
 export class SlideDeck extends Component {
   componentDidMount() {
-    loadLanguages(['json', 'jsx']);
+    loadLanguages(['json', 'jsx', 'flow', 'typescript']);
     require.ensure(
       [
         'reveal.js',
