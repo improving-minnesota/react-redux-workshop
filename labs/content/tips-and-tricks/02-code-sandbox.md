@@ -6,9 +6,27 @@ title: Code Sandbox
 
 Running into machine issues? NodeJS not configured correctly? `PATH` variable not picking up changes?
 
-Don't fear--we've been there too.
+Don't fear--we've been there too... more times than we can count!
 
 We've structured our labs so that they can be utilized with a tool called [CodeSandbox][codesandbox], which is essentially an online IDE that works similarly to your local machine setup and allows for similar functionality.
+
+### Preliminary setup
+
+Note: the labs are currently structured for local development. To correctly proxy out to the API and get tests running, please do the following:
+
+- Open up package.json, and change proxy to the following:
+
+```json:title=package.json
+"proxy": "https://timesheets-api-kxhyqqalbh.now.sh"
+```
+
+- Open up src/setupTests.js and remove the following line
+
+```js:title=src/setupTests.js
+import 'jest-enzyme.js'; // remove this!
+```
+
+The above may break with some custom enzyme matchers, but that's OK!
 
 ## [Lab 01 - Project Setup][lab-01]
 

@@ -9,7 +9,7 @@ import { Button } from '@objectpartners/components';
 const Container = styled.div({
   fontFamily: 'sans-serif',
   maxWidth: '100%',
-  a: {
+  'p a': {
     color: '#d8292f',
   },
   pre: {
