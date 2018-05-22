@@ -49,6 +49,6 @@ And then finally, to get back on the master branch run:
 git checkout master
 ```
 
-If needed, you can always run `git checkout master` to see the structure and result of the final version.
+If needed, you can always run `git checkout finished` to see the structure and result of the final version and labs.
 
 [react-redux-timesheet]: https://github.com/objectpartners/react-redux-timesheet.git
