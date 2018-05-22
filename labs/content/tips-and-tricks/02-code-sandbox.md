@@ -19,15 +19,6 @@ Note: the labs are currently structured for local development. To correctly prox
 ```json:title=package.json
 "proxy": "https://timesheets-api-kxhyqqalbh.now.sh"
 ```
-
-- Open up src/setupTests.js and remove the following line
-
-```js:title=src/setupTests.js
-import 'jest-enzyme.js'; // remove this!
-```
-
-The above may break with some custom enzyme matchers, but that's OK!
-
 ## [Lab 01 - Project Setup][lab-01]
 
 [![Lab 01](./images/code-sandbox/lab-01.png)][lab-01]
