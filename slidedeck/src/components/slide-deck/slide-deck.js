@@ -53,6 +53,28 @@ export class SlideDeck extends Component {
     );
   }
 
+  getSectionProps(html) {
+    const section = html.match(/<section[^>]+/);
+    if (!section) {
+      return {};
+    }
+
+    const props = section
+      .pop()
+      .replace(/<section\s/, '')
+      .split(/([\w-]+)="([^"]+)"/)
+      .filter(part => part && part.length > 0);
+
+    return props.reduce((merged, part, index) => {
+      if (part % 1 === 0) {
+        merged[part] = '';
+      } else if (props[index - 1]) {
+        merged[props[index - 1]] = part;
+      }
+      return merged;
+    }, {});
+  }
+
   render() {
     const { slides } = this.props;
     const { WORKSHOP_CLIENT: client, WORKSHOP_DATE: date } = process.env;
@@ -78,9 +100,11 @@ export class SlideDeck extends Component {
                       </section>
                     );
                   }
+                  const sectionProps = this.getSectionProps(html);
                   return (
                     <section
                       key={key}
+                      {...sectionProps}
                       dangerouslySetInnerHTML={{ __html: html }} // #yolo
                     />
                   );
