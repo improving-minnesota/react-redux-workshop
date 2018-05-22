@@ -2,3 +2,9 @@
   font-size: 18px !important;
   color: #666;
 }
+
+.reveal section img {
+  background: none;
+  border: none;
+  box-shadow: none;
+}

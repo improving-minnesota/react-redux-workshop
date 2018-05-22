@@ -1,0 +1,47 @@
+section
+  h2 CSS in JS
+
+section(data-background="https://media.giphy.com/media/cQtlhD48EG0SY/giphy.gif")
+
+section
+  h3 CSS Modules
+
+  div(style="display: flex")
+    script(type="text/plain", class="language-css").
+      .container {
+        display: flex;
+        justify-content: center;
+      }
+
+      .heading {
+        color: red;
+      }
+
+    script(type="text/plain", class="language-jsx").
+      import {
+        container,
+        heading
+      } from './container.css';
+
+      function App() {
+        return (
+          <div
+            className={container}
+          >
+            <h1
+              className={heading}
+            >
+              Hi!
+            </h1>        
+          </div>
+        );
+      }
+
+section
+  h4 So
+  h3 Many
+  h2 Libraries
+
+section
+  a(href="https://css-in-js-playground.com", target="_blank", rel="noopener")
+    img(src="~./images/styled-components.png")
