@@ -1,0 +1,74 @@
+section
+  h3 New, top-level APIs
+
+section
+  h3 React.Fragment
+  script(type="text/plain", class="language-jsx").
+    function App() {
+      return (
+        <React.Fragment>
+          <h1>Hello World</h1>
+          <h2>Another one</h2>
+        </React.Fragment>
+      );
+    }
+
+section
+  h3 React.createContext
+  script(type="text/plain", class="language-jsx").
+    const ThemeContext = React.createContext('light');
+
+    export class ThemeProvider extends React.Component {
+      constructor(props) {
+        super(props);
+
+        this.state = { theme: 'light' };
+      }
+
+      render() {
+        return (
+          <ThemeContext.Provider value={this.state.theme}>
+            {this.props.children}
+          </ThemeContext.Provider />
+        );
+      }
+    }
+
+    export const ThemeConsumer = ThemeContext.Consumer;
+
+section
+  h3 createContext does not kill redux
+  p It does, however, let you share data to deeply nested children cleanly and easily
+
+section
+  h3 React.createRef
+
+  script(type="text/plain", class="language-jsx").
+    class Hello extends React.Component {
+      constructor(props) {
+        super(props);
+
+        this.inputRef = React.createRef();
+      }
+
+      componentDidMount() {
+        this.inputRef.current.focus();
+      }
+
+      render() {
+        return <input type={text} ref={this.inputRef} />
+      }
+    }
+
+section
+  h3 ReactDOM.createPortal(child, container)
+
+  script(type="text/plain", class="language-jsx").
+    class Tooltip extends React.Component {
+      render() {
+        return ReactDOM.createPortal(
+          this.props.children,
+          document.getElementById('tooltip')
+        );
+      }
+    }

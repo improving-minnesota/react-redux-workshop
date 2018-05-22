@@ -4,5 +4,9 @@ import logo from './react.svg';
 import './react-logo.css';
 
 export default function ReactLogo() {
-  return <img className="react-logo" src={logo} />;
+  return (
+    <div className="react-logo-container">
+      <img className="react-logo" src={logo} />;
+    </div>
+  );
 }

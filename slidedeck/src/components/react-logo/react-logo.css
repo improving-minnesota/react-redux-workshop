@@ -6,6 +6,10 @@
   box-shadow: none !important;
 }
 
+.react-logo-container {
+  background-color: #222;
+}
+
 @keyframes spin {
   from {
     transform: rotate(0);
