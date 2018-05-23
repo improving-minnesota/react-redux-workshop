@@ -15,8 +15,8 @@ module.exports = {
             title: 'React Timesheet(s)',
           },
           {
-            href: 'TD Ameritrade Components',
-            title: 'https://github.com/DSchau/td-components',
+            href: 'https://github.com/DSchau/td-components',
+            title: 'TD Ameritrade Components',
           },
         ],
       },
