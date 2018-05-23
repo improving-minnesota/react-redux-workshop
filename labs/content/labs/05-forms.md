@@ -154,7 +154,7 @@ componentWillReceiveProps(nextProps) {
 
 * Now let's actually use the form we just built.
 * Open **/src/components/employees/EmployeesDetail.js**
-* Let's setup our proptTypes, first. We already have the `history` prop, but we need to include an `employee` prop as well, like so:
+* Let's setup our propTypes, first. We already have the `history` prop, but we need to include an `employee` prop as well, like so:
 
 ```jsx
 EmployeesDetail.propTypes = {
