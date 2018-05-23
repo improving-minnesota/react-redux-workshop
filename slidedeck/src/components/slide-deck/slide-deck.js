@@ -15,7 +15,7 @@ import './slide-deck.css';
 
 export class SlideDeck extends Component {
   componentDidMount() {
-    loadLanguages(['json', 'jsx', 'flow', 'typescript']);
+    loadLanguages(['groovy', 'json', 'jsx', 'flow', 'typescript']); // why groovy? Exactly.
     require.ensure(
       [
         'reveal.js',
@@ -112,8 +112,11 @@ export class SlideDeck extends Component {
               </section>
             );
           })}
+          <section data-background="https://media.giphy.com/media/eTVG7eVNnud8Y/giphy.gif">
+            <h2>Questions</h2>
+          </section>
           <section data-state="title">
-            <h1>Thanks!</h1>
+            <h1>Thank you!</h1>
             <h3>Follow us! @objectpartners</h3>
           </section>
         </div>
