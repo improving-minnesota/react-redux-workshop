@@ -1,6 +1,8 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const webpack = require('webpack');
+
 require('dotenv').config({
   path: path.join(
     process.cwd(),
@@ -74,7 +76,13 @@ module.exports = function webpackConfig() {
       new HtmlWebpackPlugin({
         template: path.join(__dirname, 'src/public/index.pug'),
         chunksSortMode: 'dependency'
-      })
+      }),
+      new CopyWebpackPlugin([
+        {
+          from: path.resolve('node_modules/reveal.js/plugin/**/*'),
+          to: path.resolve('dist')
+        }
+      ])
     ],
     resolve: {
       alias: {
