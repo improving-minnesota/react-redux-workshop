@@ -17,6 +17,30 @@ section
       return <h1>{props.name}</h1>
     }
 
+
+section
+  script(type="text/plain", class="language-flow").
+    import * as React from 'react';
+
+    class Counter extends React.Component<{}, { count: number }> {
+      handleClick = (event: SyntheticEvent<HTMLButtonElement>) => {
+        this.setState(prevState => ({
+          count: prevState.count + 1,
+        }));
+      };
+
+      render() {
+        return (
+          <div>
+            <p>Count: {this.state.count}</p>
+            <button onClick={this.handleClick}>
+              Increment
+            </button>
+          </div>
+        );
+      }
+    }
+
 section
   script(type="text/plain", class="language-flow").
     import { Hello } from './hello';

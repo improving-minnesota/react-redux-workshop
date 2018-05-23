@@ -1,0 +1,60 @@
+section
+  h2 React Native
+
+section
+  h3 Remember react-dom?
+
+  h4 Swap out the renderer
+
+section
+  a(href="https://github.com/chentsulin/awesome-react-renderer", target="_blank", rel="noopener")
+    img(src="~./images/awesome-react-renderer.png")
+
+section
+  h3 This is JSX's key abstraction
+
+section
+  h3 Has a native bridge that instantiates native components
+
+section
+  script(type="text/plain", class="language-jsx").
+    import React from 'react';
+    import { Button, StyleSheet, View } from 'react-native';
+
+    export function App() {
+      return (
+        <View style={styles.container}>
+          <Button onPress={() => alert('I was pressed')}>Click me</Button>
+        </View>
+      );
+    }
+
+    const styles = StyleSheet.create({
+      container: {
+        flex: 1
+      }
+    });
+
+section
+  a(href="https://github.com/jondot/awesome-react-native", target="_blank", rel="noopener")
+    img(src="~./images/awesome-react-native.png")
+
+section
+  h3 Use create-react-native-app
+
+section
+  h3 Additional libraries
+
+section
+  h3 react-native-web
+
+section
+  h3
+    a(href="https://mobile.twitter.com", target="_blank", rel="noopener") Ever browsed twitter?
+
+section
+  h3 react-native-dom
+
+section
+  a(href="https://rndom-movie-demo.now.sh/", target="_blank", rel="noopener")
+    img(src="~./images/react-native-dom-movie.png")
