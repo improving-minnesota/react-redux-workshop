@@ -2,7 +2,7 @@
 title: Setup (Day 2)
 ---
 
-We've made some slight fixes to the labs, so it will be required to get your origin/master up to date with upstream/master. This is not _strictly_ required, but will fix some slight issues particularly stylistic issues.
+We've made some slight fixes to the labs, so it will be ideal to get your origin/master up to date with upstream/master. This is not _strictly_ required, but will fix some slight issues particularly stylistic issues.
 
 For a refresher on setting upstream, please follow the below instructions:
 
