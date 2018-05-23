@@ -1,0 +1,105 @@
+section
+  h2 Redux State Management Libraries
+
+section
+  img(src="~./images/redux-saga.png")
+
+section
+  h3 redux-saga
+  ul
+    li Used to manage application side effects (asynchronous server calls, accessing local storage, etc.)
+    li Implemented as Redux middleware
+    li Uses ES6 Generators to make async code easier to read, manage, and test
+
+section
+  h3 Redux setup
+  script(type="text/plain", class="language-js", style="width: 100%;").
+
+    import axios from 'axios'
+
+    const CALL_API = `app/actions/callApi`
+    const CALL_API_SUCCESS = `app/actions/callApiSuccess`
+    const CALL_API_FAILURE = `app/actions/callApiFailure`
+
+    const callApi = () => { return { type: CALL_API } }
+    const callApiSuccess = data => {  return { type: CALL_API_SUCCESS, payload: { data } } }
+    const callApiFailure = error => { return { type: CALL_API_FAILURE, payload: error, error: true } }
+
+    const fetchApiData = () => axios.get('http://yourservice.example.com/api/data')
+
+section
+  h3 Create the saga
+  p Notice the asterisk (*) - this creates a generator function
+  script(type="text/plain", class="language-js" style="width: 100%;").
+    // sagas.js
+    import { takeLatest, call, put } from 'redux-saga/effects'
+
+    export function* watchCallApiRequest() {
+      yield takeLatest(CALL_API_REQUEST, workCallApiRequest);
+    }
+
+    function* workCallApiRequest() {
+      try {
+        const response = call(fetchApiData)
+        yield put(callApiSuccess, response.data)
+      } catch (error) {
+        yield put(callApiError, error)
+      }
+    }
+
+
+section
+  h3 How it works (cont.)
+  p Apply the middleware to the Redux store
+  script(type="text/plain", class="language-js", style="width: 100%;").
+    import { createStore, applyMiddleware } from 'redux'
+    import createSagaMiddleware from 'redux-saga'
+
+    import reducer, {createApi} from './reducers'
+    import { watchCallApiRequest } from './sagas'
+
+    // create the saga middleware
+    const sagaMiddleware = createSagaMiddleware()
+    // mount it on the Store
+    const store = createStore(
+      reducer,
+      applyMiddleware(sagaMiddleware)
+    )
+
+    // then run the saga
+    sagaMiddleware.run(watchCallApiRequest)
+
+    // dispatch the action
+    store.dispatch(createApi)
+
+section
+  h3 Testing
+  p.
+    Using <a href="https://github.com/jfairbank/redux-saga-test-plan">redux-saga-test-plan</a>
+  script(type="text/plain", class="language-js", style="width: 100%;").
+    import { testSaga } from 'redux-saga-test-plan'
+    import { watchCallApiRequest } from './sagas'
+
+    describe('Call API saga test', () => {
+      it('should successfully call the API', () => {
+        const action = callApi()
+        const saga = testSaga(watchCallApiRequest)
+        const data = { id: 12345 }
+        saga
+          .next()
+          .take(API_REQUEST)
+          .next(action)
+          .call(fetchApiData)
+          .next(data)
+          .put(callApiSuccess(data))
+          .next()
+          .finish()
+          .isDone()
+      })
+    })
+
+section
+  img(src="~./images/mobx.png")
+
+section
+  h3 MobX
