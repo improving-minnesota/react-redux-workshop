@@ -1,0 +1,71 @@
+section
+  h2 Best practices
+
+section
+  h3 Use create-react-app
+
+  h4 Don't eject!
+
+section
+  h3 Write e2e tests
+
+  h4 Write integration tests
+
+  h5 Write unit tests
+
+section
+  img(src="~./images/write-tests.png")
+
+section
+  h3 Ship minimal payloads to your users
+
+  h4 react-loadable, code splitting, etc.
+
+  h4 Weigh the cost of your JS bundles
+
+section
+  img(src="~./images/bundle-size.png")
+
+section
+  h3 Everything does not need to go in Redux
+
+  blockquote Use React for ephemeral state that doesn't matter to the app globally and doesn't mutate in complex ways. For example, a toggle in some UI element, a form input state. Use Redux for state that matters globally or is mutated in complex ways. For example, cached users, or a post draft.
+
+section
+  h3 Leverage the babel ecosystem
+
+  script(type="text/plain", class="language-js").
+    export class Form extends React.Component {
+      handleSubmit = async () => {
+        const valid = await axios.post('/form/validate', this.state.form);
+
+        if (valid) {
+          await axios.post('/form', this.state.form)
+            .then(response => response.data);
+        }
+
+        // do something else
+      };
+
+      render() {
+        <form onSubmit={this.handleSubmit} />
+      }
+    }
+
+section
+  h3 HTTP Best Practices
+
+section
+  h3 Use axios or fetch
+
+section
+  script(type="text/plain", class="language-js").
+    import axios from 'axios';
+
+    axios.get('/users')
+      .then(response => response.data); // JSON
+
+  script(type="text/plain", class="language-js").
+    fetch('/users')
+      .then(response => response.json())
+      .then(json => )

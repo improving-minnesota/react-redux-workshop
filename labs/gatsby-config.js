@@ -14,6 +14,10 @@ module.exports = {
             href: 'https://github.com/objectpartners/react-redux-timesheet',
             title: 'React Timesheet(s)',
           },
+          {
+            href: 'https://github.com/DSchau/td-components',
+            title: 'TD Ameritrade Components',
+          },
         ],
       },
     ],
