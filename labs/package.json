@@ -1,5 +1,6 @@
 {
   "name": "react-redux-workshop-labs",
+  "private": true,
   "description": "The labs for react-redux-workshop",
   "version": "1.0.0",
   "author": "Dustin Schau <dustin.schau@objectpartners.com>",
@@ -44,5 +45,8 @@
     "gatsby-transformer-yaml": "~1.5.16",
     "limax": "~1.6.0",
     "prettier": "^1.12.0"
+  },
+  "workspaces": {
+    "nohoist": ["gatsby"]
   }
 }

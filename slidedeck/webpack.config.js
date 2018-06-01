@@ -25,14 +25,14 @@ module.exports = function webpackConfig() {
     mode: 'production',
     entry: './src/index',
     output: {
-      path: path.join(__dirname, 'dist'),
+      path: path.join(process.cwd(), 'dist'),
       filename: 'bundle.js'
     },
     module: {
       rules: [
         {
           test: /\.js$/,
-          include: [path.join(__dirname, 'src')],
+          include: [path.join(process.cwd(), 'src')],
           use: ['babel-loader']
         },
         {
@@ -45,11 +45,14 @@ module.exports = function webpackConfig() {
               }
             }
           ],
-          include: [path.join(__dirname, 'node_modules')]
+          include: [path.join(process.cwd(), 'node_modules')]
         },
         {
           test: /\.css$/,
-          use: ['style-loader', 'css-loader', 'postcss-loader']
+          use: ['style-loader', 'css-loader', {
+            loader: 'postcss-loader',
+            options: require(path.join(process.cwd(), 'postcss.config'))
+          }]
         },
         {
           test: /\.(pug|jade)$/,
@@ -74,7 +77,7 @@ module.exports = function webpackConfig() {
         }
       }),
       new HtmlWebpackPlugin({
-        template: path.join(__dirname, 'src/public/index.pug'),
+        template: path.join(process.cwd(), 'src/public/index.pug'),
         chunksSortMode: 'dependency'
       }),
       new CopyWebpackPlugin([
@@ -86,7 +89,7 @@ module.exports = function webpackConfig() {
     ],
     resolve: {
       alias: {
-        resources: path.join(__dirname, 'resources')
+        resources: path.join(process.cwd(), 'resources')
       }
     }
   };

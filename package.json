@@ -15,5 +15,9 @@
     "Dustin Schau <dustin.schau@objectpartners.com>",
     "Derek Meyer"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "workspaces": {
+    "packages": ["labs", "slidedeck"],
+    "nohoist": ["**/react-*", "**/react"]
+  }
 }
