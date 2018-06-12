@@ -10,11 +10,7 @@ import { Header, Footer } from '@objectpartners/components';
 import 'normalize.css';
 
 import { Sidebar } from '../components';
-import { MEDIA, Z_INDEX } from '../style';
-
-const HEADER_HEIGHT = 102;
-const FOOTER_HEIGHT = 157;
-const SIDEBAR_WIDTH = 250;
+import { FOOTER_HEIGHT, HEADER_HEIGHT, MEDIA, SIDEBAR_WIDTH, Z_INDEX } from '../style';
 
 const Container = styled.div({
   display: 'flex',
