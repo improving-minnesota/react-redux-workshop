@@ -13,7 +13,11 @@ const Container = styled.div({
   fontFamily: 'Roboto, sans-serif',
   padding: '1rem 0.5rem',
   whiteSpace: 'nowrap',
+  zIndex: 2,
   [MEDIA.greaterThan('large')]: {
+    position: 'fixed',
+    height: 'calc(100vh - 102px)',
+    top: 102,
     flexDirection: 'column',
     overflowX: 'auto',
     minWidth: 250,

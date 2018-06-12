@@ -39,9 +39,9 @@
   version "0.6.3"
   resolved "https://registry.yarnpkg.com/@emotion/unitless/-/unitless-0.6.3.tgz#65682e68a82701c70eefb38d7f941a2c0bfa90de"
 
-"@objectpartners/components@~0.0.5":
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/@objectpartners/components/-/components-0.0.5.tgz#d3878bd10fab97062308064e22164f1c05cd8af2"
+"@objectpartners/components@~0.0.6":
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/@objectpartners/components/-/components-0.0.6.tgz#d6845b1d345c611b3c290865ae38dbce04313dad"
 
 "@types/configstore@^2.1.1":
   version "2.1.1"
