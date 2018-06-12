@@ -10,7 +10,7 @@ import { Header, Footer } from '@objectpartners/components';
 import 'normalize.css';
 
 import { Sidebar } from '../components';
-import { MEDIA } from '../style';
+import { MEDIA, Z_INDEX } from '../style';
 
 const HEADER_HEIGHT = 102;
 const FOOTER_HEIGHT = 157;
@@ -59,7 +59,7 @@ const SlideIcon = styled(SlideshowIcon)({
 const FixedHeader = styled(Header)({
   [MEDIA.greaterThan('large')]: {
     position: 'fixed',
-    zIndex: 3
+    zIndex: Z_INDEX('header')
   }
 });
 

@@ -4,7 +4,7 @@ import styled from 'react-emotion';
 import GatsbyLink from 'gatsby-link';
 import ExternalLinkIcon from 'react-icons/lib/fa/external-link-square';
 
-import { MEDIA } from '../../style';
+import { MEDIA, Z_INDEX } from '../../style';
 
 const Container = styled.div({
   display: 'flex',
@@ -13,7 +13,7 @@ const Container = styled.div({
   fontFamily: 'Roboto, sans-serif',
   padding: '1rem 0.5rem',
   whiteSpace: 'nowrap',
-  zIndex: 2,
+  zIndex: Z_INDEX('sidebar'),
   [MEDIA.greaterThan('large')]: {
     position: 'fixed',
     height: 'calc(100vh - 102px)',
