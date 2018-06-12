@@ -1,27 +1,7 @@
 const path = require('path');
 
 module.exports = {
-  siteMetadata: {
-    links: [
-      {
-        title: 'External Links',
-        links: [
-          {
-            href: '/slidedeck',
-            title: 'Slidedeck',
-          },
-          {
-            href: 'https://github.com/objectpartners/react-redux-timesheet',
-            title: 'React Timesheet(s)',
-          },
-          {
-            href: 'https://github.com/DSchau/td-components',
-            title: 'TD Ameritrade Components',
-          },
-        ],
-      },
-    ],
-  },
+  siteMetadata: {},
   plugins: [
     'gatsby-plugin-react-helmet',
     'gatsby-plugin-react-next',

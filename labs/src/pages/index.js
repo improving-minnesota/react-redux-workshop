@@ -9,7 +9,7 @@ export default function Index({ data }) {
 export const pageQuery = graphql`
   query IndexPageQuery {
     description: markdownRemark(
-      fileAbsolutePath: { regex: "/description.md/" }
+      fileAbsolutePath: { regex: "/index.md/" }
     ) {
       html
     }
