@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import styled from 'react-emotion';
 import Link from 'gatsby-link';
-import 'typeface-roboto';
 import SlideshowIcon from 'react-icons/lib/md/slideshow';
 
 import { Header, Footer } from '@objectpartners/components';
@@ -11,9 +10,7 @@ import { Header, Footer } from '@objectpartners/components';
 import 'normalize.css';
 
 import { Sidebar } from '../components';
-
-const HEADER_HEIGHT = 102;
-const FOOTER_HEIGHT = 148;
+import { FOOTER_HEIGHT, HEADER_HEIGHT, MEDIA, SIDEBAR_WIDTH, Z_INDEX } from '../style';
 
 const Container = styled.div({
   display: 'flex',
@@ -24,7 +21,7 @@ const SidebarContainer = styled.div({
   display: 'flex',
   flexDirection: 'column',
   fontFamily: 'Roboto, sans-serif',
-  minHeight: `calc(100vh - ${HEADER_HEIGHT + FOOTER_HEIGHT}px)`, // oh the humanity
+  minHeight: `calc(100vh - ${FOOTER_HEIGHT}px)`,
   '@media only screen and (min-width: 768px)': {
     flexDirection: 'row',
   },
@@ -34,14 +31,16 @@ const Content = styled.div({
   display: 'flex',
   alignSelf: 'flex-start',
   boxSixing: 'border-box',
-  margin: 'auto',
+  margin: '0 auto',
   padding: '1rem',
   height: '100%',
   maxWidth: '100%',
   position: 'relative',
   '@media only screen and (min-width: 768px)': {
-    width: '65%',
-    maxWidth: 'calc(100% - 250px)',
+    maxWidth: '80%',
+    top: HEADER_HEIGHT,
+    paddingBottom: FOOTER_HEIGHT,
+    paddingLeft: `calc(${SIDEBAR_WIDTH}px + 1rem)`
   },
 });
 
@@ -51,6 +50,24 @@ const SlideIcon = styled(SlideshowIcon)({
   ':hover': {
     color: 'white',
   },
+});
+
+const FixedHeader = styled(Header)({
+  '&': {
+    padding: '1.25rem 2rem',
+  },
+  [MEDIA.greaterThan('large')]: {
+    position: 'fixed',
+    zIndex: Z_INDEX('header')
+  }
+});
+
+const StyledFooter = styled(Footer)({
+  [MEDIA.greaterThan('large')]: {
+    position: 'relative',
+    left: SIDEBAR_WIDTH,
+    width: `calc(100% - ${SIDEBAR_WIDTH}px)`
+  }
 });
 
 export default function Layout({ children, data }) {
@@ -65,7 +82,7 @@ export default function Layout({ children, data }) {
           { name: 'keywords', content: content.meta.keywords.join(', ') },
         ]}
       />
-      <Header
+      <FixedHeader
         renderLogo={({ Logo }) => (
           <React.Fragment>
             <Link to="/">
@@ -91,7 +108,7 @@ export default function Layout({ children, data }) {
         />
         <Content>{children()}</Content>
       </SidebarContainer>
-      <Footer />
+      <StyledFooter />
     </Container>
   );
 }
