@@ -54,14 +54,15 @@ const SlideIcon = styled(SlideshowIcon)({
 });
 
 export default function Layout({ children, data }) {
+  const { content } = data;
   return (
     <Container>
       <Helmet
         titleTemplate={`%s | Object Partners`}
-        title={data.meta.title}
+        title={content.meta.title}
         meta={[
-          { name: 'description', content: data.meta.description },
-          { name: 'keywords', content: data.meta.keywords.join(', ') },
+          { name: 'description', content: content.meta.description },
+          { name: 'keywords', content: content.meta.keywords.join(', ') },
         ]}
       />
       <Header
@@ -85,7 +86,7 @@ export default function Layout({ children, data }) {
         <Sidebar
           labs={data.labs.edges}
           agendas={data.agendas.edges}
-          links={data.site.siteMetadata.links}
+          externalLinks={content.links.external}
           tips={data.tips.edges}
         />
         <Content>{children()}</Content>
@@ -134,20 +135,19 @@ export const query = graphql`
       }
     }
 
-    meta: contentYaml {
-      description
-      keywords
-      title
-    }
+    content: contentYaml {
+      meta {
+        description
+        keywords
+        title
+      }
 
-    site {
-      siteMetadata {
-        links {
+      links {
+        github
+        slidedeck
+        external {
+          href
           title
-          links {
-            href
-            title
-          }
         }
       }
     }

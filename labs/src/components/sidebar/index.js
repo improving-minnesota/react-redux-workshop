@@ -1,7 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'react-emotion';
 import GatsbyLink from 'gatsby-link';
 import ExternalLinkIcon from 'react-icons/lib/fa/external-link-square';
+
+import { MEDIA } from '../../style';
 
 const Container = styled.div({
   display: 'flex',
@@ -10,7 +13,7 @@ const Container = styled.div({
   fontFamily: 'Roboto, sans-serif',
   padding: '1rem 0.5rem',
   whiteSpace: 'nowrap',
-  '@media only screen and (min-width: 768px)': {
+  [MEDIA.greaterThan('large')]: {
     flexDirection: 'column',
     overflowX: 'auto',
     minWidth: 250,
@@ -32,7 +35,7 @@ const Link = styled(GatsbyLink)({
     color: '#d8292f',
     textDecoration: 'none',
   },
-  '@media only screen and (min-width: 768px)': {
+  [MEDIA.greaterThan('large')]: {
     display: 'flex',
     alignItems: 'center',
     padding: '0.5rem',
@@ -61,20 +64,13 @@ Link.defaultProps = {
 const Links = styled.div(
   {
     display: 'none',
-    '@media only screen and (min-width: 768px)': {
+    [MEDIA.greaterThan('large')]: {
       display: 'inline-block',
     },
-  },
-  ({ type }) => ({
-    ...(type === 'labs'
-      ? {
-          display: 'inline-block',
-        }
-      : {}),
-  })
+  }
 );
 
-const A = styled(Link)({}).withComponent('a');
+const A = styled(Link)().withComponent('a');
 
 const Title = styled.h2({
   color: 'white',
@@ -83,7 +79,7 @@ const Title = styled.h2({
   margin: 0,
   marginBottom: '1rem',
   textTransform: 'uppercase',
-  '@media only screen and (min-width: 768px)': {
+  [MEDIA.greaterThan('large')]: {
     display: 'block',
   },
 });
@@ -92,36 +88,55 @@ const LinkIcon = styled(ExternalLinkIcon)({
   marginLeft: '0.5rem',
 });
 
-const Group = ({ title, items }) => (
-  <Links type={title.toLowerCase()}>
-    <Title>{title}</Title>
-    {items.map(({ node }) => {
-      return (
-        <Link to={node.fields.slug} key={node.fields.slug}>
-          {node.frontmatter.title}
-        </Link>
-      );
-    })}
-  </Links>
-);
+const Group = ({ className, title, items }) => {
+  if (items.length === 0) {
+    return null;
+  }
+  return (
+    <Links className={className}>
+      <Title>{title}</Title>
+      {items.map(({ node }) => {
+        return (
+          <Link to={node.fields.slug} key={node.fields.slug}>
+            {node.frontmatter.title}
+          </Link>
+        );
+      })}
+    </Links>
+  );
+}
 
-export function Sidebar({ agendas, labs, links, tips }) {
+export function Sidebar({ agendas, labs, externalLinks, tips }) {
   return (
     <Container>
-      {links.map(({ title, links: subLinks }) => (
-        <Links type="sub" key={title}>
-          <Title>{title}</Title>
-          {subLinks.map(({ title: subTitle, href }) => (
+      {externalLinks.length > 0 && <Links type="sub">
+        <Title>External Links</Title>
+        {externalLinks.map(({ href, title }) => {
+          return (
             <A href={href} key={href} target="_blank" rel="noopener">
-              {subTitle}
+              {title}
               <LinkIcon />
             </A>
-          ))}
-        </Links>
-      ))}
+          );
+        })}
+      </Links>}
       <Group title="Agenda" items={agendas} />
       <Group title="Tips" items={tips} />
-      <Group title="Labs" items={labs} />
+      <Group title="Labs" css={{ display: 'inline-block' }} items={labs} />
     </Container>
   );
 }
+
+Sidebar.defaultProps = {
+  agendas: [],
+  labs: [],
+  externalLinks: [],
+  tips: []
+};
+
+Sidebar.propTypes = {
+  labs: PropTypes.array.isRequired,
+  agendas: PropTypes.array,
+  externalLinks: PropTypes.array,
+  tops: PropTypes.array
+};
