@@ -53,6 +53,9 @@ const SlideIcon = styled(SlideshowIcon)({
 });
 
 const FixedHeader = styled(Header)({
+  '&': {
+    padding: '1.25rem 2rem',
+  },
   [MEDIA.greaterThan('large')]: {
     position: 'fixed',
     zIndex: Z_INDEX('header')

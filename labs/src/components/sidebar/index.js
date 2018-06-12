@@ -16,6 +16,7 @@ const Container = styled.div({
   zIndex: Z_INDEX('sidebar'),
   [MEDIA.greaterThan('large')]: {
     position: 'fixed',
+    padding: '2rem 0.5rem',
     height: `calc(100vh - ${HEADER_HEIGHT}px)`,
     top: HEADER_HEIGHT,
     flexDirection: 'column',
