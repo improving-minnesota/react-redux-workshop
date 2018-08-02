@@ -1,5 +1,5 @@
 ---
-title: Two Day Workshop
+title: One Day Workshop
 ---
 
 # Agenda
