@@ -77,7 +77,13 @@ Hello.defaultProps = {
 };
 ```
 
-* When complete, the entire module should look like:
+
+&nbsp;
+
+
+<details>
+  <summary>When complete, click here to see what the entire module should look like:</summary>
+
 
 ```javascript
 import React, { Component } from 'react';
@@ -107,6 +113,9 @@ Hello.defaultProps = {
 
 export default Hello;
 ```
+
+
+</details>
 
 &nbsp;
 
@@ -152,7 +161,13 @@ it('should render with our props', () => {
 
 > What is happening here? We use the [shallow renderer](http://airbnb.io/enzyme/docs/api/shallow.html) from [Enzyme](http://airbnb.io/enzyme/index.html) to render the component into a sandboxed "document" so that we can perform inquiries. Notice that we are using `JSX` in the `shallow()` method. Shallow testing is useful to isolate our test by not rendering any child components. For more advanced "integration" style tests you would use `mount()` for [full DOM rendering](http://airbnb.io/enzyme/docs/api/mount.html)
 
-* When finished, your suite should look similar to the one below:
+
+&nbsp;
+
+
+<details>
+  <summary>When finished, click here to see if your suite is similar to the one below:</summary>
+
 
 ```javascript
 import React from 'react';
@@ -181,6 +196,13 @@ describe('Hello World:', () => {
   });
 });
 ```
+
+
+</details>
+
+
+&nbsp;
+
 
 * What are we testing here?:
 

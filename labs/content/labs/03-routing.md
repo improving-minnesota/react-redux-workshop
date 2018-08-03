@@ -66,7 +66,11 @@ import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 
 * Finally, let's add the Navigation component while we're here.
   * Let's import the **Navigation** component - Then add the component in side the "App" div
-* The final class should look like this.
+
+
+<details>
+  <summary>Click here to see the finished class:</summary>
+
 
 ```javascript
 import React, { Component } from 'react';
@@ -100,6 +104,10 @@ class App extends Component {
 
 export default App;
 ```
+
+
+</details>
+
 
 &nbsp;
 
