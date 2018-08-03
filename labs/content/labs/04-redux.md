@@ -405,7 +405,13 @@ let employeeRows = this.props.employees.map(employee => {
 ```
 
 * Now let's open the **src/components/employees/EmployeeRow.js** and add the delete functionality by - Importing the bootstrap **Button** component - Styling the deleted rows - Building the button - Rendering the button
-* The final file should look like this:
+
+
+&nbsp;
+
+<details>
+  <summary>When finished, click here to view the final file:</summary>
+
 
 ```javascript:title=src/components/employees/EmployeeRow.js
 import React, { Component } from 'react';
@@ -466,6 +472,10 @@ EmployeeRow.propTypes = {
 
 export default EmployeeRow;
 ```
+
+
+</details>
+
 
 > Note: Check out how we can build that **button** variable as jsx and include it in our render method.
 
