@@ -1,7 +1,8 @@
 section
   h1 React
-  p
-    a(href="http://facebook.github.io/react/index.html") website
+  p See
+    a(href="http://facebook.github.io/react/index.html")  website
+    |  for Documentation
 
 section
   h3 A JavaScript library for building user interfaces
@@ -12,7 +13,8 @@ section
 section
   ul
     li JavaScript syntax extension that looks similar to HTML
-    li HTML-like syntax compiles to JavaScript function calls with Babel
+    li HTML-like syntax compiles to JavaScript function calls with
+      a(href="https://babeljs.io")  Babel
 
 section
   h3 Our first React component
@@ -56,7 +58,7 @@ section
 
 section
   h3 Gotchas!
-  p Since JSX is a superset of JavaScript, identifiers like class and for as attributes (or props!) is discouraged
+  p Since JSX is a superset of JavaScript, identifiers like 'class' and 'for' as attributes (or props!) is discouraged
   ul
     li <span class="component red">htmlFor</span> instead of <span class="component red">for</span>
     li <span class="component red">className</span> instead of  <span class="component red">class</span>
@@ -127,27 +129,13 @@ section
   ul
     li methods
       ul
-        li <span class="component red">render()</span>
         li <span class="component red">constructor()</span>
+        li <span class="component red">render()</span>
         li lifecycle methods
     li properties
       ul
         li <span class="component red">props</span>, <span class="component red">defaultProps</span>, & <span class="component red">propTypes</span>
         li <span class="component red">state</span> & <span class="component red">setState()</span>
-
-section
-  h2.lower render()
-  ul
-    li Required
-    li Returns a child component or components
-    li Or returns null or false to render nothing
-
-section
-  h2.lower render()
-  ul
-    li Does not mutate component state
-    li Should return the same result each time it is invoked (rendering consistency!)
-    li Should not read from or write to the DOM
 
 section
   h2.lower constructor()
@@ -165,6 +153,31 @@ section
         employee: {},
         errors: {}
       }
+    }
+
+section
+  h2.lower render()
+  ul
+    li Required
+    li Returns child element(s) to display (which can be other components)
+    li Or returns null or false to render nothing
+
+section
+  h2.lower render()
+  ul
+    li Does not mutate component state
+    li Should return the same result each time it is invoked (rendering consistency!)
+    li Should not read from or write to the DOM
+
+section
+  script(type="text/plain", class="language-jsx").
+    render() {
+      return (
+        <div>
+          <p>Can use props and state here</p>
+          <small>(but can't change them)</small>
+        </div>
+      );
     }
 
 section

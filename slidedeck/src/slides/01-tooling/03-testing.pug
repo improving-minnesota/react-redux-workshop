@@ -14,9 +14,10 @@ section
 section
   p BDD-style (Behavior Driven Development)
   script(type="text/plain", class="language-jsx", style="width:100%").
+    import { Snackbar } from './snackbar';
+
     describe('when there is no message', () => {
       beforeEach(() => {
-        Snackbar = require('./snackbar');
         element = shallow(<Snackbar />);
       });
 
@@ -31,6 +32,11 @@ section
   ul
     li axios is a promise based HTTP client for the browser and node.js
     li moxios is for mocking axios requests while testing
+
+section
+  h2 Promises?
+  p Method of handling asynchronous interactions
+  a(href="https://developers.google.com/web/fundamentals/primers/promises", target="_blank") More Info
 
 section
   p Making a request
