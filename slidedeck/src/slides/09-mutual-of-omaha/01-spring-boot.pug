@@ -1,0 +1,15 @@
+section
+  h2 React + Spring Boot
+
+section
+  h3 Deployment strategy
+  p React generates flat JS files
+  p Apps deployed by WAM are expected to be WAR or EAR
+
+section
+  h3 Solution
+  p Bundle JS frontend along with backing REST services to deploy as a single artifact
+  h4 Gradle + gradle-node-plugin
+  p Allows Gradle to run Node commands >> Runnable on the Jekins Pipeline
+section
+  h3 Let's look at an example
