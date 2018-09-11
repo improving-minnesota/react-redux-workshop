@@ -10,7 +10,7 @@ section
   h2 Component types
   ul
     li Presentational (dumb) components vs. container (smart) components
-    li Avoid using state or React lifecycle methods in components if possible
+    li Avoid using component state or React lifecycle methods if possible
 
 section
   h3 Presentational components
@@ -46,8 +46,10 @@ section
 
 section
   h3 Container components
+  p Act as a bridge between React and Redux
   ul
-    li Used as a bridge between React and Redux to dispatch actions and update the store
+    li Map data from state onto props
+    li Dispatch actions and update the store
     li.
       Uses React Redux <span class="component red">connect()</span> function
 
@@ -55,47 +57,44 @@ section
   h3 Connect function
   ul
     li.
-      <span class="component red">connect([mapStateToProps], [mapDispatchToProps], [mergeProps], [options])</span>
+      <span class="component red">connect(<br/>[mapStateToProps],<br />[mapDispatchToProps],<br />[mergeProps],<br />[options]<br />)</span>
     li.
       <span class="component red">mapStateToProps</span> and <span class="component red">mapDispatchToProps</span> are the most commonly used parameters
 
 section
   h3 mapStateToProps(state, [ownProps])
+  p Maps values from Redux state onto the component's props
   ul
-    li Must be an object
+    li Must be a function
     li Subscribes the component to store updates
-    li Allows mapping of store data to props in child components
     li.
-      If passed <span class="component red">ownProps</span>, will pass in props passed to this component
+      If <span class="component red">ownProps</span> is defined, will contain all props passed to this component
 
 section
   h3 mapDispatchToProps(dispatch, [ownProps])
   ul
     li Can be an object or a function
     li.
-      If passed an object, each function inside it is considered an action creator and binds to <span class="component red">store.dispatch</span>
+      Object: each object key is considered an action creator and binds to <span class="component red">store.dispatch</span>
     li.
-      If passed a function, the function is given the <span class="component red">dispatch</span> function directly
+      Function: is given the <span class="component red">dispatch</span> function directly
     li.
-      If passed <span class="component red">ownProps</span>, will pass in props passed to this component
+      If <span class="component red">ownProps</span> is defined, will contain all props passed to this component
 
 section
-  h3 Example container component
+  h3 Example presentation component
   script(type="text/plain", class="language-jsx", style="width: 100%; max-height: 700px;").
     import React, {Component} from 'react'
     import PropTypes from 'prop-types'
-
     import AgentDetails from '../components/AgentDetails'
 
     class AgentList extends Component {
-
       render() {
         return (
           <ul>{this.props.agents.map(
           agent => (<AgentDetails agent={agent} onClick={this.props.onAgentClick}/>))}</ul>
         )
       }
-
     }
 
     AgentList.propTypes = {
@@ -105,7 +104,7 @@ section
     export default AgentList
 
 section
-  h3 Connecting with connect()
+  h3 Container wraps presentation component with connect()
   script(type="text/plain", class="language-jsx", style="width: 100%; max-height: 700px;").
     import {connect} from 'react-redux'
     import {onAgentClick} from '../actions/agentActions'
@@ -131,8 +130,10 @@ section
     thead
       tr
         td
-        td Presentational components
-        td Container components
+        td
+          h4 Presentational
+        td
+          h4 Container
     tbody
       tr
         td Purpose
@@ -143,13 +144,13 @@ section
         td No
         td Yes
       tr
-        td To read data
-        td Read data from props
-        td Subscribe to Redux state
+        td Reads data from
+        td props
+        td Redux state subscription
       tr
-        td To change data
-        td Invoke callbacks from props
-        td Dispatch Redux actions
+        td Change data by
+        td Invoking callbacks from props
+        td Dispatching Redux actions
       tr
         td Are written
         td By hand

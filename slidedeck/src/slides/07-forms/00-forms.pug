@@ -2,8 +2,7 @@ section
   h1 Forms
 
 section
-  ul
-    li React Form Inputs hold internal state from user interactions
+  p Form fields hold internal state from user interactions
   script(type="text/plain", class="language-jsx").
     <form>
       <label>
@@ -14,14 +13,16 @@ section
     </form>
 
 section
+  p Form components allow listening for changes
   ul
-    li Form components allow listening for changes
     li Set a callback to the <span class="component red">onChange</span> prop
     li The callback fires when:
       ul
         li The value changes (every keystroke)
         li Checked state changes (checkbox)
-        li Selected state changes (select dropdown)
+        li Selected value changes (select dropdown)
+  script(type="text/plain", class="language-jsx").
+    <input type="text" name="name" onChange={this.onNameChange} />
 
 section
   h2 Controlled Components
@@ -94,10 +95,8 @@ section
   h3 Uncontrolled Components
   ul
     li React does not control the state
-    li Used for custom behavior
     li Good for co-existing with non-React libraries
     li Use a <span class="component red">ref</span> function to get input value from DOM
-    li Optionally, use <span class="component red">defaultValue</span> instead of <span class="component red">value</span>, <span class="component red">defaultChecked</span> instead of <span class="component red">checked</span>
   script(type="text/plain", class="language-jsx").
     <form onSubmit={this.handleSubmit}>
       <input type="text" ref={(input) => this.name = input} />
@@ -121,7 +120,7 @@ section
 section
   h3 Choose what you like best
   h4 Or no library!
-
+  p One popular opinion:
   blockquote(cite="Dan Abramov") [form state] is inherently ephemeral and local, so tracking it in Redux (or any kind of Flux library) is unnecessary
 
 section
