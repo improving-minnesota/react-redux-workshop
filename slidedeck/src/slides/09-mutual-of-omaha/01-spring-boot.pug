@@ -4,12 +4,21 @@ section
 section
   h3 Deployment strategy
   p React generates flat JS files
-  p Apps deployed by WAM are expected to be WAR or EAR
+  p Apps deployed by WAM have to be WAR or EAR
 
 section
   h3 Solution
   p Bundle JS frontend along with backing REST services to deploy as a single artifact
   h4 Gradle + gradle-node-plugin
-  p Allows Gradle to run Node commands >> Runnable on the Jekins Pipeline
+  p Allows Gradle to run Node commands >> Runnable on the Jenkins Pipeline
+
+section
+  h3 Architecture
+  ul
+    li Spring Boot for backing services, generates a WAR that bundles in UI code
+    li Spring integrates with AMUI to handle Auth
+    li UI calls Spring REST services, then Spring calls backing services using SOAP, REST, etc
+
 section
   h3 Let's look at an example
+  a(href="https://bitbucket.mutualofomaha.com/projects/CAW/repos/customer-access-client/browse") Customer Access
