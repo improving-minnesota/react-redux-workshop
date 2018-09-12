@@ -1,8 +1,9 @@
 section
   h3 Store
   ul
-    li The "glue" between actions and reducers
-    li Contains the current state value
+    li Contains the current State value
+    li Actions are dispatched to it
+    li Reducers accept Actions and update State
     li Only one store in a Redux application
 
 section
@@ -53,12 +54,11 @@ section
   h4 Redux follows a strict unidirectional data flow
 
 section
-  h4 Action is called via store.dispatch(action)
-  h4.fragment Calls the reducer function
-  h4.fragment Store saves the result from the reducer
-  h4.fragment The store is updated
-  h4.fragment ...
-  h4.fragment Profit
+  ol
+    li Action is created and sent via store.dispatch(action)
+    li.fragment Reducer function accepts Action and generates State update(s)
+    li.fragment Store saves the result from the reducer
+    li.fragment The store notifies subscribers
 
 section
   img(src="~./images/redux-diagram.png")

@@ -2,7 +2,17 @@ section
   h1 Routing
 
 section
-  p Since our backend doesn't serve different "pages", how do we handle different URLs?
+  h2 Legacy Routing
+  p Legacy webapps were composed of multiple HTML/JSP/PHP pages
+  p Browser would load new page for location transitions
+
+section
+  h2 Single Page Application
+  p React (and Angular and Vue) apps tend to be Single Page Apps (SPAs)
+  p This means there is no browser reload when moving between locations, it just hides some components and renders others
+
+section
+  p Since our backend doesn't serve different "pages", how do we link URLs to the displayed content in our app?
   ul
     li.monospace <span class="component red">/</span>
     li.monospace <span class="component red">/login</span>
@@ -29,13 +39,15 @@ section
   p Declarative routing for React via components
   p
     a(href="https://github.com/ReactTraining/react-router") github react-router
+
 section
+  h3 react-router
   ul
-    li Helps us track routes with states of our application
+    li Helps us control the state of our application based on the URL
     li Maintains the browser history within the app
-    li Able to trigger multiple routes
-    li Routes are represented as React Components
-    li Routes provides info to components via <span class="component red">props</span>
+    li A Route defines that a React Component should be rendered when the URL meets certain conditions
+    li Multiple sibling/child Routes can be controlled simultaneously
+    li Routes provide info to components via <span class="component red">props</span>
 
 section
   h2 react-router components we'll be covering...
@@ -109,13 +121,14 @@ section
     <Switch>
       <Redirect from='/employee-list' to='/employees'/>
 
-      <Route path='/employees/details/:_id' component={EmployeeDetail} />
-
       <Route path="/employees" component={Employees}/>
+      <Route path='/employees/details/:_id' component={EmployeeDetail} />
 
       {/* Unreachable: inside Switch && /employees is not exact */}
       <Route path="/employees/depts" component={EmployeesByDept}/>
 
+      {/* If nothing above matched then redirect */}
+      <Redirect to="/" />
     </Switch>
 
 section
@@ -126,7 +139,6 @@ section
   ul
     li Renders an <span class="component red">&lt;a&gt;</span> tag
     li Links to a route in the application
-    li If you change the path of your route, <br/>you don't have to change your links as well
     li.
       <span class="component red">NavLink</span> is a specialized version of <span class="component red">Link</span>
     ul
