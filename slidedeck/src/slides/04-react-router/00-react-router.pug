@@ -161,6 +161,13 @@ section
 
 section
   h2 Using react-router in your components
+  script(type="text/plain", class="language-jsx").
+    class MyComponent extends Component {
+      ...
+    }
+
+    // Injects react-router props into MyComponent
+    export default withRouter(MyComponent);
 
 section
   h2.lower Route Props
