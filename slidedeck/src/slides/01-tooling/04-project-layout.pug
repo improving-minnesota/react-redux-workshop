@@ -23,13 +23,24 @@ section
   a(href="https://confluence.mutualofomaha.com/confluence/display/FEDG/Development+Environment")  install now
   p  or use a development VDI - contact Abby Jones
 
+section
+  h3 Yarn Configuration
+  p From a command prompt, execute (on one line)
+  script(type="text/plain", class="language-bash", style="width:100%").
+    yarn config set registry
+    https://ivyrepo.mutualofomaha.com/artifactory/api/npm/npmjs/
+    --global
+
 sections
   h3 Custom fork directions:
   ol
-    li Go to "https://bitbucket.mutualofomaha.com/profile"
+    li Go to
+      a(href="https://bitbucket.mutualofomaha.com/profile")  https://bitbucket.mutualofomaha.com/profile
     li Click "Import Repository" button at the top
     li Select "Git"
-    li Enter "https://github.com/objectpartners/react-redux-timesheet.git" into "Clone URL" field (no username/password)
+    li Enter into "Clone URL" field (no username or password)
+      code
+        pre https://github.com/objectpartners/react-redux-timesheet.git
     li Click "Import Repository"
     li Select "react-redux-timesheet" project
     li Click "Clone" button in upper left, use URL to clone repo to your workstation
