@@ -78,14 +78,13 @@ export class SlideDeck extends Component {
   render() {
     const { slides } = this.props;
     const { WORKSHOP_CLIENT: client, WORKSHOP_DATE: date } = process.env;
+    const subtitle = `${client}${date ? ` - ${date}` : ''}`;
     return (
       <div className="reveal">
         <div className="slides">
           <section data-state="title">
             <h1>React</h1>
-            <h2>
-              {client} - {date}
-            </h2>
+            <h2>{subtitle}</h2>
           </section>
           {slides.map((deck, deckIndex) => {
             return (
