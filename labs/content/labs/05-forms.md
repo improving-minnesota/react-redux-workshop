@@ -1,5 +1,6 @@
 ---
 title: Forms and Validation
+index: 5
 ---
 
 # Lab Five - Forms and Validation

@@ -1,5 +1,6 @@
 ---
 title: Integrating Redux
+index: 4
 ---
 
 # Lab Four - Integrating Redux
