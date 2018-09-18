@@ -1,5 +1,6 @@
 ---
 title: Setup and Install Dependencies
+index: 1
 ---
 
 # Lab One - Setup and install dependencies

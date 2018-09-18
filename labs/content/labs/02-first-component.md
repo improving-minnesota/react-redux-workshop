@@ -1,5 +1,6 @@
 ---
 title: Your First React Component
+index: 2
 ---
 
 # Lab Two - Your First React Component

@@ -1,5 +1,6 @@
 ---
 title: Capstone
+index: 6
 ---
 
 # Lab Six - Capstone

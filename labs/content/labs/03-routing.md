@@ -1,5 +1,6 @@
 ---
 title: Routing and Components
+index: 3
 ---
 
 # Lab Three - Routing and Components
