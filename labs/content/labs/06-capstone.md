@@ -327,9 +327,13 @@ git commit -m "We are React masters"
 
 ## Extra Credit
 
-* Can you figure out how to update the form validation state when login fails so the fields are styled appropriately?
+* Unit tests! Our new and changed components need tests.
 
-* Is there a way to leave the Login form as a presentational component?
+* Do you think we should test our actions & reducers? Any ideas on how to do it?
+
+* Can you find a way to update the form validation state when login fails so the fields are styled appropriately?
+
+* Is there a way to restructure the Login form as a presentational component?
 
 * Try to figure out a way to tie in `react-router` to provide a `/login` route while still securing the other routes
 
