@@ -5,3 +5,15 @@ section
   h1
     a(href="/labs/capstone") Lab 6
   h2 Capstone
+  ol
+    li Setup upstream repository and fetch
+    code
+      pre.
+        git remote add upstream
+          https://github.com/objectpartners/react-redux-timesheet.git
+
+        git fetch upstream
+    li Switch to branch for Lab 6
+      code
+        pre.
+          git checkout -b lab-06 upstream/lab-06-capstone-start
