@@ -1,16 +1,19 @@
 import React from 'react';
-import Link from 'gatsby-link';
+import Layout from '../components/layout';
+import { graphql } from 'gatsby';
 
 export default function Index({ data }) {
   const { description } = data;
-  return <div dangerouslySetInnerHTML={{ __html: description.html }} />;
+  return (
+    <Layout>
+      <div dangerouslySetInnerHTML={{ __html: description.html }} />
+    </Layout>
+  );
 }
 
 export const pageQuery = graphql`
   query IndexPageQuery {
-    description: markdownRemark(
-      fileAbsolutePath: { regex: "/index.md/" }
-    ) {
+    description: markdownRemark(fileAbsolutePath: { regex: "/index.md/" }) {
       html
     }
   }

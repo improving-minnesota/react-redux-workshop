@@ -2,9 +2,10 @@ import React from 'react';
 import styled, { injectGlobal } from 'react-emotion';
 import 'prismjs/themes/prism-okaidia.css';
 import GatsbyLink from 'gatsby-link';
-import ChevronRight from 'react-icons/lib/fa/chevron-right';
-
+import { FaChevronRight } from 'react-icons/fa';
+import Layout from '../components/layout';
 import { Button } from '@objectpartners/components';
+import { graphql } from 'gatsby';
 
 const Container = styled.div({
   fontFamily: 'sans-serif',
@@ -34,27 +35,28 @@ const Link = styled(Button)({
   },
 }).withComponent(GatsbyLink);
 
-const NextLabIcon = styled(ChevronRight)({
+const NextLabIcon = styled(FaChevronRight)({
   color: 'white',
   position: 'absolute',
   right: 8,
 });
 
-export default function Content({ data, pathContext }) {
+export default function ContentTemplate({ data, pathContext }) {
   const { content } = data;
   const { next } = pathContext;
-
   const isLab = content.fields.type === 'lab';
   return (
-    <Container>
-      <div dangerouslySetInnerHTML={{ __html: content.html }} />
-      {isLab && next.node ? (
-        <Link to={next.node.fields.slug}>
-          {next.node.frontmatter.title}
-          <NextLabIcon />
-        </Link>
-      ) : null}
-    </Container>
+    <Layout>
+      <Container>
+        <div dangerouslySetInnerHTML={{ __html: content.html }} />
+        {isLab && next.node ? (
+          <Link to={next.node.fields.slug}>
+            {next.node.frontmatter.title}
+            <NextLabIcon />
+          </Link>
+        ) : null}
+      </Container>
+    </Layout>
   );
 }
 
