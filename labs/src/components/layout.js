@@ -80,8 +80,6 @@ const StyledFooter = styled(Footer)({
 function Layout({ children, data }) {
   const { content } = data;
 
-  console.log(children);
-
   return (
     <Container>
       <Helmet
