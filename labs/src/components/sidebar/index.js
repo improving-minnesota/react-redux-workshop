@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'react-emotion';
 import GatsbyLink from 'gatsby-link';
-import ExternalLinkIcon from 'react-icons/lib/fa/external-link-square';
+import { FaExternalLinkAlt } from 'react-icons/fa';
 
 import { HEADER_HEIGHT, MEDIA, Z_INDEX } from '../../style';
 
@@ -66,14 +66,12 @@ Link.defaultProps = {
   activeClassName: 'active',
 };
 
-const Links = styled.div(
-  {
-    display: 'none',
-    [MEDIA.greaterThan('large')]: {
-      display: 'inline-block',
-    },
-  }
-);
+const Links = styled.div({
+  display: 'none',
+  [MEDIA.greaterThan('large')]: {
+    display: 'inline-block',
+  },
+});
 
 const A = styled(Link)().withComponent('a');
 
@@ -89,7 +87,7 @@ const Title = styled.h2({
   },
 });
 
-const LinkIcon = styled(ExternalLinkIcon)({
+const LinkIcon = styled(FaExternalLinkAlt)({
   marginLeft: '0.5rem',
 });
 
@@ -109,22 +107,24 @@ const Group = ({ className, title, items }) => {
       })}
     </Links>
   );
-}
+};
 
 export function Sidebar({ agendas, labs, externalLinks, tips }) {
   return (
     <Container>
-      {externalLinks.length > 0 && <Links type="sub">
-        <Title>External Links</Title>
-        {externalLinks.map(({ href, title }) => {
-          return (
-            <A href={href} key={href} target="_blank" rel="noopener">
-              {title}
-              <LinkIcon />
-            </A>
-          );
-        })}
-      </Links>}
+      {externalLinks.length > 0 && (
+        <Links type="sub">
+          <Title>External Links</Title>
+          {externalLinks.map(({ href, title }) => {
+            return (
+              <A href={href} key={href} target="_blank" rel="noopener">
+                {title}
+                <LinkIcon />
+              </A>
+            );
+          })}
+        </Links>
+      )}
       <Group title="Agenda" items={agendas} />
       <Group title="Tips" items={tips} />
       <Group title="Labs" css={{ display: 'inline-block' }} items={labs} />
@@ -136,12 +136,12 @@ Sidebar.defaultProps = {
   agendas: [],
   labs: [],
   externalLinks: [],
-  tips: []
+  tips: [],
 };
 
 Sidebar.propTypes = {
   labs: PropTypes.array.isRequired,
   agendas: PropTypes.array,
   externalLinks: PropTypes.array,
-  tops: PropTypes.array
+  tops: PropTypes.array,
 };

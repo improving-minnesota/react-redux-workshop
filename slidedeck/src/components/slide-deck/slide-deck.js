@@ -1,21 +1,14 @@
 import React, { Component } from 'react';
 
 import 'prismjs';
-import loadLanguages from 'prismjs/components/index.js';
-import 'prismjs/plugins/keep-markup/prism-keep-markup.js';
-import 'prismjs/plugins/normalize-whitespace/prism-normalize-whitespace.js';
-import 'prismjs/plugins/unescaped-markup/prism-unescaped-markup.js';
 
 import 'reveal.js/css/reveal.css';
 import '@objectpartners/revealjs-theme';
-import 'prismjs/themes/prism-okaidia.css';
-import 'prismjs/plugins/unescaped-markup/prism-unescaped-markup.css';
 
 import './slide-deck.css';
 
 export class SlideDeck extends Component {
   componentDidMount() {
-    loadLanguages(['groovy', 'json', 'jsx', 'flow', 'typescript']); // why groovy? Exactly.
     require.ensure(
       [
         'reveal.js',
