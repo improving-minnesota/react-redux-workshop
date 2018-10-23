@@ -1,5 +1,6 @@
 ---
 title: Capstone
+index: 6
 ---
 
 # Lab Six - Capstone
@@ -8,7 +9,8 @@ title: Capstone
 
 * In a terminal:
 
-```
+
+```bash
 cd ../ # presuming still in first lab
 cd lab-06-capstone
 yarn start
@@ -26,7 +28,13 @@ We need to add some security to this app, fast!
 We need to restrict access by requiring the user log in using valid credentials.
 The good news is that our server team has put together a nice login/logout capability.
 
-**Note**: This is a *terrible* login/logout capability. Don't copy it!
+**Note**: This is a very naïve login/logout capability as a simple example. Don't use it in production code!
+
+### How are we going to do it?
+
+There aren't any new concepts in this section - we're just applying all the things you've learned from previous labs.
+**Try and implement each step yourself** - don't be afraid to ask questions or collaborate with classmates to work out a solution.
+If you truly get stuck then each section has a code hint you can refer to.
 
 ### Build the Action Types for Auth
 
@@ -39,10 +47,18 @@ We need to define our types for Authentication actions.
 * A second type to track whether we encountered an error when logging in so we can tell the user.
 
 
+<details>
+  <summary>Code hint:</summary>
+
 ```javascript:title=AuthActionTypes.js
 export const SET_USER = 'SET_USER';
 export const ERROR = 'ERROR';
 ```
+
+</details>
+
+&nbsp;
+
 
 ### Build the Actions
 
@@ -53,8 +69,13 @@ We need async actions for making API calls to the following endpoints:
 * POST `/api/logout`, no request body
 
 Then we need actions:
+
 * To handle getting a copy of the user after login & clearing the user after logout
 * To track errors on login
+
+
+<details>
+  <summary>Code hint:</summary>
 
 ```javascript:title=AuthActionCreator.js
 export function setUser(user) {
@@ -101,12 +122,20 @@ export const logout = () => {
 };
 ```
 
+</details>
+
+&nbsp;
+
+
 ### Build the Reducer
 
 We need a reducer to handle our actions
 
 * One case needs to save the new active User (which could be null if the user is logging out)
 * A second case needs to save an error message if login failed.
+
+<details>
+  <summary>Code hint:</summary>
 
 ```javascript:title=auth-reducer.js
 switch (action.type) {
@@ -119,12 +148,19 @@ switch (action.type) {
 }
 ```
 
+</details>
+
+&nbsp;
+
+
 ### Create a Login form
 
 * We need a form that will accept a username and password as well as supply a "Login" button.
 * Look at the existing forms in the rest of the app for examples.
 
-  
+<details>
+  <summary>Code hint:</summary>
+
 ```jsx:title=Login.js
 class LoginForm extends Component {
   constructor(props) {
@@ -219,8 +255,16 @@ LoginForm.propTypes = {
 };
 ```
 
+</details>
+
+&nbsp;
+
+
 * We'll need a function to handle submitting the login info for us, and a way to find out if there was an error on login.
 * These could be passed down as props, but in this instance we'll grab them from Redux so we can practice that.
+
+<details>
+  <summary>Code hint:</summary>
 
 ```jsx:title=Login.js
 function mapStateToProps(state) {
@@ -238,22 +282,36 @@ function mapDispatchToProps(dispatch) {
 export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);
 ```
 
+</details>
+
+&nbsp;
+
+
 ### Add a Logout button
 
 We want to let the user log out from the navbar, so we'll need to add a new link that can fire off the 'Logout' action.
 
 * First, add a 'onLogout' prop to the Navigation component
 
-  
+<details>
+  <summary>Code hint:</summary>
+
 ```jsx:title=Navigation.js
 NavBar.propTypes = {
   onLogout: PropTypes.func.isRequired
 };
 ```
-  
+
+</details>
+
+&nbsp;
+
+
 * Next, add a link to the NavBar with a click listener that calls the 'onLogout' prop
 
-  
+<details>
+  <summary>Code hint:</summary>
+
 ```jsx:title=Navigation.js
 <Nav pullRight>
   <LinkContainer to="/logout">
@@ -261,14 +319,21 @@ NavBar.propTypes = {
   </LinkContainer>
 </Nav>
 ```
-  
+
+</details>
+
+&nbsp;
+
+
 ### Grab props to pass into Navigation
 
 Now that Navigation needs a 'onLogout' function to call, we need to get that from Redux and pass it in.
 
 * In **app.js**, connect the component to Redux and bind the AuthActions we created earlier
 
-  
+<details>
+  <summary>Code hint:</summary>
+
 ```jsx:title=App.js
 function mapStateToProps(state) {
   return {
@@ -284,14 +349,25 @@ function mapDispatchToProps(dispatch) {
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
 ```
-  
+
+</details>
+
+&nbsp;
+
 
 * Pass the 'logout' action from our AuthActions into Navigation as the 'onLogout' prop
 
-  
+<details>
+  <summary>Code hint:</summary>
+
 ```jsx:title=App.js
 <Navigation onLogout={this.props.authActions.logout}/>
 ```
+
+</details>
+
+&nbsp;
+
 
 ### Render login form until user successfully logs in
 
@@ -299,7 +375,9 @@ We have all the pieces in place, now we just need to prevent the user from acces
 
 * In **app.js**, look for a good way to render our LoginForm anytime there isn't valid _User_ object in our Redux state.
 
-  
+<details>
+  <summary>Code hint:</summary>
+
 ```jsx:title=App.js
 render() {
     if (!this.props.user) {
@@ -309,9 +387,18 @@ render() {
     ...
 ```
 
+</details>
+
+&nbsp;
+
 ### Try it out
 
 Let's see if the app does what we want.
+
+| Username | Password |
+| -------- | -------- |
+| admin    | password |
+| user     | password |
 
 * Try accessing any route (employees, projects, etc) - you should be restricted to the login form.
 * Try a bad login. Do you get an error message?

@@ -1,8 +1,8 @@
 const path = require('path');
 const slugify = require('limax');
 
-module.exports = function createPages({ boundActionCreators, graphql }) {
-  const { createPage } = boundActionCreators;
+module.exports = function createPages({ actions, graphql }) {
+  const { createPage } = actions;
 
   const contentTemplate = path.resolve('src/templates/content.js');
 
@@ -60,7 +60,13 @@ module.exports = function createPages({ boundActionCreators, graphql }) {
 
     const createPages = page => {
       page.edges.forEach(({ node }) => {
-        const next = page.edges.find(edge => edge.node && edge.node.frontmatter && edge.node.frontmatter.index === node.frontmatter.index + 1) || {};
+        const next =
+          page.edges.find(
+            edge =>
+              edge.node &&
+              edge.node.frontmatter &&
+              edge.node.frontmatter.index === node.frontmatter.index + 1
+          ) || {};
         createPage({
           path: node.fields.slug,
           component: contentTemplate,
