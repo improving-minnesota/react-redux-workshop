@@ -4,7 +4,6 @@ module.exports = {
   siteMetadata: {},
   plugins: [
     'gatsby-plugin-react-helmet',
-    'gatsby-plugin-react-next',
     'gatsby-plugin-emotion',
     {
       resolve: `gatsby-plugin-typography`,

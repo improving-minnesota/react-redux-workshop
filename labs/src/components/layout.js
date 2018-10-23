@@ -3,14 +3,21 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import styled from 'react-emotion';
 import Link from 'gatsby-link';
-import SlideshowIcon from 'react-icons/lib/md/slideshow';
+import { MdSlideshow } from 'react-icons/md';
+import { graphql } from 'gatsby';
+import { Footer, Header } from '@objectpartners/components';
 
-import { Header, Footer } from '@objectpartners/components';
-
-import 'normalize.css';
+import '../../node_modules/normalize.css/normalize.css';
 
 import { Sidebar } from '../components';
-import { FOOTER_HEIGHT, HEADER_HEIGHT, MEDIA, SIDEBAR_WIDTH, Z_INDEX } from '../style';
+import {
+  FOOTER_HEIGHT,
+  HEADER_HEIGHT,
+  MEDIA,
+  SIDEBAR_WIDTH,
+  Z_INDEX,
+} from '../style';
+import { StaticQuery } from 'gatsby';
 
 const Container = styled.div({
   display: 'flex',
@@ -40,11 +47,11 @@ const Content = styled.div({
     maxWidth: '80%',
     top: HEADER_HEIGHT,
     paddingBottom: FOOTER_HEIGHT,
-    paddingLeft: `calc(${SIDEBAR_WIDTH}px + 1rem)`
+    paddingLeft: `calc(${SIDEBAR_WIDTH}px + 1rem)`,
   },
 });
 
-const SlideIcon = styled(SlideshowIcon)({
+const SlideIcon = styled(MdSlideshow)({
   color: 'rgba(255, 255, 255, 0.8)',
   transition: '175ms ease-in-out',
   ':hover': {
@@ -58,20 +65,21 @@ const FixedHeader = styled(Header)({
   },
   [MEDIA.greaterThan('large')]: {
     position: 'fixed',
-    zIndex: Z_INDEX('header')
-  }
+    zIndex: Z_INDEX('header'),
+  },
 });
 
 const StyledFooter = styled(Footer)({
   [MEDIA.greaterThan('large')]: {
     position: 'relative',
     left: SIDEBAR_WIDTH,
-    width: `calc(100% - ${SIDEBAR_WIDTH}px)`
-  }
+    width: `calc(100% - ${SIDEBAR_WIDTH}px)`,
+  },
 });
 
-export default function Layout({ children, data }) {
+function Layout({ children, data }) {
   const { content } = data;
+
   return (
     <Container>
       <Helmet
@@ -106,7 +114,7 @@ export default function Layout({ children, data }) {
           externalLinks={content.links.external}
           tips={data.tips.edges}
         />
-        <Content>{children()}</Content>
+        <Content>{children}</Content>
       </SidebarContainer>
       <StyledFooter />
     </Container>
@@ -117,56 +125,61 @@ Layout.propTypes = {
   children: PropTypes.func,
 };
 
-export const query = graphql`
-  query SiteTitleQuery {
-    labs: allMarkdownRemark(
-      filter: { fields: { type: { eq: "lab" } } }
-      sort: { fields: [fileAbsolutePath], order: ASC }
-    ) {
-      edges {
-        node {
-          ...ContentFragment
+export default ({ children }) => (
+  <StaticQuery
+    query={graphql`
+      query SiteTitleQuery {
+        labs: allMarkdownRemark(
+          filter: { fields: { type: { eq: "lab" } } }
+          sort: { fields: [fileAbsolutePath], order: ASC }
+        ) {
+          edges {
+            node {
+              ...ContentFragment
+            }
+          }
+        }
+
+        agendas: allMarkdownRemark(
+          filter: { fields: { type: { eq: "agenda" } } }
+          sort: { fields: [fileAbsolutePath], order: ASC }
+        ) {
+          edges {
+            node {
+              ...ContentFragment
+            }
+          }
+        }
+
+        tips: allMarkdownRemark(
+          filter: { fields: { type: { eq: "tip" } } }
+          sort: { fields: [fileAbsolutePath], order: ASC }
+        ) {
+          edges {
+            node {
+              ...ContentFragment
+            }
+          }
+        }
+
+        content: contentYaml {
+          meta {
+            description
+            keywords
+            title
+          }
+
+          links {
+            github
+            slidedeck
+            external {
+              href
+              title
+            }
+          }
         }
       }
-    }
-
-    agendas: allMarkdownRemark(
-      filter: { fields: { type: { eq: "agenda" } } }
-      sort: { fields: [fileAbsolutePath], order: ASC }
-    ) {
-      edges {
-        node {
-          ...ContentFragment
-        }
-      }
-    }
-
-    tips: allMarkdownRemark(
-      filter: { fields: { type: { eq: "tip" } } }
-      sort: { fields: [fileAbsolutePath], order: ASC }
-    ) {
-      edges {
-        node {
-          ...ContentFragment
-        }
-      }
-    }
-
-    content: contentYaml {
-      meta {
-        description
-        keywords
-        title
-      }
-
-      links {
-        github
-        slidedeck
-        external {
-          href
-          title
-        }
-      }
-    }
-  }
-`;
+    `}
+    render={data => <Layout data={data}>{children}</Layout>}
+  />
+);

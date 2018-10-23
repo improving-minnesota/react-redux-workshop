@@ -1,5 +1,5 @@
 import React from 'react';
-import TwitterIcon from 'react-icons/lib/fa/twitter';
+import { FaTwitter } from 'react-icons/fa';
 
 import './person.css';
 
@@ -16,7 +16,7 @@ export default function Person({ avatar, name, title, twitter }) {
           target="_blank"
           rel="noopener"
         >
-          <TwitterIcon className="icon" color="#1da1f2" />@{twitter}
+          <FaTwitter className="icon" color="#1da1f2" />@{twitter}
         </a>
       </div>
     </div>
