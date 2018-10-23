@@ -41,9 +41,9 @@ const NextLabIcon = styled(FaChevronRight)({
   right: 8,
 });
 
-export default function ContentTemplate({ data, pathContext }) {
+export default function ContentTemplate({ data, pageContext }) {
   const { content } = data;
-  const { next } = pathContext;
+  const { next } = pageContext;
   const isLab = content.fields.type === 'lab';
   return (
     <Layout>
