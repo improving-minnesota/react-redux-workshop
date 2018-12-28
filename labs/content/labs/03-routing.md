@@ -30,9 +30,9 @@ yarn start
 * Let's start by importing the component classes that we're going to use as the **Handlers** for our routes:
 
 ```javascript:title=src/App.js
-import Projects from './components/projects/Projects';
-import Employees from './components/employees/Employees';
-import Timesheets from './components/timesheets/Timesheets';
+import Projects from './projects/Projects';
+import Employees from './employees/Employees';
+import Timesheets from './timesheets/Timesheets';
 ```
 
 * Next we'll import some classes from the react router
@@ -51,12 +51,14 @@ import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
     return (
       <BrowserRouter>
         <div className="App">
-          <Switch>
-            <Route path="/projects" component={Projects}/>
-            <Route path="/employees" component={Employees}/>
-            <Route path="/timesheets" component={Timesheets}/>
-            <Redirect to="/employees"/>
-          </Switch>
+          <div className="container">
+            <Switch>
+              <Route path="/projects" component={Projects}/>
+              <Route path="/employees" component={Employees}/>
+              <Route path="/timesheets" component={Timesheets}/>
+              <Redirect to="/employees"/>
+            </Switch>
+          </div>
         </div>
       </BrowserRouter>
     );
@@ -66,6 +68,13 @@ import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 * Finally, let's add the Navigation component while we're here.
   * Let's import the **Navigation** component - Then add the component in side the "App" div
 
+```javascript
+import Navigation from './nav/Navigation';
+```
+
+```javascript
+<Navigation />
+```
 
 <details>
   <summary>Click here to see the finished class:</summary>
@@ -74,10 +83,10 @@ import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 ```javascript
 import React from 'react';
 import './App.css';
-import Projects from './components/projects/Projects';
-import Employees from './components/employees/Employees';
-import Timesheets from './components/timesheets/Timesheets';
-import Navigation from './components/nav/Navigation';
+import Projects from './projects/Projects';
+import Employees from './employees/Employees';
+import Timesheets from './timesheets/Timesheets';
+import Navigation from './nav/Navigation';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 
 class App extends React.Component {
@@ -533,7 +542,7 @@ describe('<Employees />', () => {
 
 &nbsp;
 
-* Run the tests. Did your new one pass?
+* Run the tests.
 
 ## Run the application and see your work.
 

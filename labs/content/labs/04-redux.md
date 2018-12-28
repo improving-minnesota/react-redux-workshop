@@ -350,9 +350,8 @@ const rootReducer = combineReducers({
 * Import some **redux** libraries we need and the **EmployeeActionCreator**
 
 ```javascript:title=src/components/employees/Employees.js
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import * as EmployeeActions from '../../actions/EmployeeActionCreator';
+import * as EmployeeActionCreators from '../actions/EmployeeActionCreator';
 ```
 
 * Next lets add the **mapStateToProps** and **mapDispatchToProps** methods between the component and the export.
@@ -386,20 +385,38 @@ export default connect(mapStateToProps, mapDispatchToProps)(Employees);
   }
 ```
 
-* Now we update the data we are passing to the EmployeeTable in the render method.
+* Now we update the data we are passing to the EmployeeTable in the render method. Note that we're now pulling employees from props since React-Redux pulls them from global Redux state and adds them to the components props in `mapStateToProps`
+* We also pass down two of the actions we're getting from `mapDispatchToProps` so that they can be called from a row
 
 ```javascript
-<EmployeeTable employees={ employees } onDelete={ deleteEmployee } onRestore={ restoreEmployee }/>
+const { employees, deleteEmployee, restoreEmployee } = this.props;
+
+return (
+  <div>
+    <h1>Employees</h1>
+    <EmployeeTable employees={ employees } onDelete={deleteEmployee} onRestore={restoreEmployee} />
+  </div>
+);
 ```
 
 * Next let's open the **src/components/employees/EmployeeTable.js** and update the render method to pass the actions to the **EmployeeRows**
 
 ```javascript:title=src/components/employees/EmployeeTable.js
-const actions = this.props.actions;
+const { employees, onDelete, onRestore } = this.props;
 
 {employees.map(employee => (
   <EmployeeRow employee={ employee } key={ employee._id } onDelete={onDelete} onRestore={onRestore} />
 ))}
+```
+
+* Also, update the propTypes
+
+```javascript
+EmployeeTable.propTypes = {
+  employees: PropTypes.array.isRequired,
+  onDelete: PropTypes.func,
+  onRestore: PropTypes.func
+};
 ```
 
 * Then we need to add a column header for the delete button we'll add to the **EmployeeRow**
@@ -408,12 +425,53 @@ const actions = this.props.actions;
 <th>Delete</th>
 ```
 
-* Now let's open the **src/components/employees/EmployeeRow.js** and add the delete functionality by
-    - Importing the bootstrap **Button** component
-    - Styling the deleted rows
-    - Building the button
-    - Rendering the button
+* Now let's open the **src/components/employees/EmployeeRow.js** and add the delete functionality
 
+* Import the Bootstrap Button component
+
+```javascript
+import { Button } from 'react-bootstrap';
+```
+
+* Add new table cell containing the button. The button can dynamically change its label based on whether a click would delete or restore the record. We also give it a click handler to call.
+
+```javascript
+<td>
+  <Button onClick={this.handleClick}>
+    {employee.deleted ? 'Restore' : 'Delete'}
+  </Button>
+</td>
+```
+
+* Next, let's make the row re-style based on whether the record has been deleted:
+
+```javascript
+<tr className={employee.deleted ? 'deleted' : ''}>
+```
+
+* Add the click handler:
+
+```javascript
+handleClick = () => {
+    const { employee, onDelete, onRestore } = this.props;
+
+    if (employee.deleted) {
+      onRestore(employee);
+    } else {
+      onDelete(employee);
+    }
+  };
+```
+
+* And lastly update our propTypes:
+
+```javascript
+EmployeeRow.propTypes = {
+  employee: PropTypes.object.isRequired,
+  onDelete: PropTypes.func.isRequired,
+  onRestore: PropTypes.func.isRequired
+};
+```
 
 &nbsp;
 

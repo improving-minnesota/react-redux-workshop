@@ -21,7 +21,7 @@ yarn start
   * The component files needed to create and edit employees, timesheets, and timeunits have been created for you. This lab will walk you through the implementation of some of those features.
   * You'll also notice that **React Router** has been added to some of our previous components. More on that later.
 
-### Add the Routes for Creating and Updating
+### Add the Routes for Create/Update
 
 * Before we can do anything, we need to add more routes to our application and tie them together with the appropriate handlers.
 * Open **src/App.js** and update the Routes under the 'Switch' tag to match the following:
@@ -53,9 +53,9 @@ If we really wanted to, we could absolutely create our own user input/validation
 In the real world, you'll almost certainly use one of several popular User Input/Form libraries such as [Redux Form](https://redux-form.com), [React Final Form](https://github.com/final-form/react-final-form), or [Formik](https://jaredpalmer.com/formik).
 For this example application, we're using Formik.
 
-Formik is a wrapper around Forms that takes care of some basic considerations like setup/reset/teardown, validation, and state management.
+Formik is a wrapper around Forms that takes care of some basic considerations like setup/reset/teardown, validation, and state management. It's a very lightweight solution which means it's easy to setup and very fast, but it doesn't do as much for you as others like `redux-form` which can lead to some boilerplate (but way less than you'd have doing it all yourself!)
 
-### Add Edit Employee Functionality
+### Add Create/Edit Employee Functionality
 
 * Now let's set up a way to edit an employee.
 
@@ -72,20 +72,22 @@ Formik is a wrapper around Forms that takes care of some basic considerations li
 * We need to define the Form element and integrate it with Formik so we get all of the helpful validation and support mechanisms.
 
 ```jsx
-const { employee } = this.props;
+render() {
+  const { employee } = this.props;
 
-return (
-  <Formik
-    initialValues={{}}
-    validate={ this.validate }
-    onSubmit={ this.handleSave }
-  >
-    { ({ isValid, errors, handleReset, handleSubmit }) => (
-      <Form>
+  return (
+    <Formik
+      initialValues={{}}
+      validate={ this.validate }
+      onSubmit={ this.handleSave }
+    >
+      { ({ isValid, errors, handleReset, handleSubmit }) => (
+        <Form>
         
-      </Form>
-  </Formik>
-);
+        </Form>
+    </Formik>
+  );
+}
 ```
 
 > This block defines the `Formik` Higher-Order-Component (HOC) - this is a wrapper around a child `Form` which adds behaviors to make it more capable than it is by itself.
@@ -99,17 +101,22 @@ return (
   
 * Great! We have an empty form...probably need to add some content in there.
 
-* A helpful member of our team has created a reusable component for Forms that takes care of wrapping the user input element with an appropriate label and validation logic. Let's just reuse that!
+* A helpful member of your team has created a reusable component for Forms that takes care of wrapping the user input element with an appropriate label and validation logic. Let's just reuse that! Hooray for reusable shared components!
 
 ```jsx
-<FieldWrapper type="text" name="username" label="Username" invalid={ errors.username }/>
-<FieldWrapper type="text" name="email" label="Email" invalid={ errors.email }/>
-<FieldWrapper type="text" name="firstName" label="First Name" invalid={ errors.firstName }/>
-<FieldWrapper type="text" name="lastName" label="Last Name" invalid={ errors.lastName }/>
-<FieldWrapper type="checkbox" name="admin" label="Admin" invalid={ errors.admin }/>
+<FieldWrapper type="text" name="username" label="Username" invalid={errors.username} touched={touched.username} />
+<FieldWrapper type="text" name="email" label="Email" invalid={errors.email} touched={touched.email} />
+<FieldWrapper type="text" name="firstName" label="First Name" invalid={errors.firstName} touched={touched.firstName} />
+<FieldWrapper type="text" name="lastName" label="Last Name" invalid={errors.lastName} touched={touched.lastName} />
+<FieldWrapper type="checkbox" name="admin" label="Admin" invalid={errors.admin} touched={touched.admin} />
 ```
 
-* Here we're defining five fields - the `FieldWrapper` component takes a few props so it can show validation errors and such.
+* Here we're defining five fields - the `FieldWrapper` component takes a few props:
+  * `type` is used to define what type of form field to render - text, checkbox, select menu, etc
+  * `name` is a unique name within the form for the value of each field
+  * `label` is the text to show next to the field so the user knows what it is
+  * `invalid` is a hint to the field whether Formik's validation has any problems with the value in that field. It will be an error message if a validation issue was found
+  * `touched` is a hint to the field as to whether the user has interacted with it yet
 
 * Lastly we need to give the ability for the user to Save or Reset the form.
 
@@ -123,14 +130,18 @@ return (
 />
 ```
 
-* There, our Form is implemented. However, we need to finish implementing what should happen when the Form detects a submission.
-* We've already told the `Formik` component to call `handleSave` in this situation. Here's what `handleSave` should look like:
+* Note how we're using another Formik-supplied value here `isValid` - this tells us whether the entire form has passed validation. Once it has, we'll enable the save button.
+
+* There, our Form is complete. However, we need to finish implementing what should happen when the Form detects a submission.
+* We've already told the `Formik` component to call `handleSave` in this situation. Here's what the `handleSave` function should look like:
 
 ```jsx
 handleSave = (values) => {
   this.props.handleSave(values);
 };
 ```
+
+> Notice that we are not actually implementing the save function. That is left for the component that uses this form to implement and pass it in as a prop.
 
 * `Formik` will let the user click the Submit button once the form is valid, passing the values from the form into our save handler, which then calls the handleSave prop passed down from Redux.
 * We haven't defined `validate()` yet, so let's do that next. Here's what it should look like:
@@ -150,7 +161,7 @@ validate = (values) => {
 };
 ```
 
-* Here, we're simply checking that we have values for all the fields. Our other handler functions will update the state appropriately as the user changes field values. But what if the `EmployeeForm` is being used to edit an existing employee?
+* We're simply checking that we have values for all the fields. Our other handler functions will update the state appropriately as the user changes field values. But what if the `EmployeeForm` is being used to edit an existing employee?
 * We already know that this component can receive an `employee` in its props, what we need to do is update the form to reflect that employee's values.
 * The `Formik` components gives us the `initialValues` hook to do this. Replace the empty declaration you currently have with the following:
 
@@ -164,8 +175,6 @@ initialValues={ {
   _id: employee._id
 } }
 ```
-
-> Notice that we are not actually implementing the save function. That is left for the component that uses this form to implement and pass it in as a prop.
 
 ## Add the Form into an Employee Detail Component
 
@@ -183,12 +192,16 @@ EmployeesDetail.propTypes = {
 * Next, let's hook up to the Redux architecture. The only thing we'll need from the Redux state is the employee, like so:
 
 ```jsx
-const mapStateToProps = state => {
+const mapStateToProps = (state, props) => {
+  const { match } = props;
+  const { _id } = match.params;
   return {
-    employee: state.employees.employee,
+    employee: state.employees.employees.find(employee => employee._id === _id)
   };
 };
 ```
+
+* We use react-router to give us the parameters that `match`-ed from the `Route` - in this instance, we'll get the employee ID from the URL. We use that to find the corresponding employee record. If none exists, then we'll get `undefined`
 
 * This component will also need the ability to update the Redux state through using the `EmployeeActions`, like so:
 
