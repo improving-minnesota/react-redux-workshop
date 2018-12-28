@@ -27,7 +27,7 @@ Many times in React it's helpful to build things starting at the bottom and buil
 
 * The first thing we want to do is `import` the libraries we need. At the top of the page add:
 
-```javascript:title=src/projects/Projects.js
+```javascript:title=src/projects/ProjectRow.js
 import React from 'react';
 import PropTypes from 'prop-types';
 ```
@@ -116,7 +116,7 @@ export default ProjectRow;
 
 * Add the necessary imports:
 
-```javascript:title=src/projects/Projects.js
+```javascript:title=src/projects/ProjectTable.js
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Table } from 'react-bootstrap';
@@ -141,24 +141,23 @@ export default ProjectTable;
 
 ```javascript
 render() {
-    const { projects } = this.props;
+  const { projects } = this.props;
 
-    return (
-      <Table bordered striped>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Description</th>
-          </tr>
-        </thead>
-        <tbody>
-          {projects.map(project => (
-            <ProjectRow project={ project } key={ project._id }/>
-          ))}
-        </tbody>
-      </Table>
-    );
-  }
+  return (
+    <Table bordered striped>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        {projects.map(project => (
+          <ProjectRow project={ project } key={ project._id }/>
+        ))}
+      </tbody>
+    </Table>
+  );
 }
 ```
 
@@ -347,9 +346,9 @@ export default Projects;
 
 &nbsp;
 
-## Test the one of our components
+## Test our components
 
-* Now that we've created our first components, we need to make sure it works as expected
+* Now that we've created our first components, we need to make sure they work as expected
 
 * Open **src/projects/ProjectRow.test.js**
 * First, let's import our libraries for `React` `ProjectRow` and the shallow `enzyme` renderer
@@ -361,7 +360,9 @@ import { shallow } from 'enzyme';
 
 import ProjectRow from './ProjectRow';
 
-describe('<ProjectRow />', () => {});
+describe('<ProjectRow />', () => {
+  // Tests go here
+});
 ```
 
 * Now we need to set up our component that we'll be testing. Inside the describe block:
@@ -440,12 +441,76 @@ describe('<ProjectRow />', () => {
 
 &nbsp;
 
+* Let's write tests for ProjectTable. Open **src/projects/ProjectTable.test.js**
+
+```javascript
+import React from 'react';
+import { shallow } from 'enzyme';
+
+import ProjectTable from './ProjectTable';
+import ProjectRow from './ProjectRow';
+
+describe('<ProjectTable />', () => {
+  let wrapper;
+
+  beforeEach(() => {
+    const projects = [{}, {}];
+    wrapper = shallow(<ProjectTable projects={projects} />);
+  });
+
+  it('should instantiate the Project Table Component', () => {
+    expect(wrapper).toHaveLength(1);
+  });
+
+  it('should render a row for each project', () => {
+    expect(wrapper.find(ProjectRow)).toHaveLength(2);
+  });
+});
+```
+
+* These tests shallow render ProjectTable with two stubbed project entries
+  * We verify that the table renders without blowing up
+  * Then make sure that we end up with two instances of the ProjectRow component being rendered (one for each project entry)
+
+* Finally, add some tests for Projects. Open **src/projects/Projects.test.js**
+
+```javascript
+import React from 'react';
+import { shallow } from 'enzyme';
+
+import Projects from './Projects';
+import ProjectTable from './ProjectTable';
+
+describe('<Projects />', () => {
+  let wrapper;
+
+  beforeEach(() => {
+    wrapper = shallow(<Projects />);
+  });
+
+  it('should instantiate the Project Component', () => {
+    expect(wrapper).toHaveLength(1);
+  });
+
+  it('should pass projects down to table', () => {
+    wrapper.setState({
+      projects: [{}, {}, {}, {}]
+    });
+    expect(wrapper.find(ProjectTable).prop('projects')).toHaveLength(4);
+  });
+});
+```
+
+* Here, we're shallow rendering the Projects container
+  * First we ensure it renders
+  * Then we use Enzyme to update the component's state so that it has 4 project entries, then verify that the prop value passed down to ProjectTable reflects those 4 items
+
 
 * If it's not already running, open your terminal and run the test (`yarn test`) command.
 
 ![](./images/yarn.test.png)
 
-* Did your test pass?
+* Did your tests pass?
 
 * If you get a weird error like the following, try installing watchman as reported here: [watchman bug](https://github.com/facebookincubator/create-react-app/issues/871)
 
@@ -480,7 +545,9 @@ import Projects from './projects/Projects';
   render() {
     return (
       <div className="App">
-        <Projects />
+        <div className="container">
+          <Projects />
+        </div>
       </div>
     );
   }
@@ -493,7 +560,7 @@ import Projects from './projects/Projects';
 * In a terminal windows run: `yarn start` to fire off the build.
 * Navigate to [http://localhost:3000](http://localhost:3000) in your favorite browser (if it doesn't automatically open)
 
-### ADD SCREENSHOT HERE
+![](./images/lab-02-complete.png)
 
 &nbsp;
 
