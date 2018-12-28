@@ -18,7 +18,7 @@ yarn start
 
 * While we were working on the last lab, the rest of the team was adding lots of new stuff to the app
 * Before proceeding, let's look at the progress that has been made:
-  * Peruse the **src/components** directory and notice that the **Projects** and **Timesheets** modules have been implemented by the team.
+  * Peruse the **src/components** directory and notice that the **Projects**, **Timesheets**, **Timeunits** modules have been updated to use Redux by the team.
   * Also look at the **actions** and **reducers** directories to get a feel for how these classes are laid out and used.
   * Finally, look at the **src/index.js**, **src/reducers/index.js** and **src/store/configure-store.js** to see how we instantiated Redux and included it in our app.
   * Don't worry if it looks a little cryptic - by the end of this lab you will understand what is happening.

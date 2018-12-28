@@ -7,25 +7,27 @@
     "@objectpartners/components": "~0.0.6",
     "emotion": "~9.2.12",
     "emotion-server": "~9.2.12",
-    "gatsby": "^2.0.25",
-    "gatsby-link": "^2.0.4",
+    "gatsby": "^2.0.77",
+    "gatsby-link": "^2.0.7",
     "gatsby-plugin-emotion": "~2.0.5",
-    "gatsby-plugin-react-helmet": "^3.0.0",
-    "gatsby-remark-images": "~2.0.4",
+    "gatsby-plugin-react-helmet": "^3.0.5",
+    "gatsby-remark-images": "~3.0.1",
     "lodash.debounce": "~4.0.8",
-    "normalize.css": "~8.0.0",
+    "normalize.css": "~8.0.1",
     "prismjs": "~1.15.0",
-    "react": "~16.5.2",
-    "react-dom": "~16.5.2",
+    "react": "~16.7.0",
+    "react-dom": "~16.7.0",
     "react-emotion": "~9.2.12",
     "react-helmet": "^5.2.0",
-    "react-icons": "~3.2.1",
-    "react-typography": "^0.16.13",
+    "react-icons": "~3.2.2",
+    "react-typography": "^0.16.18",
     "typeface-roboto": "~0.0.54",
-    "typography": "~0.16.17",
-    "typography-plugin-code": "~0.16.11"
+    "typography": "~0.16.18",
+    "typography-plugin-code": "~0.16.18"
   },
-  "keywords": ["gatsby"],
+  "keywords": [
+    "gatsby"
+  ],
   "license": "MIT",
   "scripts": {
     "build": "gatsby build",
@@ -35,15 +37,15 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
-    "gatsby-plugin-sharp": "^2.0.7",
-    "gatsby-plugin-typography": "~2.2.0",
+    "gatsby-plugin-sharp": "^2.0.17",
+    "gatsby-plugin-typography": "~2.2.4",
     "gatsby-remark-code-titles": "~1.0.2",
-    "gatsby-remark-prismjs": "~3.0.2",
-    "gatsby-remark-smartypants": "~2.0.5",
-    "gatsby-source-filesystem": "~2.0.4",
-    "gatsby-transformer-remark": "~2.1.7",
-    "gatsby-transformer-yaml": "~2.1.3",
+    "gatsby-remark-prismjs": "~3.1.4",
+    "gatsby-remark-smartypants": "~2.0.7",
+    "gatsby-source-filesystem": "~2.0.12",
+    "gatsby-transformer-remark": "~2.1.17",
+    "gatsby-transformer-yaml": "~2.1.6",
     "limax": "~1.7.0",
-    "prettier": "^1.14.3"
+    "prettier": "^1.15.3"
   }
 }

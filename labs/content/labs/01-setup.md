@@ -51,7 +51,7 @@ Check if you have node installed. `$ node --version`
 
 ## Checkout the Github repository
 
-Fork project from Github
+Fork project from Github: https://github.com/objectpartners/react-redux-timesheet
 
 ![Fork repo](./images/fork.png)
 
