@@ -9,8 +9,8 @@ section
 section
   h2 Component types
   ul
-    li Presentational (dumb) components vs. container (smart) components
-    li Avoid using component state or React lifecycle methods if possible
+    li Presentational (dumb) components
+    li Container (smart) components
 
 section
   h3 Presentational components
@@ -46,7 +46,8 @@ section
 
 section
   h3 Container components
-  p Act as a bridge between React and Redux
+  p Act as a bridge between React and Redux.
+  p Avoid use of React state or lifecycle methods
   ul
     li Map data from state onto props
     li Dispatch actions and update the store
