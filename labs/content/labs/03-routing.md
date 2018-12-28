@@ -5,22 +5,22 @@ index: 3
 
 # Lab Three - Routing and Components
 
-## `cd` to the third lab
+## Switch to the Lab03 branch
 
 * In a terminal:
 
 ```
-cd ../ # presuming still in first lab
-cd lab-03-routing
+git checkout lab-03
 yarn start
 ```
 
 ### Check it out!
 
-* Before doing anything, let's look at the progress that has already been completed on the application by the rest of the team.
+* While we were working on the last lab, the rest of the team was adding lots of new stuff to the app
+* Before proceeding, let's look at the progress that has been made:
   * Peruse the **src/components** directory and notice that the **Projects** and **Timesheets** modules have been implemented by the team.
   * You will be building out the **Employees** module and adding **Navigation** to the app.
-  * The module files have been stubbed out for you, we just need to add the codez.
+  * The module files have been stubbed out for you, we just need to add the logic.
 
 &nbsp;
 
@@ -44,7 +44,6 @@ import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 * Next let's configure our routes:
   * We need to wrap the routes in a **BrowserRouter** to handle the routes
   * We need separate sibling routes for **Projects**, **Employees**, and **Timesheets**.
-  * Even though **Timesheets** content is a sibling to **Employees**, we want the route to behave as if it is a child. That way, we'll have access to the `user_id` from the route's params.
   * If we can't match a route, we want to redirect the user to the **Employees** component.
 
 ```jsx
@@ -52,13 +51,12 @@ import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
     return (
       <BrowserRouter>
         <div className="App">
-        <Switch>
-          <Route path="/projects" component={Projects}/>
-          <Route exact path="/employees" component={Employees}/>
-          <Route path="/employees/:user_id/timesheets" component={Timesheets}/>
-          <Redirect to="/employees"/>
-        </Switch>
-
+          <Switch>
+            <Route path="/projects" component={Projects}/>
+            <Route path="/employees" component={Employees}/>
+            <Route path="/timesheets" component={Timesheets}/>
+            <Redirect to="/employees"/>
+          </Switch>
         </div>
       </BrowserRouter>
     );
@@ -74,7 +72,7 @@ import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 
 
 ```javascript
-import React, { Component } from 'react';
+import React from 'react';
 import './App.css';
 import Projects from './components/projects/Projects';
 import Employees from './components/employees/Employees';
@@ -82,7 +80,7 @@ import Timesheets from './components/timesheets/Timesheets';
 import Navigation from './components/nav/Navigation';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 
-class App extends Component {
+class App extends React.Component {
   render() {
     return (
       <BrowserRouter>
@@ -90,9 +88,9 @@ class App extends Component {
           <Navigation />
           <Switch>
             <Route path="/projects" component={Projects} />
-            <Route exact path="/employees" component={Employees} />
+            <Route path="/employees" component={Employees} />
             <Route
-              path="/employees/:user_id/timesheets"
+              path="/timesheets"
               component={Timesheets}
             />
             <Redirect to="/employees" />
@@ -148,17 +146,6 @@ import { LinkContainer } from 'react-router-bootstrap';
         </Nav>
       </Navbar>
     );
-  }
-```
-
-* Now, all we need do is add a constructor to set up the initial state to be used within the `render()` method we just implemented:
-
-```javascript
-  constructor(props) {
-    super(props);
-    this.state = {
-      user: {_id: 'all'}
-    };
   }
 ```
 
@@ -277,26 +264,21 @@ it('should instantiate the Employee Table', () => {
 
 ```javascript:title=src/components/employees/EmployeeTable.js
   render() {
-
-    let employeeRows = this.props.employees.map(employee => {
-      return (
-        <EmployeeRow employee={employee} key={employee._id} />
-      );
-    });
-
     return (
-      <Table striped bordered condensed hover>
+      <Table bordered striped>
         <thead>
-        <tr>
-          <th>Username</th>
-          <th>Email</th>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Admin</th>
-        </tr>
+          <tr>
+            <td>Username</td>
+            <td>Email</td>
+            <td>First Name</td>
+            <td>Last Name</td>
+            <td>Admin</td>
+          </tr>
         </thead>
         <tbody>
-          {employeeRows}
+          {employees.map(employee => (
+            <EmployeeRow employee={ employee } key={ employee._id }/>
+          ))}
         </tbody>
       </Table>
     );
@@ -308,11 +290,11 @@ it('should instantiate the Employee Table', () => {
 
 ```javascript
 EmployeeTable.defaultProps = {
-  employees: [],
+  employees: []
 };
 
 EmployeeTable.propTypes = {
-  employees: PropTypes.array.isRequired,
+  employees: PropTypes.array.isRequired
 };
 ```
 
@@ -355,7 +337,6 @@ it('should instantiate the Employee Table', () => {
 
 ```javascript:title=src/components/employees/Employees.js
 import EmployeeTable from './EmployeeTable';
-import { PageHeader, Grid, Row } from 'react-bootstrap';
 ```
 
 * Add the render method below to the React class
@@ -365,14 +346,10 @@ import { PageHeader, Grid, Row } from 'react-bootstrap';
 ```javascript
   render() {
     return (
-      <Grid>
-        <Row>
-          <PageHeader>Employees</PageHeader>
-        </Row>
-        <Row>
-          <EmployeeTable employees={this.state.pageConfig.data}/>
-        </Row>
-      </Grid>
+      <div>
+        <h1>Employees</h1>
+        <EmployeeTable employees={ employees }/>
+      </div>
     );
   }
 ```

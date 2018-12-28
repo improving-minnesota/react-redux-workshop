@@ -5,13 +5,12 @@ index: 2
 
 # Lab Two - Your First React Component
 
-## `cd` to the second lab
+## Switch to the Lab02 branch
 
 * In a terminal:
 
 ```
-cd ../ # presuming still in first lab
-cd lab-02-first-component
+git checkout lab-02
 yarn start
 ```
 
@@ -20,21 +19,24 @@ yarn start
 * Open **src/hello/Hello.js**
 * This is going to be the component that we will render to the screen.
 
-* The first thing we want to do is `import` **React** and the React **Component** into our module. At the top of the page add:
+* The first thing we want to do is `import` the libraries we need. At the top of the page add:
 
 ```javascript:title=src/hello/Hello.js
-import React, { Component } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 ```
 
-* Next let's create our empty **React** class and have the module `exports` the class:
+* This imports the React library so we can create React logic, and the PropTypes library so we can define the types of properties our React logic expects.
+
+* Next let's create our empty **React** component class and have the module `exports` the class:
 
 ```javascript
-class Hello extends Component {}
+class Hello extends React.Component {}
 
 export default Hello;
 ```
 
-* Now we have to tell **React** what we want the module to draw to the page.
+* Now we have to tell **React** what we want the component to draw to the page.
 * To do this we need to implement a `render()` method:
 
 * Inside the `class`, add the below method:
@@ -70,14 +72,21 @@ export default Hello;
 ```
 
 * Now we need set the default value for the `friend` prop in case the caller doesn't include the attribute in the `JSX`.
-  * To do that, we implement `defaultProps` after the class definition and before the export
+  * To do that, we implement `defaultProps` and `propTypes` after the class definition and before the export
 
 ```javascript
+
+Hello.propTypes = {
+  friend: PropTypes.string
+};
+
 Hello.defaultProps = {
   friend: 'Partner!!',
 };
 ```
 
+`propTypes` defines the properties this component expects and what type they should be - this helps IDE's with code-completion and also adds some safety logging in development mode if you have bad property values.
+`defaultProps` provides a default value for properties that aren't supplied. Not all properties need to have a `defaultProps` entry, but typically any non-required props should have one.
 
 &nbsp;
 
@@ -87,9 +96,10 @@ Hello.defaultProps = {
 
 
 ```javascript
-import React, { Component } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
-class Hello extends Component {
+class Hello extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -107,6 +117,10 @@ class Hello extends Component {
     );
   }
 }
+
+Hello.propTypes = {
+  friend: PropTypes.string
+};
 
 Hello.defaultProps = {
   friend: 'Partner!!',

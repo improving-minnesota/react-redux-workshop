@@ -5,23 +5,23 @@ index: 4
 
 # Lab Four - Integrating Redux
 
-## `cd` to the fourth lab
+## Switch to the Lab04 branch
 
 * In a terminal:
 
 ```
-cd ../ # presuming still in first lab
-cd lab-04-redux
+git checkout lab-04
 yarn start
 ```
 
 ### Check it out!
 
-* Before doing anything, let's look at the progress that has already been completed on the application by the rest of the team.
+* While we were working on the last lab, the rest of the team was adding lots of new stuff to the app
+* Before proceeding, let's look at the progress that has been made:
   * Peruse the **src/components** directory and notice that the **Projects** and **Timesheets** modules have been implemented by the team.
   * Also look at the **actions** and **reducers** directories to get a feel for how these classes are laid out and used.
   * Finally, look at the **src/index.js**, **src/reducers/index.js** and **src/store/configure-store.js** to see how we instantiated Redux and included it in our app.
-  * Don't worry if it looks a little cryptic, by the end of this lab, you will understand what is happening.
+  * Don't worry if it looks a little cryptic - by the end of this lab you will understand what is happening.
 
 - What will we do?
   * We will be building our **EmployeeActionCreator** and our **employee-reducer**.
@@ -135,6 +135,9 @@ export const removeEmployee = employee => {
         console.log('Employee : ' + res.data.name + ', was deleted.');
         return true;
       })
+      .then(() => {
+        dispatch(listEmployees())
+      })
       .catch(error => {
         console.log('Error attempting to delete employee.');
       });
@@ -151,6 +154,9 @@ export const restoreEmployee = employee => {
         console.log('Employee : ' + res.data.name + ', was restored.');
         return true;
       })
+      .then(() => {
+        dispatch(listEmployees())
+      })
       .catch(error => {
         console.log('Error attempting to restore employee.');
       });
@@ -159,11 +165,14 @@ export const restoreEmployee = employee => {
 
 export const createEmployee = employee => {
   return dispatch => {
-    return Axios.put(url(), employee)
+    return Axios.post(url(), employee)
       .then(res => {
         dispatch(get(res.data));
         console.log('Employee : ' + res.data.name + ', created.');
         return true;
+      })
+      .then(() => {
+        dispatch(listEmployees())
       })
       .catch(error => {
         console.log('There was an error creating employee.');
@@ -307,8 +316,6 @@ export default (state = { employees: [], employee: {} }, action) => {
   switch (action.type) {
     case EmployeeActionTypes.LIST:
       return Object.assign({}, state, { employees: action.employees });
-    case EmployeeActionTypes.GET:
-      return Object.assign({}, state, { employee: action.employee });
 
     default:
       return state;
@@ -357,10 +364,10 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
-    actions: bindActionCreators(EmployeeActions, dispatch),
-  };
+const mapDispatchToProps = {
+  listEmployees: EmployeeActionCreators.listEmployees,
+  deleteEmployee: EmployeeActionCreators.removeEmployee,
+  restoreEmployee: EmployeeActionCreators.restoreEmployee
 };
 ```
 
@@ -370,21 +377,19 @@ const mapDispatchToProps = dispatch => {
 export default connect(mapStateToProps, mapDispatchToProps)(Employees);
 ```
 
-* Next, we can replace previously hard-coded state data in the constructor with a call to the **listEmployees** action to retrieve the employees from the server.
+* Next, we can replace previously hard-coded state data in the constructor with a call to the **listEmployees** action in a lifecycle method to retrieve the employees from the server.
 
 ```javascript
-  constructor(props) {
-    super(props);
-
-    //Replaces the previously hard-coded state assignment
-    props.actions.listEmployees();
+  componentDidMount() {
+    const { listEmployees } = this.props;
+    listEmployees();
   }
 ```
 
 * Now we update the data we are passing to the EmployeeTable in the render method.
 
 ```javascript
-<EmployeeTable employees={this.props.employees} actions={this.props.actions} />
+<EmployeeTable employees={ employees } onDelete={ deleteEmployee } onRestore={ restoreEmployee }/>
 ```
 
 * Next let's open the **src/components/employees/EmployeeTable.js** and update the render method to pass the actions to the **EmployeeRows**
@@ -392,11 +397,9 @@ export default connect(mapStateToProps, mapDispatchToProps)(Employees);
 ```javascript:title=src/components/employees/EmployeeTable.js
 const actions = this.props.actions;
 
-let employeeRows = this.props.employees.map(employee => {
-  return (
-    <EmployeeRow employee={employee} key={employee._id} actions={actions} />
-  );
-});
+{employees.map(employee => (
+  <EmployeeRow employee={ employee } key={ employee._id } onDelete={onDelete} onRestore={onRestore} />
+))}
 ```
 
 * Then we need to add a column header for the delete button we'll add to the **EmployeeRow**
@@ -405,7 +408,11 @@ let employeeRows = this.props.employees.map(employee => {
 <th>Delete</th>
 ```
 
-* Now let's open the **src/components/employees/EmployeeRow.js** and add the delete functionality by - Importing the bootstrap **Button** component - Styling the deleted rows - Building the button - Rendering the button
+* Now let's open the **src/components/employees/EmployeeRow.js** and add the delete functionality by
+    - Importing the bootstrap **Button** component
+    - Styling the deleted rows
+    - Building the button
+    - Rendering the button
 
 
 &nbsp;
@@ -415,53 +422,36 @@ let employeeRows = this.props.employees.map(employee => {
 
 
 ```javascript:title=src/components/employees/EmployeeRow.js
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-
 import { Button } from 'react-bootstrap';
 
-class EmployeeRow extends Component {
-  handleClick(employee) {
+class EmployeeRow extends React.Component {
+  handleClick = () => {
+    const { employee, onDelete, onRestore } = this.props;
+
     if (employee.deleted) {
-      employee.deleted = false;
-      this.props.actions
-        .restoreEmployee(employee)
-        .then(this.props.actions.listEmployees);
+      onRestore(employee);
     } else {
-      employee.deleted = true;
-      this.props.actions
-        .removeEmployee(employee)
-        .then(this.props.actions.listEmployees);
+      onDelete(employee);
     }
-  }
+  };
 
   render() {
-    const employee = this.props.employee;
-
-    let rowClass = '';
-    if (employee.deleted) {
-      rowClass = 'faded';
-    }
-
-    const button = (
-      <Button
-        onClick={() => {
-          this.handleClick(employee);
-        }}
-        bsStyle={employee.deleted ? 'success' : 'danger'}
-      >
-        {employee.deleted ? 'Restore' : 'Delete'}
-      </Button>
-    );
+    const { employee } = this.props;
 
     return (
-      <tr className={rowClass}>
+      <tr className={employee.deleted ? 'deleted' : ''}>
         <td>{employee.username}</td>
         <td>{employee.email}</td>
         <td>{employee.firstName}</td>
         <td>{employee.lastName}</td>
         <td>{employee.admin ? 'Yes' : 'No'}</td>
-        <td>{button}</td>
+        <td>
+          <Button onClick={this.handleClick}>
+            {employee.deleted ? 'Restore' : 'Delete'}
+          </Button>
+        </td>
       </tr>
     );
   }
@@ -469,6 +459,8 @@ class EmployeeRow extends Component {
 
 EmployeeRow.propTypes = {
   employee: PropTypes.object.isRequired,
+  onDelete: PropTypes.func.isRequired,
+  onRestore: PropTypes.func.isRequired
 };
 
 export default EmployeeRow;
@@ -477,8 +469,6 @@ export default EmployeeRow;
 
 </details>
 
-
-> Note: Check out how we can build that **button** variable as jsx and include it in our render method.
 
 &nbsp;
 

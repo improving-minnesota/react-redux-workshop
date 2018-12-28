@@ -38,29 +38,16 @@ Check if you have node installed. `$ node --version`
 * Restart
 
 #### Mac
-
+* You can download an installer [https://nodejs.org/download/](https://nodejs.org/download/) OR
 * Install via Homebrew
   * Check for existing install. `$ brew --version`
   * Install Hombrew as needed [http://brew.sh](http://brew.sh)
-  * Install Node w/ Hombrew. `$ brew install node`
+  * Install Node w/ Homebrew. `$ brew install node`
 
 ## Yarn
 
-Check if you have yarn installed. `$ yarn --version`
-
-#### Windows
-
-* Install Yarn using the installer [https://yarnpkg.com/lang/en/docs/install/](https://yarnpkg.com/lang/en/docs/install/#windows-stable)
-
-#### Mac
-
-* Install via Homebrew `$ brew install yarn`
-
-**NOTE:** If you have errors, try running this first:
-
-```
-$ npm config set strict-ssl false
-```
+* Check if you have yarn installed. `$ yarn --version`
+* If Yarn isn't installed, then add it as a global NPM module: `$ npm install -g yarn`
 
 ## Checkout the Github repository
 
@@ -92,26 +79,26 @@ Change directories to the lab main directory.
 cd react-redux-timesheet
 ```
 
-Each lab is distributed as part of the "monorepo" approach in origin/master. Each folder is the start of a React project, and the rest is left for you to fill in! To get started, first install the application dependencies with `yarn` like so
+The `master` branch represents the finished state of the application (what we'll have once we've done all of the labs). For each lab, you'll switch to the corresponding branch which will give you a view of the application at the start of that lab. Go ahead and switch to the `lab-01` branch:
 
 ```bash
-yarn
+$ git checkout lab-01
 ```
 
-we're using `yarn` workspaces, so running this command in the root of the repo will make it so that every lab from here on out will "just work!"
-
-`cd` into the first lab with 
+Then we need to make sure our dependencies are installed:
 
 ```bash
-cd lab-01-project-setup
+$ yarn
 ```
+
+It is typically a good idea to run the `yarn` command after switching branches, just to be sure that your installed dependencies match what the branch wants.
 
 ------
 
-Note: these labs technically don't require `yarn` so if it's not installed, you will need to do this following for every lab to install the dependencies. If you have yarn, ignore, no need to run `yarn` or `yarn install` for the timesheet application again!
+Note: these labs technically don't require `yarn` - if you would prefer to use NPM you absolutely can, just replace any references to `yarn` or `yarn install` with `npm install`
 
 ```bash:title=If yarn is not installed...
-cd lab-01-project-setup # replace with whichever lab is current!
+git checkout lab-01
 
 npm install
 ```
@@ -135,5 +122,33 @@ $ yarn start
 * Verify that you see the welcome page.
 
 ![](./images/welcome.png)
+
+### Troubleshooting
+
+#### Port Conflicts
+
+The labs assume that you don't already have apps running on ports 3000 and 3001. If you do we can override the ports in the following way:
+
+**react-redux-timesheet**
+```bash
+$ PORT=4000 yarn start
+```
+
+**react-redux-api** (used in later labs)
+```bash
+$ PORT=4001 yarn start
+```
+
+Then update the timesheet app to point to that new port and re-launch:
+
+```title=react-redux-timesheet/package.json
+"proxy": "http://localhost:4001",
+```
+
+#### The CLI apps won't stop with Ctrl-C
+
+Some Windows systems (esp. Windows 10) don't properly pass Ctrl-C to the command line. Some people report that `CTRL-fn-b` works in these situations.
+
+
 
 #### Now let's check out our project's structure so we know what goes where.
