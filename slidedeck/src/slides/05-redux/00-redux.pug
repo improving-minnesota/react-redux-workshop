@@ -87,9 +87,10 @@ section
     function agentReducer(state = initialState, action) {
       switch (action.type) {
         case 'ADD_EMPLOYEE':
-          return Object.assign({}, state, {
-            agents: state.agents.concat(action.payload)
-          })
+          return {
+            ...state,
+            agents: [...state.agents, ...action.payload]
+          };
           ...
       }
     }
@@ -99,9 +100,10 @@ section
   h4 Good
   script(type="text/plain", class="language-js").
     case 'ADD_EMPLOYEE':
-      return Object.assign({}, state, {
-        agents: state.agents.concat(action.payload)
-      });
+      return {
+        ...state,
+        agents: [...state.agents, ...action.payload]
+      };
 
   h4 Bad
   script(type="text/plain", class="language-js").
@@ -111,9 +113,12 @@ section
 
 section
   h3 Immutability
-  p Consider using a library like
-  a(href="https://github.com/rtfeldman/seamless-immutable")  seamless-immutable
-  p to prevent accidental state mutation
+  p
+    | Consider using a library like
+    a(href="https://github.com/rtfeldman/seamless-immutable")  seamless-immutable
+    |  or
+    a(href="https://github.com/mweststrate/immer")  immer
+    |  to prevent accidental state mutation
 
 section
   iframe(src="https://codesandbox.io/embed/82l7p64vrl", style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;", sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin")
