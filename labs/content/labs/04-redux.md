@@ -433,11 +433,11 @@ EmployeeTable.propTypes = {
 import { Button } from 'react-bootstrap';
 ```
 
-* Add new table cell containing the button. The button can dynamically change its label based on whether a click would delete or restore the record. We also give it a click handler to call.
+* Add new table cell containing the button. The button can dynamically change its label & style based on whether a click would delete or restore the record. We also give it a click handler to call.
 
 ```javascript
 <td>
-  <Button onClick={this.handleClick}>
+  <Button onClick={this.handleClick} bsStyle={employee.deleted ? 'success' : 'danger'}>
     {employee.deleted ? 'Restore' : 'Delete'}
   </Button>
 </td>
@@ -452,15 +452,17 @@ import { Button } from 'react-bootstrap';
 * Add the click handler:
 
 ```javascript
-handleClick = () => {
-    const { employee, onDelete, onRestore } = this.props;
+handleClick = (event) => {
+  const { employee, onDelete, onRestore } = this.props;
 
-    if (employee.deleted) {
-      onRestore(employee);
-    } else {
-      onDelete(employee);
-    }
-  };
+  if (employee.deleted) {
+    onRestore(employee);
+  } else {
+    onDelete(employee);
+  }
+  
+  event.stopPropagation();
+};
 ```
 
 * And lastly update our propTypes:
@@ -485,7 +487,7 @@ import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
 
 class EmployeeRow extends React.Component {
-  handleClick = () => {
+  handleClick = (event) => {
     const { employee, onDelete, onRestore } = this.props;
 
     if (employee.deleted) {
@@ -493,6 +495,8 @@ class EmployeeRow extends React.Component {
     } else {
       onDelete(employee);
     }
+    
+    event.stopPropagation();
   };
 
   render() {
@@ -506,7 +510,7 @@ class EmployeeRow extends React.Component {
         <td>{employee.lastName}</td>
         <td>{employee.admin ? 'Yes' : 'No'}</td>
         <td>
-          <Button onClick={this.handleClick}>
+          <Button onClick={this.handleClick} bsStyle={employee.deleted ? 'success' : 'danger'}>
             {employee.deleted ? 'Restore' : 'Delete'}
           </Button>
         </td>
