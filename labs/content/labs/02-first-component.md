@@ -602,8 +602,3 @@ it('should render to match the snapshot', () => {
 
 `git add .` and `git commit -m "extra credit"` when you are done
 
-## Extra Extra Credit
-
-Try writing tests for the `ProjectTable` and `Projects` components. You'll likely need to reference the Enzyme documentation to find appropriate matchers - see if you can find ways to validate the value of state and props throughout the tests.
-
-Don't forget to `git add .` and `git commit -m "extra extra credit"` when you are done

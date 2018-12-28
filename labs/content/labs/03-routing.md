@@ -118,15 +118,6 @@ export default App;
 
 &nbsp;
 
-* What's all this?
-  * We first are setting up a `BrowserRouter` - this integrates `react-router` with the browser's history & URL constructs
-  * We then render our `Navigation` component so it appears at the top
-  * Underneath navigation we have a `Switch` - this is so that only the first `Route` that matches the current URL will render
-  * We then define a `Route` for each of our three components
-  * Lastly we define a `Redirect` that will serve as a fallback - if the user inputs a URL that doesn't match one of the three then they will be sent to `/employees`
-
-&nbsp;
-
 ## Add the Navbar to our Application
 
 * Open **src/components/nav/Navigation.js**
@@ -196,8 +187,9 @@ describe('<Navigation />', () => {
 
 ## Run the tests
 
-* Run `yarn test` and verify that all the tests pass.
+* Run `yarn test` and verify that the Navigation tests pass.
   * Since the rest of your team has already implemented a bunch of tests, you may have to do a little searching to find the tests you just wrote.
+  * Also, the stubbed tests for the employee components will fail since we haven't implemented them yet
 
 &nbsp;
 
@@ -444,11 +436,13 @@ describe('<EmployeeTable />', () => {
 }]
 ```
 
+&nbsp;
+
 <details>
   <summary>When finished, click here to see if your component is similar to the one below:</summary>
   
-  
-  ```jsx
+
+```javascript
   import React from 'react';
   import PropTypes from 'prop-types';
   import EmployeeTable from './EmployeeTable';
@@ -497,15 +491,17 @@ describe('<EmployeeTable />', () => {
   };
   
   export default Employees;
-  ```
-  
-  
+```
+
+
 </details>
+
 
 &nbsp;
 
 * Open **src/components/employees/Employees.test.js**
 * Test that our component renders as expected and passes down the expected data to EmployeeTable
+
 
 <details>
   <summary>When finished, click here to see if your component is similar to the one below:</summary>
