@@ -62,7 +62,7 @@ Formik is a wrapper around Forms that takes care of some basic considerations li
 ###### Before we get started, take the time to look at the custom form components already implemented for us.
 
 * The first component we need is a form to contain all of our employee's properties.
-* Open **src/components/employees/EmployeeForm.js**.
+* Open **src/employees/EmployeeForm.js**.
 
 * Let's review the `props` of this component:
 
@@ -122,7 +122,7 @@ render() {
 
 * At the very bottom of the `Form` element, we can add another nice reusable Form component somebody on our team created - the `FormControls` component. This contains a submit and reset button.
 
-```jsx:title=src/components/employees/EmployeeForm.js
+```jsx:title=src/employees/EmployeeForm.js
 <FormControls
   allowSubmit={isValid}
   onSubmit={handleSubmit}
@@ -179,7 +179,7 @@ initialValues={ {
 ## Add the Form into an Employee Detail Component
 
 * Now let's actually use the form we just built.
-* Open **/src/components/employees/EmployeesDetail.js**
+* Open **/src/employees/EmployeesDetail.js**
 * Let's setup our propTypes, first. We already have the `history` prop, but we need to include an `employee` prop as well, like so:
 
 ```jsx
@@ -260,7 +260,7 @@ componentDidMount() {
 
 ## Test the Employee Detail Component
 
-* Open **/src/components/employees/EmployeesDetail.test.js**
+* Open **/src/employees/EmployeesDetail.test.js**
 * Update the test labeled `should instantiate the Employees Detail Component`:
 
 ```jsx
@@ -282,7 +282,7 @@ it('should instantiate the Employees Detail Component', () => {
 * We have an Employee Detail route, but there's no way to get to it yet.
 * We're going to add functionality so that when you click an **EmployeeRow**, the router will transition to the appropriate detail route for the employee.
 
-- Open **/src/components/employees/EmployeeRow.js**
+- Open **/src/employees/EmployeeRow.js**
 
 - Add the `showDetail()` method to the **EmployeeRow**
 
@@ -309,7 +309,7 @@ showDetail(employee) {
 
 ## Add ability to create a new Employee
 
-* Navigate to **src/components/employees/Employees.js**.
+* Navigate to **src/employees/Employees.js**.
 * Let's add a new Button the user can click to create an Employee. Add this next to the `EmployeeTable`:
 
 ```jsx

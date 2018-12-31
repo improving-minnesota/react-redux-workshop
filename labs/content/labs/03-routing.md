@@ -18,7 +18,7 @@ yarn start
 
 * While we were working on the last lab, the rest of the team was adding lots of new stuff to the app
 * Before proceeding, let's look at the progress that has been made:
-  * Peruse the **src/components** directory and notice that the **Timesheets** module has been implemented by the team.
+  * Peruse the **src** directory and notice that the **Timesheets** module has been implemented by the team.
   * You will be building out the **Employees** module and adding **Navigation** to the app.
   * The module files have been stubbed out for you, we just need to add the logic.
 
@@ -120,12 +120,12 @@ export default App;
 
 ## Add the Navbar to our Application
 
-* Open **src/components/nav/Navigation.js**
+* Open **src/nav/Navigation.js**
 
 * We first need to import the Bootstrap components that we are going to use
 * Also the **LinkContainer** from the react-router-bootstrap library that helps us integrate the router with bootstrap
 
-```javascript:title=src/components/nav/Navigation.js
+```javascript:title=src/nav/Navigation.js
 import React from 'react';
 import { Nav, Navbar, NavItem } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
@@ -159,11 +159,11 @@ import { NavLink } from 'react-router-dom';
 ## Test the Navbar
 
 * Just like in lab 2, we need to test that our component will render without errors.
-* Open **src/components/nav/Navigation.test.js** and add the test suite.
+* Open **src/nav/Navigation.test.js** and add the test suite.
 
 * Add the below code to the **Navigation.test.js**
 
-```javascript:title=src/components/nav/Navigation.test.js
+```javascript:title=src/nav/Navigation.test.js
 import React from 'react';
 import { shallow } from 'enzyme';
 import Navigation from './Navigation';
@@ -220,7 +220,7 @@ If you haven't already done so,
 
 ## Create the EmployeeRow Component
 
-* Open **src/components/employees/EmployeeRow.js**
+* Open **src/employees/EmployeeRow.js**
 * We need to create a component that accepts an employee property (which is an object).
 * The row should contain `<td/>`'s for each of the employee's properties (username, email, firstName, lastName, and Yes/No for whether they're an admin)
 
@@ -228,7 +228,7 @@ If you haven't already done so,
   <summary>When finished, click here to see if your component is similar to the one below:</summary>
 
 
-```javascript:title=src/components/employees/EmployeeRow.js
+```javascript:title=src/employees/EmployeeRow.js
   import React from 'react';
   import PropTypes from 'prop-types';
   
@@ -268,7 +268,7 @@ If you haven't already done so,
   <summary>When finished, click here to see if your suite is similar to the one below:</summary>
 
 
-```javascript:title=src/components/employees/EmployeeRow.test.js
+```javascript:title=src/employees/EmployeeRow.test.js
 import React from 'react';
 import EmployeeRow from './EmployeeRow';
 import { shallow } from 'enzyme';
@@ -316,7 +316,7 @@ describe('<EmployeeRow />', () => {
   <summary>When finished, click here to see if your component is similar to the one below:</summary>
 
 
-```javascript:title=src/components/employees/EmployeeTable.js
+```javascript:title=src/employees/EmployeeTable.js
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Table } from 'react-bootstrap';
@@ -371,7 +371,7 @@ export default EmployeeTable;
   <summary>When finished, click here to see if your suite is similar to the one below:</summary>
   
 
-```javascript:title=src/components/employees/EmployeeTable.test.js
+```javascript:title=src/employees/EmployeeTable.test.js
 import React from 'react';
 import EmployeeTable from './EmployeeTable';
 import { shallow } from 'enzyme';
@@ -413,7 +413,7 @@ describe('<EmployeeTable />', () => {
 ## Create Employees Component
 
 * Last, we need to add the table to our handler for the `/employees` route.
-* Open **src/components/employees/Employees.js** and implement the data container
+* Open **src/employees/Employees.js** and implement the data container
 * To get your started, here's some mock data:
 
 ```javascript
@@ -499,7 +499,7 @@ describe('<EmployeeTable />', () => {
 
 &nbsp;
 
-* Open **src/components/employees/Employees.test.js**
+* Open **src/employees/Employees.test.js**
 * Test that our component renders as expected and passes down the expected data to EmployeeTable
 
 
@@ -507,7 +507,7 @@ describe('<EmployeeTable />', () => {
   <summary>When finished, click here to see if your component is similar to the one below:</summary>
 
 
-```javascript:title=src/components/employees/Employees.test.js
+```javascript:title=src/employees/Employees.test.js
 import React from 'react';
 import Employees from './Employees';
 import { shallow } from 'enzyme';

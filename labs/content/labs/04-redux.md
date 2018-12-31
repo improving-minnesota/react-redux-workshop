@@ -18,7 +18,7 @@ yarn start
 
 * While we were working on the last lab, the rest of the team was adding lots of new stuff to the app
 * Before proceeding, let's look at the progress that has been made:
-  * Peruse the **src/components** directory and notice that the **Projects**, **Timesheets**, **Timeunits** modules have been updated to use Redux by the team.
+  * Peruse the **src** directory and notice that the **Projects**, **Timesheets**, **Timeunits** modules have been updated to use Redux by the team.
   * Also look at the **actions** and **reducers** directories to get a feel for how these classes are laid out and used.
   * Finally, look at the **src/index.js**, **src/reducers/index.js** and **src/store/configure-store.js** to see how we instantiated Redux and included it in our app.
   * Don't worry if it looks a little cryptic - by the end of this lab you will understand what is happening.
@@ -135,9 +135,6 @@ export const removeEmployee = employee => {
         console.log('Employee : ' + res.data.name + ', was deleted.');
         return true;
       })
-      .then(() => {
-        dispatch(listEmployees())
-      })
       .catch(error => {
         console.log('Error attempting to delete employee.');
       });
@@ -154,9 +151,6 @@ export const restoreEmployee = employee => {
         console.log('Employee : ' + res.data.name + ', was restored.');
         return true;
       })
-      .then(() => {
-        dispatch(listEmployees())
-      })
       .catch(error => {
         console.log('Error attempting to restore employee.');
       });
@@ -170,9 +164,6 @@ export const createEmployee = employee => {
         dispatch(get(res.data));
         console.log('Employee : ' + res.data.name + ', created.');
         return true;
-      })
-      .then(() => {
-        dispatch(listEmployees())
       })
       .catch(error => {
         console.log('There was an error creating employee.');
@@ -312,11 +303,19 @@ describe('async actions', () => {
 ```javascript:title=src/reducers/employee-reducer.js
 import * as EmployeeActionTypes from '../actions/EmployeeActionTypes';
 
-export default (state = { employees: [], employee: {} }, action) => {
+export default (state = { data: [] }, action) => {
   switch (action.type) {
     case EmployeeActionTypes.LIST:
-      return Object.assign({}, state, { employees: action.employees });
-
+      return { ...state, data: action.employees };
+    case EmployeeActionTypes.GET:
+      const updatedItem = action.employee;
+      const index = state.data.findIndex(d => d._id === updatedItem._id);
+        if (index >= 0 ) {
+          const copy = [...state.data];
+          copy.splice(index, 1, updatedItem);
+          return { ...state, data: copy };
+        }
+        return { ...state, data: [...state.data, updatedItem] };
     default:
       return state;
   }
@@ -346,10 +345,10 @@ const rootReducer = combineReducers({
 ### Use the Employee Actions
 
 * Now, let's update our **Employee** components to use these actions.
-* Open **src/components/employees/Employees.js**
+* Open **src/employees/Employees.js**
 * Import some **redux** libraries we need and the **EmployeeActionCreator**
 
-```javascript:title=src/components/employees/Employees.js
+```javascript:title=src/employees/Employees.js
 import { connect } from 'react-redux';
 import * as EmployeeActionCreators from '../actions/EmployeeActionCreator';
 ```
@@ -359,7 +358,7 @@ import * as EmployeeActionCreators from '../actions/EmployeeActionCreator';
 ```javascript
 const mapStateToProps = state => {
   return {
-    employees: state.employees.employees,
+    employees: state.employees.data,
   };
 };
 
@@ -376,7 +375,7 @@ const mapDispatchToProps = {
 export default connect(mapStateToProps, mapDispatchToProps)(Employees);
 ```
 
-* Next, we can replace previously hard-coded state data in the constructor with a call to the **listEmployees** action in a lifecycle method to retrieve the employees from the server.
+* Next, we can replace previously hard-coded state data in the constructor with a call to the **listEmployees** action in a lifecycle method to retrieve the employees from the server. Replace the constructor with the following:
 
 ```javascript
   componentDidMount() {
@@ -399,9 +398,9 @@ return (
 );
 ```
 
-* Next let's open the **src/components/employees/EmployeeTable.js** and update the render method to pass the actions to the **EmployeeRows**
+* Next let's open the **src/employees/EmployeeTable.js** and update the render method to pass the actions to the **EmployeeRows**
 
-```javascript:title=src/components/employees/EmployeeTable.js
+```javascript:title=src/employees/EmployeeTable.js
 const { employees, onDelete, onRestore } = this.props;
 
 {employees.map(employee => (
@@ -425,7 +424,7 @@ EmployeeTable.propTypes = {
 <th>Delete</th>
 ```
 
-* Now let's open the **src/components/employees/EmployeeRow.js** and add the delete functionality
+* Now let's open the **src/employees/EmployeeRow.js** and add the delete functionality
 
 * Import the Bootstrap Button component
 
@@ -481,7 +480,7 @@ EmployeeRow.propTypes = {
   <summary>When finished, click here to view the final file:</summary>
 
 
-```javascript:title=src/components/employees/EmployeeRow.js
+```javascript:title=src/employees/EmployeeRow.js
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
