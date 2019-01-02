@@ -5,13 +5,13 @@ index: 6
 
 # Lab Six - Capstone
 
-## Switch to the Lab06 branch
+## Switch to Lab06
 
 * In a terminal:
 
-
 ```
-git checkout lab-06
+cd ../ # presuming still in previous lab
+cd lab-06
 yarn start
 ```
 
@@ -137,20 +137,25 @@ We need a reducer to handle our actions
   <summary>Code hint:</summary>
 
 ```javascript:title=auth-reducer.js
-switch (action.type) {
+import * as AuthActionTypes from '../actions/AuthActionTypes';
+
+export default (state = { user: {} }, action) => {
+  switch (action.type) {
     case AuthActionTypes.SET_USER:
       return { ...state, user: action.user };
     case AuthActionTypes.ERROR:
       return { ...state, error: action.error };
     default:
       return state;
-}
+  }
+};
 ```
 
 </details>
 
 &nbsp;
 
+* Don't forget to hook up the new reducer in **src/reducers/index.js**
 
 ### Create a Login form
 
@@ -162,6 +167,12 @@ switch (action.type) {
   <summary>Code hint:</summary>
 
 ```jsx:title=Login.js
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Form, Formik } from 'formik';
+import FieldWrapper from '../form/FieldWrapper';
+import FormControls from '../form/FormControls';
+
 class LoginForm extends React.Component {
 
   validate = (values) => {
@@ -196,10 +207,10 @@ class LoginForm extends React.Component {
             username: '',
             password: ''
           }}>
-          {({ isValid, errors, handleSubmit, handleReset }) => (
+          {({ isValid, errors, touched, handleSubmit, handleReset }) => (
             <Form>
-              <FieldWrapper type="text" name="username" label="Username" invalid={errors.username}/>
-              <FieldWrapper type="password" name="password" label="Password" invalid={errors.email}/>
+              <FieldWrapper type="text" name="username" label="Username" invalid={errors.username} touched={touched.username} />
+              <FieldWrapper type="password" name="password" label="Password" invalid={errors.password} touched={touched.password} />
 
               <FormControls
                 action="Login"
@@ -222,15 +233,21 @@ LoginForm.propTypes = {
   onLogin: PropTypes.func.isRequired,
   loginError: PropTypes.string
 };
+
+export default LoginForm;
 ```
 
 </details>
 
 &nbsp;
 
+### Get data for Login Form
 
-* We'll need a function to handle submitting the login info for us, and a way to find out if there was an error on login.
-* We need to hook up to Redux in a parent component to get these items and pass them down as props.
+* We need to get the `onLogin` and `loginError` props somewhere and pass them down into our Form
+
+* We're going to render our LoginForm in **App.js**, so open that file, get it hooked up to Redux, and grab the following:
+  - Get the async method you created to log the user in
+  - Get the current user and whether there was an error on login from Redux state
 
 <details>
   <summary>Code hint:</summary>
@@ -242,7 +259,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  login: AuthActions.login
+  login: AuthActionCreators.login
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
@@ -263,7 +280,7 @@ We want to let the user log out from the navbar, so we'll need to add a new link
   <summary>Code hint:</summary>
 
 ```jsx:title=Navigation.js
-NavBar.propTypes = {
+Navigation.propTypes = {
   onLogout: PropTypes.func.isRequired
 };
 ```
@@ -281,7 +298,7 @@ NavBar.propTypes = {
 ```jsx:title=Navigation.js
 <Nav pullRight>
  <NavItem>
-   <Button onClick={this.logout}>Logout</Button>
+   <Button onClick={this.props.onLogout}>Logout</Button>
  </NavItem>
 </Nav>
 ```
@@ -295,20 +312,20 @@ NavBar.propTypes = {
 
 Now that Navigation needs a 'onLogout' function to call, we need to get that from Redux and pass it in.
 
-* In **app.js**, grab the Logout actioncreator in addition to the login binding we just added
+* In **app.js**, grab the Logout async action method in addition to the bindings we add a few steps ago
 
 <details>
   <summary>Code hint:</summary>
 
-```jsx:title=Navigation.js
+```jsx:title=App.js
 const mapStateToProps = state => ({
   user: state.auth.user,
   loginError: state.auth.error
 });
 
 const mapDispatchToProps = {
-  login: AuthActions.login,
-  logout: AuthActions.logout
+  login: AuthActionCreators.login,
+  logout: AuthActionCreators.logout
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
@@ -319,7 +336,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(App);
 &nbsp;
 
 
-* Pass the 'logout' action from our AuthActions into Navigation as the 'onLogout' prop
+* Pass the 'logout' action from our AuthActionCreators into Navigation as the 'onLogout' prop
 
 <details>
   <summary>Code hint:</summary>
@@ -343,11 +360,13 @@ We have all the pieces in place, now we just need to prevent the user from acces
   <summary>Code hint:</summary>
 
 ```jsx:title=App.js
-{!user ? (
+{!this.props.user ? (
   <LoginForm onLogin={this.props.login} loginError={this.props.loginError} />
 ) : (
   <Switch>
     ...
+  </Switch>
+)}
 ```
 
 </details>

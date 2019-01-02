@@ -5,12 +5,13 @@ index: 4
 
 # Lab Four - Integrating Redux
 
-## Switch to the Lab04 branch
+## Switch to Lab04
 
 * In a terminal:
 
 ```
-git checkout lab-04
+cd ../ # presuming still in previous lab
+cd lab-04
 yarn start
 ```
 
@@ -18,12 +19,14 @@ yarn start
 
 * While we were working on the last lab, the rest of the team was adding lots of new stuff to the app
 * Before proceeding, let's look at the progress that has been made:
-  * Peruse the **src** directory and notice that the **Projects**, **Timesheets**, **Timeunits** modules have been updated to use Redux by the team.
-  * Also look at the **actions** and **reducers** directories to get a feel for how these classes are laid out and used.
+  * Peruse the **src** directory and notice that there's a new **Timeunits** module. This will track time entries in a Timesheet
+  * It has been hooked up to Redux already. Some parts of **src/timeunits/Timeunits.js** may sound familiar from the lecture - `connect`, `mapDispatchToProps`, `mapStateToProps` for example
+  * The team has implemented **actions** and **reducers** for large parts of the app. Take a look at those directories to get a feel for how these items are laid out and used.
   * Finally, look at the **src/index.js**, **src/reducers/index.js** and **src/store/configure-store.js** to see how we instantiated Redux and included it in our app.
-  * Don't worry if it looks a little cryptic - by the end of this lab you will understand what is happening.
+  * Don't worry if it looks a little cryptic - by the end of this lab you will have a better understanding of what is happening.
 
 - What will we do?
+  * We want to replace our use of static data with loading data dynamically using Rest service calls. To do this we'll need a way to retrieve all employees and retrieve a single employee.
   * We will be building our **EmployeeActionCreator** and our **employee-reducer**.
   * Next we will add our reducer to the **rootReducer** and connect our state and actions to our **Employees** component
   * Then we will update our **Employees** components to use our actions to retrieve our list of employees.
@@ -44,6 +47,13 @@ export const GET = 'GET_EMPLOYEE';
 &nbsp;
 
 ### Create the Employee Actions
+
+* Redux Thunk typically works this way:
+  - A trigger (usually user activity, but could be an expiring timer, etc) will execute an asynchronous method
+  - The method will execute whatever logic is necessary to complete the activity flow (getting data, updating data, etc). Typically this involves making Rest service calls.
+  - Any results of the activity that the application state must respond to (changing values in Redux State) are communicated by dispatching an action. A single asynchronous method may generate 0 to many actions.
+  - A common pattern is for an action will be dispatched when a service call is starting so a loading indicator can be activated and when the service call completes (either successfully or unsuccessfully) so the indicator can be stopped
+  - In our examples here we're only dispatching actions at the end of each activity to inform the application when new data has been retrieved - to retain simplicity we aren't using loading indicators so we dispense with those actions 
 
 * Now open **src/actions/EmployeeActionCreator.js** so we can create the actions.
 * We'll import the types we just created, and the [Axios](https://github.com/mzabriskie/axios) library to handle our http requests.
@@ -322,6 +332,9 @@ export default (state = { data: [] }, action) => {
 };
 ```
 
+* When the reducer receives a LIST action it will replace the currently-stored list of employees with the new one from the action's payload
+* When a GET is received the reducer will attempt to replace the existing version of that employee in state, or will add to the end of the list if it's a new item
+
 * Now let's add our **employee-reducer** to the combined reducer
 * Open **src/reducers/index.js**
 * Import the **employee-reducer**
@@ -330,12 +343,13 @@ export default (state = { data: [] }, action) => {
 import employees from './employee-reducer';
 ```
 
-* Add it to the list or reducers so it looks like this:
+* Add it to the list of reducers so it looks like this:
 
 ```javascript
 const rootReducer = combineReducers({
   projects: projects,
   timesheets: timesheets,
+  timeunits: timeunits,
   employees: employees,
 });
 ```
@@ -384,6 +398,12 @@ export default connect(mapStateToProps, mapDispatchToProps)(Employees);
   }
 ```
 
+* This allows the following to happen:
+  * When the component is mounted (the user navigates to that tab), it will trigger the `listEmployees` activity
+  * That activity will make a Rest service call and eventually dispatch a **LIST** action with the resulting data
+  * The reducer will pick up the LIST action and update the Redux State with the new data
+  * The connected component will detect the state update and will re-run `mapStateToProps` - this will take the data from Redux and pass it into our component as a prop
+
 * Now we update the data we are passing to the EmployeeTable in the render method. Note that we're now pulling employees from props since React-Redux pulls them from global Redux state and adds them to the components props in `mapStateToProps`
 * We also pass down two of the actions we're getting from `mapDispatchToProps` so that they can be called from a row
 
@@ -398,11 +418,11 @@ return (
 );
 ```
 
-* Next let's open the **src/employees/EmployeeTable.js** and update the render method to pass the actions to the **EmployeeRows**
+* Next let's open **src/employees/EmployeeTable.js** and update the render method to pass the actions to the **EmployeeRows**
 
 ```javascript:title=src/employees/EmployeeTable.js
 const { employees, onDelete, onRestore } = this.props;
-
+...
 {employees.map(employee => (
   <EmployeeRow employee={ employee } key={ employee._id } onDelete={onDelete} onRestore={onRestore} />
 ))}
@@ -424,7 +444,7 @@ EmployeeTable.propTypes = {
 <th>Delete</th>
 ```
 
-* Now let's open the **src/employees/EmployeeRow.js** and add the delete functionality
+* Now let's open **src/employees/EmployeeRow.js** and add the delete/restore functionality
 
 * Import the Bootstrap Button component
 
@@ -432,7 +452,7 @@ EmployeeTable.propTypes = {
 import { Button } from 'react-bootstrap';
 ```
 
-* Add new table cell containing the button. The button can dynamically change its label & style based on whether a click would delete or restore the record. We also give it a click handler to call.
+* Add a new table cell containing the button. The button can dynamically change its label & style based on whether a click would delete or restore the record. We also give it a click handler to call.
 
 ```javascript
 <td>
@@ -448,7 +468,7 @@ import { Button } from 'react-bootstrap';
 <tr className={employee.deleted ? 'deleted' : ''}>
 ```
 
-* Add the click handler:
+* Almost done! Implement the click handler method:
 
 ```javascript
 handleClick = (event) => {
@@ -602,5 +622,5 @@ $ yarn start
 
 ```
 git add .
-git commit -m 'I think I know redux now?!'
+git commit -m "I think I know redux now?!"
 ```

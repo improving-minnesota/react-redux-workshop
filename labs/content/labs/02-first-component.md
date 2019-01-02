@@ -5,12 +5,13 @@ index: 2
 
 # Lab Two - Your First React Component
 
-## Switch to the Lab02 branch
+## Switch to Lab02
 
 * In a terminal:
 
 ```
-git checkout lab-02
+cd ../ # presuming still in previous lab
+cd lab-02
 yarn start
 ```
 
@@ -34,7 +35,7 @@ import PropTypes from 'prop-types';
 
 * This imports the React library so we can create React logic, and the PropTypes library so we can define the types of properties our React logic expects.
 
-* Next let's create our empty **React** component class and have the module `exports` the class:
+* Next let's create our empty **React** component class and have the module `export` the class:
 
 ```javascript
 class ProjectRow extends React.Component {
@@ -64,7 +65,7 @@ export default ProjectRow;
 
 * Let's look at what we just did:
   * We've grabbed a 'project' prop that we presume will be supplied to this component from a parent
-  * We've supplied a `JSX` template that builds a table row along with a couple table cells
+  * We've supplied a `JSX` template that builds an HTML table row along with a couple table cells
   * The first cell is going to display the 'name' value off the project
   * The second cell is going to display the 'description' value off the project
 
@@ -111,7 +112,7 @@ export default ProjectRow;
 
 ## Create a table component
 
-* We have a row, but now we need a way to turn a list of projects into a table full of ProjectRow components
+* We have a row, but now we need a way to turn a list of projects into a table full of `ProjectRow` components
 * Open **src/projects/ProjectTable.js**
 
 * Add the necessary imports:
@@ -161,11 +162,12 @@ render() {
 }
 ```
 
-* Whoa! This is way more complicated than the last one! What's going on here?
+* Whoa! This is *way* more complicated than the last one! What's going on here?
   * We grab a list of projects that we presume will be supplied as a prop
-  * We build a `Table` and set some props for styling purposes (bordered just adds a border, striped causes alternating rows to be different colors)
+  * We build a `Table` and set some props to enable some Bootstrap-supplied styling ('bordered' adds a border, 'striped' causes alternating rows to be different colors)
   * We give that table a header in which we define the column headings
-  * Inside the table body we then iterate over the list of projects and, for each, map a project to an instance of our `ProjectRow` component. We pass the project down as a prop, and also give React a hint in the form of `key` so it can efficiently render
+  * Inside the table body we then iterate over the list of projects and, for each, map a project to an instance of our `ProjectRow` component. We pass the project down as a prop.
+  **Note:** We're also giving React an 'index' in the form of `key` so it can efficiently render the list of items
 
 * Finally, add our prop declarations:
 
@@ -254,7 +256,7 @@ class Projects extends React.Component {
 export default Projects;
 ```
 
-* Now we need to give the component some data to render. A good holding place is the component's *state*. We need to initialize state with the data in a constructor.
+* Now we need to give the component some data to render. A good holding place is the component's *state*. We need to initialize state with the data in a constructor. Add this constructor at the top of the class:
 
 ```javascript
 constructor(props) {
@@ -365,7 +367,7 @@ describe('<ProjectRow />', () => {
 });
 ```
 
-* Now we need to set up our component that we'll be testing. Inside the describe block:
+* Now we need to set up our component that we'll be testing. Inside the `describe` block:
 
 ```javascript
 let wrapper;
@@ -379,10 +381,10 @@ beforeEach(() => {
 });
 ```
 
-> What is happening here? We use the [shallow renderer](http://airbnb.io/enzyme/docs/api/shallow.html) from [Enzyme](http://airbnb.io/enzyme/index.html) to render the component into a sandboxed "document" so that we can perform inquiries. Notice that we are using `JSX` in the `shallow()` method. Shallow testing is useful to isolate our test by not rendering any child components. For more advanced "integration" style tests you would use `mount()` for [full DOM rendering](http://airbnb.io/enzyme/docs/api/mount.html)
+> What is happening here? We use the [shallow renderer](http://airbnb.io/enzyme/docs/api/shallow.html) from [Enzyme](http://airbnb.io/enzyme/index.html) to render the component into a in-memory sandboxed "document" so that we can perform inquiries. Notice that we are using `JSX` in the `shallow()` method. Shallow testing is useful to isolate our test by not rendering any child components. For more advanced "integration" style tests you would use `mount()` for [full DOM rendering](http://airbnb.io/enzyme/docs/api/mount.html)
 
-* The shallow render is going to be created before each test we define. This may seem inefficient (why not just create it once), but shallow renders are very fast, and creating a blank slate before each test can be helpful once your tests get complicated.
-* This is great, but we aren't actually testing anything yet. Let's add some tests:
+* The shallow render is going to be created before each test we define. This may seem inefficient (why not just create it once?), but shallow renders are very fast and starting with a blank slate before each test can be helpful once your tests get complicated.
+* This is great, but we aren't actually testing anything yet. Let's add some tests below the `beforeEach` block:
 
 ```javascript
 it('should instantiate the Project Row Component', () => {
@@ -555,9 +557,13 @@ import Projects from './projects/Projects';
 
 &nbsp;
 
+* How does React get rendered?
+  * **App.js** is what we're treating as our root component - the base piece of React that encompasses our entire SPA
+  * Take a look at **src/index.js** - this JavaScript is run at load time (our Webpack setup makes this file the "entrypoint" of our application). It takes the `App` component and renders it into a DOM node with an id of "root". This is how React gets bootstrapped.
+
 ## Run the application and see your work.
 
-* In a terminal windows run: `yarn start` to fire off the build.
+* In a terminal window run: `yarn start` to fire off the build.
 * Navigate to [http://localhost:3000](http://localhost:3000) in your favorite browser (if it doesn't automatically open)
 
 ![](./images/lab-02-complete.png)
@@ -568,14 +574,14 @@ import Projects from './projects/Projects';
 
 ```
 git add .
-git commit -m 'Lab 2 completed successfully'
+git commit -m "Lab 2 completed successfully"
 ```
 
 ## Extra Credit
 
 If you're looking for an extra challenge, take a look at [Jest Snapshot testing](http://facebook.github.io/jest/blog/2016/07/27/jest-14.html). On first run, jest will generate a snapshot file that represents the rendered react component in a \_\_snapshots\_\_ folder. On subsequent runs it will compare the test result to the previous snapshot file. On a failure you will have to decide whether to fix the code, modify the test, or press 'u' to update the snapshot file with the new rendering.
 
-Snapshot testing can save you time from writing individual expect assertions on elements, by simply allowing you to review the snapshot file on any changes.
+Snapshot testing can save you time from writing individual expect assertions on elements, by simply allowing you to review the snapshot file on any changes. It also serves as a useful "tripwire" to inform developers that they may have impacted components/logic they didn't intend to.
 
 Try creating a Snapshot test inside ProjectRow.test.js, or:
 

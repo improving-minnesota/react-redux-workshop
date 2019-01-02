@@ -79,19 +79,17 @@ Change directories to the lab main directory.
 cd react-redux-timesheet
 ```
 
-The `master` branch represents the finished state of the application (what we'll have once we've done all of the labs). For each lab, you'll switch to the corresponding branch which will give you a view of the application at the start of that lab. Go ahead and switch to the `lab-01` branch:
-
-```bash
-$ git checkout lab-01
-```
-
-Then we need to make sure our dependencies are installed:
+Next we need to make sure our dependencies are installed:
 
 ```bash
 $ yarn
 ```
 
-It is typically a good idea to run the `yarn` command after switching branches, just to be sure that your installed dependencies match what the branch wants.
+The `final` directory represents the finished state of the application (what we'll have once we've done all of the labs). For each lab, you'll switch to the corresponding directory which will give you a view of the application at the start of that lab. Go ahead and navigate to the `lab-01` directory:
+
+```bash
+$ cd lab-01
+```
 
 ------
 
@@ -148,7 +146,3 @@ Then update the timesheet app to point to that new port and re-launch:
 #### The CLI apps won't stop with Ctrl-C
 
 Some Windows systems (esp. Windows 10) don't properly pass Ctrl-C to the command line. Some people report that `CTRL-fn-b` works in these situations.
-
-
-
-#### Now let's check out our project's structure so we know what goes where.

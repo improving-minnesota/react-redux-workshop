@@ -5,12 +5,13 @@ index: 3
 
 # Lab Three - Routing and Components
 
-## Switch to the Lab03 branch
+## Switch to Lab03
 
 * In a terminal:
 
 ```
-git checkout lab-03
+cd ../ # presuming still in previous lab
+cd lab-03
 yarn start
 ```
 
@@ -35,16 +36,17 @@ import Employees from './employees/Employees';
 import Timesheets from './timesheets/Timesheets';
 ```
 
-* Next we'll import some classes from the react router
+* Next we'll import some classes from `react-router-dom` - this library is a way to declare `react-router` rules within JSX
 
 ```javascript
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 ```
 
 * Next let's configure our routes:
-  * We need to wrap the routes in a **BrowserRouter** to handle the routes
+  * We need to wrap the routes in a **BrowserRouter** so the Browser URL is used to determine which Routes match
+  * We only want to render a single segment of the app based on the URL, so we add a **Switch**
   * We need separate sibling routes for **Projects**, **Employees**, and **Timesheets**.
-  * If we can't match a route, we want to redirect the user to the **Employees** component.
+  * If no route matches, we want to redirect the user to the **Employees** component.
 
 ```jsx
   render() {
@@ -66,7 +68,7 @@ import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 ```
 
 * Finally, let's add the Navigation component while we're here.
-  * Let's import the **Navigation** component - Then add the component in side the "App" div
+  * Let's import the **Navigation** component - then add the component just inside the "App" div (but outside the "container" div)
 
 ```javascript
 import Navigation from './nav/Navigation';
@@ -98,10 +100,7 @@ class App extends React.Component {
           <Switch>
             <Route path="/projects" component={Projects} />
             <Route path="/employees" component={Employees} />
-            <Route
-              path="/timesheets"
-              component={Timesheets}
-            />
+            <Route path="/timesheets" component={Timesheets} />
             <Redirect to="/employees" />
           </Switch>
         </div>
@@ -118,12 +117,12 @@ export default App;
 
 &nbsp;
 
-## Add the Navbar to our Application
+## Implement the Navigation bar
 
 * Open **src/nav/Navigation.js**
 
 * We first need to import the Bootstrap components that we are going to use
-* Also the **LinkContainer** from the react-router-bootstrap library that helps us integrate the router with bootstrap
+* There is also a **NavLink** component from the react-router-dom library that helps us integrate the router
 
 ```javascript:title=src/nav/Navigation.js
 import React from 'react';
@@ -152,7 +151,10 @@ import { NavLink } from 'react-router-dom';
   }
 ```
 
-* We've told Boostrap to render our application name as a header, then gave it three navigation items that, when clicked, will tell react-router to switch the current URL to a new value
+* What did we just do?
+  * We've told Bootstrap to render our application name as a header
+  * We declared a Nav component with three navigation items in it
+  * Each navigation item is a NavLink which, when clicked, will tell react-router to switch the current URL to a new value
 
 &nbsp;
 
@@ -212,7 +214,7 @@ If you haven't already done so,
 
 * We want to display the list of employees when the user clicks the employee link in the navbar.
 * To do this, we need to build three components:
-  * The _Employees_ route handler that acts as our controller component.
+  * The _Employees_ route handler that acts as our container component.
   * The _EmployeeTable_ component to contain our list of employees.
   * The _EmployeeRow_ component that is repeated within our _EmployeeTable_ component for each employee.
 
@@ -557,5 +559,5 @@ If you haven't already done so,
 
 ```
 git add .
-git commit -m 'We added some routes'
+git commit -m "We added some routes"
 ```

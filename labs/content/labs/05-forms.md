@@ -5,12 +5,13 @@ index: 5
 
 # Lab Five - Forms and Validation
 
-## Switch to the Lab05 branch
+## Switch to Lab05
 
 * In a terminal:
 
 ```
-git checkout lab-05
+cd ../ # presuming still in previous lab
+cd lab-05
 yarn start
 ```
 
@@ -59,8 +60,6 @@ Formik is a wrapper around Forms that takes care of some basic considerations li
 
 * Now let's set up a way to edit an employee.
 
-###### Before we get started, take the time to look at the custom form components already implemented for us.
-
 * The first component we need is a form to contain all of our employee's properties.
 * Open **src/employees/EmployeeForm.js**.
 
@@ -81,10 +80,11 @@ render() {
       validate={ this.validate }
       onSubmit={ this.handleSave }
     >
-      { ({ isValid, errors, handleReset, handleSubmit }) => (
+      { ({ isValid, errors, touched, handleReset, handleSubmit }) => (
         <Form>
         
         </Form>
+      )}
     </Formik>
   );
 }
@@ -95,13 +95,13 @@ render() {
   Within the `Formik` component is something called a "render prop" - this is a more advanced pattern that is used by some third-party libraries to allow you to define content
   to be nested inside third-party components while still retaining the ability to apply custom logic, styles, etc like you could in your own React code.
   
-> Note the four render props being passed down - 'isValid', 'errors', 'handleReset', and 'handleSubmit'. These are all values and functions provided by Formik. The first two give us access
-  to the validation state of the form (true or false) and what errors exist in the form, the last two are event handlers that should be called to submit or reset the form. Formik provides
+> Note the five render props being passed down - 'isValid', 'errors', 'touched', 'handleReset', and 'handleSubmit'. These are all values and functions provided by Formik. The first two give us access
+  to the validation state of the form (true or false) and what errors exist in the form, 'touched' tells us what fields the user has interacted with, and the last two are event handlers that can be called to submit or reset the form. Formik provides
   a *ton* more props for more advanced scenarios, but we don't need them here.
   
 * Great! We have an empty form...probably need to add some content in there.
 
-* A helpful member of your team has created a reusable component for Forms that takes care of wrapping the user input element with an appropriate label and validation logic. Let's just reuse that! Hooray for reusable shared components!
+* A helpful member of your team has created a reusable component for Forms that takes care of wrapping an input element with an appropriate label and validation logic. Let's just reuse that! Hooray for reusable shared components!
 
 ```jsx
 <FieldWrapper type="text" name="username" label="Username" invalid={errors.username} touched={touched.username} />
@@ -143,7 +143,6 @@ handleSave = (values) => {
 
 > Notice that we are not actually implementing the save function. That is left for the component that uses this form to implement and pass it in as a prop.
 
-* `Formik` will let the user click the Submit button once the form is valid, passing the values from the form into our save handler, which then calls the handleSave prop passed down from Redux.
 * We haven't defined `validate()` yet, so let's do that next. Here's what it should look like:
 
 ```jsx
@@ -161,9 +160,10 @@ validate = (values) => {
 };
 ```
 
-* We're simply checking that we have values for all the fields. Our other handler functions will update the state appropriately as the user changes field values. But what if the `EmployeeForm` is being used to edit an existing employee?
+* We're simply checking that we have values for a few fields. Formik will automatically call this as the user inputs data and will reflect those errors back to the user via our **FieldWrapper** components.
+* Until now we've assumed that the user is creating a new employee record. What if the `EmployeeForm` is being used to edit an existing employee?
 * We already know that this component can receive an `employee` in its props, what we need to do is update the form to reflect that employee's values.
-* The `Formik` components gives us the `initialValues` hook to do this. Replace the empty declaration you currently have with the following:
+* The `Formik` component gives us the `initialValues` prop to do this. Replace the empty declaration you currently have with the following:
 
 ```jsx
 initialValues={ {
@@ -179,24 +179,28 @@ initialValues={ {
 ## Add the Form into an Employee Detail Component
 
 * Now let's actually use the form we just built.
-* Open **/src/employees/EmployeesDetail.js**
+* Open **/src/employees/EmployeeDetail.js**
 * Let's setup our propTypes, first. We already have the `history` prop, but we need to include an `employee` prop as well, like so:
 
 ```jsx
-EmployeesDetail.propTypes = {
+EmployeeDetail.propTypes = {
   employee: PropTypes.object.isRequired,
   history: PropTypes.object,
 };
+
+EmployeeDetail.defaultProps = {
+  employee: {}
+};
 ```
 
-* Next, let's hook up to the Redux architecture. The only thing we'll need from the Redux state is the employee, like so:
+* Next, let's hook up to Redux. The only thing we'll need from the Redux state is the selected employee, like so:
 
 ```jsx
 const mapStateToProps = (state, props) => {
   const { match } = props;
   const { _id } = match.params;
   return {
-    employee: state.employees.employees.find(employee => employee._id === _id)
+    employee: state.employees.data.find(employee => employee._id === _id)
   };
 };
 ```
@@ -207,10 +211,16 @@ const mapStateToProps = (state, props) => {
 
 ```jsx
 const mapDispatchToProps = {
-  onCreate: EmployeeActions.createEmployee,
-  onUpdate: EmployeeActions.updateEmployee,
-  getEmployee: EmployeeActions.getEmployee
+  onCreate: EmployeeActionCreators.createEmployee,
+  onUpdate: EmployeeActionCreators.updateEmployee,
+  getEmployee: EmployeeActionCreators.getEmployee
 };
+```
+
+* Then we need to **connect** to Redux
+
+```javascript
+export default connect(mapStateToProps, mapDispatchToProps)(EmployeeDetail);
 ```
 
 * Next, let's update the render function to include the `EmployeeForm`, and pass it all the props it needs:
@@ -219,7 +229,7 @@ const mapDispatchToProps = {
 render() {
   return (
     <div>
-      <h1>Employees Detail</h1>
+      <h1>Employee Detail</h1>
       <EmployeeForm
         employee={this.props.employee}
         actions={this.props.actions}
@@ -243,36 +253,31 @@ handleSave = (values) => {
 };
 ```
 
-* Finally, we need to build a lifecycle hook so we can retrieve data as necessary when this component mounts. Go ahead and do that now, then we'll look at each part:
-
-```jsx
-componentDidMount() {
-  const { match, getEmployee } = this.props;
-  const id = match.params._id;
-  getEmployee(id);
-}
-```
-
-* First, we grab the `match` prop which is provided by **react-router** - this contains any URL path/request params that we can use
-* We then use the ID we find in the path to retrieve the corresponding Employee
+* When handleSave is called we'll:
+  - Check to see if the record being saved already has an ID - if yes it's an update, if not it's a create.
+  - We call the corresponding handler function to begin the appropriate async action method
+  - Once complete, we'll tell react-router to send the user back to the "/employees" route so they see the Table.
 
 &nbsp;
 
 ## Test the Employee Detail Component
 
-* Open **/src/employees/EmployeesDetail.test.js**
-* Update the test labeled `should instantiate the Employees Detail Component`:
+* Open **/src/employees/tail.test.js**
+* Add a test to verify the component renders as expected:
 
 ```jsx
-it('should instantiate the Employees Detail Component', () => {
-  const component = mount(
-    <MemoryRouter>
-      <EmployeesDetail store={mockStore} />
-    </MemoryRouter>
-  );
+it('should instantiate the Employee Detail Component', () => {
+    const mockStore = configureStore();
+    const component = mount(
+      <Provider store={mockStore}>
+        <MemoryRouter>
+          <EmployeeDetail />
+        </MemoryRouter>
+      </Provider>
+    );
 
-  expect(component).toIncludeText('Employees Detail');
-});
+    expect(component.find(EmployeeDetail)).toIncludeText('Employee Detail');
+  });
 ```
 
 * Run the tests and verify that they pass before moving on to the next section.
@@ -287,8 +292,8 @@ it('should instantiate the Employees Detail Component', () => {
 - Add the `showDetail()` method to the **EmployeeRow**
 
 ```jsx
-showDetail(employee) {
-  iconst { history, employee } = this.props;
+showDetail = () => {
+  const { history, employee } = this.props;
    
    if (employee.deleted) {
      console.log('You cannot edit a deleted employee.');
@@ -296,8 +301,11 @@ showDetail(employee) {
    }
 
    history.push(`/employees/detail/${employee._id}`);
-}
+};
 ```
+
+* This first checks to see if the employee has been deleted and prevents viewing it if so
+* Then it uses the **history** prop provided by `react-router` to change the current URL programmatically (and thus change the matched route)
 
 * Now add an `onClick()` handler to the `<tr/>` in the `render()` method.
 
@@ -314,7 +322,7 @@ showDetail(employee) {
 
 ```jsx
 <Link to="/employees/detail">
-  <Button floated="right" primary>
+  <Button bsStyle="primary">
     New Employee
   </Button>
 </Link>
@@ -322,17 +330,19 @@ showDetail(employee) {
 
 * What's going on here? We're using a **react-router** `Link` element which, when clicked, will send the user to the Route that causes the EmployeeDetail component to render. Inside the Link we specify a component to render that is clickable.
 
-* That's it! We made our EmployeeDetail component smart enough to know that, if it wasn't given an Employee object with an ID set, that we were creating a new one. Cool!
+* That's it! We already made our EmployeeDetail component smart enough to know that, if it wasn't given an Employee object with an ID set, that we were creating a new one. Cool!
 
 ## Extra credit
+
+The **ProjectDetail** component has been implemented already. Can you get it hooked up to allow Project create/update? How about adding Delete/Restore to the ProjectTable?
 
 Are you a true champion? Figure out how to add validation to prevent the user from creating an Employee with the same name or username as an existing Employee.
 
 Hint: You might be tempted to drag data down to use it in child components, but it's sometimes easier to leave data up high and pass down worker functions from a parent to a child component.
 
-### Commit your changes to Git - congrats, you are a React/Redux Master.
+### Commit your changes to Git - congrats, you are a Forms Master.
 
 ```
 git add .
-git commit -m 'We are validating forms'
+git commit -m "We are validating forms"
 ```
