@@ -93,10 +93,11 @@ $ cd lab-01
 
 ------
 
-Note: these labs technically don't require `yarn` - if you would prefer to use NPM you absolutely can, just replace any references to `yarn` or `yarn install` with `npm install`
+Note: these labs technically don't require `yarn` - if you would prefer to use NPM you absolutely can, just replace any references to `yarn` or `yarn install` with `npm install`.
+You'll need to install dependencies for each lab individually.
 
 ```bash:title=If yarn is not installed...
-git checkout lab-01
+cd lab-01
 
 npm install
 ```
