@@ -35,6 +35,8 @@ There aren't any new concepts in this section - we're just applying all the thin
 **Try and implement each step yourself** - don't be afraid to ask questions or collaborate with classmates to work out a solution.
 If you truly get stuck then each section has a code hint you can refer to.
 
+> Note that many of the files you'll be working with don't exist in the baseline yet, so you'll need to create them. In addition, you'll need to keep an eye out for any missing `import` statements and get those fixed. Just another bit of fun in modern JS development 😃
+
 ### Build the Action Types for Auth
 
 Our app is going to have to accept credentials, log the user in, and pull the current user from the server
