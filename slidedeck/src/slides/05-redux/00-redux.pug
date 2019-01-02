@@ -60,7 +60,7 @@ section
     const ADD_AGENT = 'ADD_AGENT'
 
     // action creator
-    function addAgent(agent) {
+    const addAgent = agent => {
       return {
         type: ADD_AGENT,
         payload: agent
@@ -74,7 +74,7 @@ section
       agents: []
     }
 
-    function agentReducer(state = initialState, action) {
+    const agentReducer = (state = initialState, action) => {
       switch (action.type) {
         case 'ADD_EMPLOYEE':
           return Object.assign({}, state, {
