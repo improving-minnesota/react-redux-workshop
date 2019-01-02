@@ -1,5 +1,5 @@
 section
-  h3 New, top-level APIs
+  h3 Helpful newer top-level APIs
 
 section
   h3 React.Fragment
@@ -14,7 +14,10 @@ section
     }
 
 section
-  h3 React.createContext
+  h3 React Context
+  p New way to pass data from higher components down to nested children without "prop drilling"
+
+section
   script(type="text/plain", class="language-jsx").
     const ThemeContext = React.createContext('light');
 
@@ -37,7 +40,7 @@ section
     export const ThemeConsumer = ThemeContext.Consumer;
 
 section
-  h3 createContext does not kill redux
+  h3 Context does not kill Redux
   p It does, however, let you share data to deeply nested children cleanly and easily
 
 section
@@ -75,3 +78,20 @@ section
         );
       }
     }
+
+section
+  h3 React.lazy, React.Suspense
+
+  script(type="text/plain", class="language-jsx").
+    const LazyLoadedComponent = React.lazy(() => import('./abc.jsx'));
+
+    export const AsyncVersionOfComponent = props => (
+      <React.Suspense fallback={<SomeLoadingSpinnerComponent />}>
+        <LazyLoadedComponent {...props} />
+      </React.Suspense>
+    );
+
+section
+  h3 Hooks
+  p Functional components will be gaining the ability to have State
+  p No real feature change, some people just prefer Functional Component style

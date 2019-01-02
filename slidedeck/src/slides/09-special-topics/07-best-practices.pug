@@ -4,14 +4,18 @@ section
 section
   h3 Use create-react-app
 
-  h4 Don't eject!
+  h4 Don't eject until you need to
 
 section
-  h3 Write e2e tests
+  h3 Small components == Happy components
 
-  h4 Write integration tests
+  p Small components may feel like a lot of boilerplate,
+  p but they are immeasurably easier to test and reuse
 
-  h5 Write unit tests
+section
+  h3 Write Tests
+
+  h4 Unit & Integration tests for React components are easy and super helpful
 
 section
   img(src="~./images/write-tests.png")
@@ -30,6 +34,11 @@ section
   h3 Everything does not need to go in Redux
 
   blockquote Use React for ephemeral state that doesn't matter to the app globally and doesn't mutate in complex ways. For example, a toggle in some UI element, a form input state. Use Redux for state that matters globally or is mutated in complex ways. For example, cached users, or a post draft.
+
+section
+  h3 Minimize ties to Redux
+
+  h4 Not every component should be `connect`-ed to Redux
 
 section
   h3 Leverage the babel ecosystem
