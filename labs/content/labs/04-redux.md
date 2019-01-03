@@ -5,25 +5,28 @@ index: 4
 
 # Lab Four - Integrating Redux
 
-## `cd` to the fourth lab
+## Switch to Lab04
 
 * In a terminal:
 
 ```
-cd ../ # presuming still in first lab
-cd lab-04-redux
+cd ../ # presuming still in previous lab
+cd lab-04
 yarn start
 ```
 
 ### Check it out!
 
-* Before doing anything, let's look at the progress that has already been completed on the application by the rest of the team.
-  * Peruse the **src/components** directory and notice that the **Projects** and **Timesheets** modules have been implemented by the team.
-  * Also look at the **actions** and **reducers** directories to get a feel for how these classes are laid out and used.
+* While we were working on the last lab, the rest of the team was adding lots of new stuff to the app
+* Before proceeding, let's look at the progress that has been made:
+  * Peruse the **src** directory and notice that there's a new **Timeunits** module. This will track time entries in a Timesheet
+  * It has been hooked up to Redux already. Some parts of **src/timeunits/Timeunits.js** may sound familiar from the lecture - `connect`, `mapDispatchToProps`, `mapStateToProps` for example
+  * The team has implemented **actions** and **reducers** for large parts of the app. Take a look at those directories to get a feel for how these items are laid out and used.
   * Finally, look at the **src/index.js**, **src/reducers/index.js** and **src/store/configure-store.js** to see how we instantiated Redux and included it in our app.
-  * Don't worry if it looks a little cryptic, by the end of this lab, you will understand what is happening.
+  * Don't worry if it looks a little cryptic - by the end of this lab you will have a better understanding of what is happening.
 
 - What will we do?
+  * We want to replace our use of static data with loading data dynamically using Rest service calls. To do this we'll need a way to retrieve all employees and retrieve a single employee.
   * We will be building our **EmployeeActionCreator** and our **employee-reducer**.
   * Next we will add our reducer to the **rootReducer** and connect our state and actions to our **Employees** component
   * Then we will update our **Employees** components to use our actions to retrieve our list of employees.
@@ -44,6 +47,13 @@ export const GET = 'GET_EMPLOYEE';
 &nbsp;
 
 ### Create the Employee Actions
+
+* Redux Thunk typically works this way:
+  - A trigger (usually user activity, but could be an expiring timer, etc) will execute an asynchronous method
+  - The method will execute whatever logic is necessary to complete the activity flow (getting data, updating data, etc). Typically this involves making Rest service calls.
+  - Any results of the activity that the application state must respond to (changing values in Redux State) are communicated by dispatching an action. A single asynchronous method may generate 0 to many actions.
+  - A common pattern is for an action will be dispatched when a service call is starting so a loading indicator can be activated and when the service call completes (either successfully or unsuccessfully) so the indicator can be stopped
+  - In our examples here we're only dispatching actions at the end of each activity to inform the application when new data has been retrieved - to retain simplicity we aren't using loading indicators so we dispense with those actions 
 
 * Now open **src/actions/EmployeeActionCreator.js** so we can create the actions.
 * We'll import the types we just created, and the [Axios](https://github.com/mzabriskie/axios) library to handle our http requests.
@@ -77,12 +87,10 @@ export const get = employee => {
 const apiUrl = '/api/users';
 
 const url = employeeId => {
-  let url = apiUrl;
   if (employeeId) {
-    url += '/' + employeeId;
+    return `${apiUrl}/${employeeId}`;
   }
-
-  return url;
+  return apiUrl;
 };
 
 export const listEmployees = () => {
@@ -116,7 +124,7 @@ export const updateEmployee = employee => {
     return Axios.put(url(employee._id), employee)
       .then(res => {
         dispatch(get(res.data));
-        console.log('Employee : ' + employee.name + ', updated.');
+        console.log(`Employee : ${employee._id}, updated.`);
         return true;
       })
       .catch(error => {
@@ -132,7 +140,7 @@ export const removeEmployee = employee => {
     return Axios.put(url(employee._id), employee)
       .then(res => {
         dispatch(get(res.data));
-        console.log('Employee : ' + res.data.name + ', was deleted.');
+        console.log(`Employee : ${res.data._id}, was deleted.`);
         return true;
       })
       .catch(error => {
@@ -148,7 +156,7 @@ export const restoreEmployee = employee => {
     return Axios.put(url(employee._id), employee)
       .then(res => {
         dispatch(get(res.data));
-        console.log('Employee : ' + res.data.name + ', was restored.');
+        console.log(`Employee : ${res.data._id}, was restored.`);
         return true;
       })
       .catch(error => {
@@ -159,10 +167,10 @@ export const restoreEmployee = employee => {
 
 export const createEmployee = employee => {
   return dispatch => {
-    return Axios.put(url(), employee)
+    return Axios.post(url(), employee)
       .then(res => {
         dispatch(get(res.data));
-        console.log('Employee : ' + res.data.name + ', created.');
+        console.log(`Employee : ${res.data._id}, created.`);
         return true;
       })
       .catch(error => {
@@ -303,18 +311,27 @@ describe('async actions', () => {
 ```javascript:title=src/reducers/employee-reducer.js
 import * as EmployeeActionTypes from '../actions/EmployeeActionTypes';
 
-export default (state = { employees: [], employee: {} }, action) => {
+export default (state = { data: [] }, action) => {
   switch (action.type) {
     case EmployeeActionTypes.LIST:
-      return Object.assign({}, state, { employees: action.employees });
+      return { ...state, data: action.employees };
     case EmployeeActionTypes.GET:
-      return Object.assign({}, state, { employee: action.employee });
-
+      const updatedItem = action.employee;
+      const index = state.data.findIndex(d => d._id === updatedItem._id);
+        if (index >= 0 ) {
+          const copy = [...state.data];
+          copy.splice(index, 1, updatedItem);
+          return { ...state, data: copy };
+        }
+        return { ...state, data: [...state.data, updatedItem] };
     default:
       return state;
   }
 };
 ```
+
+* When the reducer receives a LIST action it will replace the currently-stored list of employees with the new one from the action's payload
+* When a GET is received the reducer will attempt to replace the existing version of that employee in state, or will add to the end of the list if it's a new item
 
 * Now let's add our **employee-reducer** to the combined reducer
 * Open **src/reducers/index.js**
@@ -324,12 +341,13 @@ export default (state = { employees: [], employee: {} }, action) => {
 import employees from './employee-reducer';
 ```
 
-* Add it to the list or reducers so it looks like this:
+* Add it to the list of reducers so it looks like this:
 
 ```javascript
 const rootReducer = combineReducers({
   projects: projects,
   timesheets: timesheets,
+  timeunits: timeunits,
   employees: employees,
 });
 ```
@@ -339,13 +357,12 @@ const rootReducer = combineReducers({
 ### Use the Employee Actions
 
 * Now, let's update our **Employee** components to use these actions.
-* Open **src/components/employees/Employees.js**
+* Open **src/employees/Employees.js**
 * Import some **redux** libraries we need and the **EmployeeActionCreator**
 
-```javascript:title=src/components/employees/Employees.js
-import { bindActionCreators } from 'redux';
+```javascript:title=src/employees/Employees.js
 import { connect } from 'react-redux';
-import * as EmployeeActions from '../../actions/EmployeeActionCreator';
+import * as EmployeeActionCreators from '../actions/EmployeeActionCreator';
 ```
 
 * Next lets add the **mapStateToProps** and **mapDispatchToProps** methods between the component and the export.
@@ -353,14 +370,14 @@ import * as EmployeeActions from '../../actions/EmployeeActionCreator';
 ```javascript
 const mapStateToProps = state => {
   return {
-    employees: state.employees.employees,
+    employees: state.employees.data,
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
-    actions: bindActionCreators(EmployeeActions, dispatch),
-  };
+const mapDispatchToProps = {
+  listEmployees: EmployeeActionCreators.listEmployees,
+  deleteEmployee: EmployeeActionCreators.removeEmployee,
+  restoreEmployee: EmployeeActionCreators.restoreEmployee
 };
 ```
 
@@ -370,33 +387,53 @@ const mapDispatchToProps = dispatch => {
 export default connect(mapStateToProps, mapDispatchToProps)(Employees);
 ```
 
-* Next, we can replace previously hard-coded state data in the constructor with a call to the **listEmployees** action to retrieve the employees from the server.
+* Next, we can replace previously hard-coded state data in the constructor with a call to the **listEmployees** action in a lifecycle method to retrieve the employees from the server. Replace the constructor with the following:
 
 ```javascript
-  constructor(props) {
-    super(props);
-
-    //Replaces the previously hard-coded state assignment
-    props.actions.listEmployees();
+  componentDidMount() {
+    const { listEmployees } = this.props;
+    listEmployees();
   }
 ```
 
-* Now we update the data we are passing to the EmployeeTable in the render method.
+* This allows the following to happen:
+  * When the component is mounted (the user navigates to that tab), it will trigger the `listEmployees` activity
+  * That activity will make a Rest service call and eventually dispatch a **LIST** action with the resulting data
+  * The reducer will pick up the LIST action and update the Redux State with the new data
+  * The connected component will detect the state update and will re-run `mapStateToProps` - this will take the data from Redux and pass it into our component as a prop
+
+* Now we update the data we are passing to the EmployeeTable in the render method. Note that we're now pulling employees from props since React-Redux pulls them from global Redux state and adds them to the components props in `mapStateToProps`
+* We also pass down two of the actions we're getting from `mapDispatchToProps` so that they can be called from a row
 
 ```javascript
-<EmployeeTable employees={this.props.employees} actions={this.props.actions} />
+const { employees, deleteEmployee, restoreEmployee } = this.props;
+
+return (
+  <div>
+    <h1>Employees</h1>
+    <EmployeeTable employees={ employees } onDelete={deleteEmployee} onRestore={restoreEmployee} />
+  </div>
+);
 ```
 
-* Next let's open the **src/components/employees/EmployeeTable.js** and update the render method to pass the actions to the **EmployeeRows**
+* Next let's open **src/employees/EmployeeTable.js** and update the render method to pass the actions to the **EmployeeRows**
 
-```javascript:title=src/components/employees/EmployeeTable.js
-const actions = this.props.actions;
+```javascript:title=src/employees/EmployeeTable.js
+const { employees, onDelete, onRestore } = this.props;
+...
+{employees.map(employee => (
+  <EmployeeRow employee={ employee } key={ employee._id } onDelete={onDelete} onRestore={onRestore} />
+))}
+```
 
-let employeeRows = this.props.employees.map(employee => {
-  return (
-    <EmployeeRow employee={employee} key={employee._id} actions={actions} />
-  );
-});
+* Also, update the propTypes
+
+```javascript
+EmployeeTable.propTypes = {
+  employees: PropTypes.array.isRequired,
+  onDelete: PropTypes.func,
+  onRestore: PropTypes.func
+};
 ```
 
 * Then we need to add a column header for the delete button we'll add to the **EmployeeRow**
@@ -405,8 +442,55 @@ let employeeRows = this.props.employees.map(employee => {
 <th>Delete</th>
 ```
 
-* Now let's open the **src/components/employees/EmployeeRow.js** and add the delete functionality by - Importing the bootstrap **Button** component - Styling the deleted rows - Building the button - Rendering the button
+* Now let's open **src/employees/EmployeeRow.js** and add the delete/restore functionality
 
+* Import the Bootstrap Button component
+
+```javascript
+import { Button } from 'react-bootstrap';
+```
+
+* Add a new table cell containing the button. The button can dynamically change its label & style based on whether a click would delete or restore the record. We also give it a click handler to call.
+
+```javascript
+<td>
+  <Button onClick={this.handleClick} bsStyle={employee.deleted ? 'success' : 'danger'}>
+    {employee.deleted ? 'Restore' : 'Delete'}
+  </Button>
+</td>
+```
+
+* Next, let's make the row re-style based on whether the record has been deleted:
+
+```javascript
+<tr className={employee.deleted ? 'deleted' : ''}>
+```
+
+* Almost done! Implement the click handler method:
+
+```javascript
+handleClick = (event) => {
+  const { employee, onDelete, onRestore } = this.props;
+
+  if (employee.deleted) {
+    onRestore(employee);
+  } else {
+    onDelete(employee);
+  }
+  
+  event.stopPropagation();
+};
+```
+
+* And lastly update our propTypes:
+
+```javascript
+EmployeeRow.propTypes = {
+  employee: PropTypes.object.isRequired,
+  onDelete: PropTypes.func.isRequired,
+  onRestore: PropTypes.func.isRequired
+};
+```
 
 &nbsp;
 
@@ -414,54 +498,39 @@ let employeeRows = this.props.employees.map(employee => {
   <summary>When finished, click here to view the final file:</summary>
 
 
-```javascript:title=src/components/employees/EmployeeRow.js
-import React, { Component } from 'react';
+```javascript:title=src/employees/EmployeeRow.js
+import React from 'react';
 import PropTypes from 'prop-types';
-
 import { Button } from 'react-bootstrap';
 
-class EmployeeRow extends Component {
-  handleClick(employee) {
+class EmployeeRow extends React.Component {
+  handleClick = (event) => {
+    const { employee, onDelete, onRestore } = this.props;
+
     if (employee.deleted) {
-      employee.deleted = false;
-      this.props.actions
-        .restoreEmployee(employee)
-        .then(this.props.actions.listEmployees);
+      onRestore(employee);
     } else {
-      employee.deleted = true;
-      this.props.actions
-        .removeEmployee(employee)
-        .then(this.props.actions.listEmployees);
+      onDelete(employee);
     }
-  }
+    
+    event.stopPropagation();
+  };
 
   render() {
-    const employee = this.props.employee;
-
-    let rowClass = '';
-    if (employee.deleted) {
-      rowClass = 'faded';
-    }
-
-    const button = (
-      <Button
-        onClick={() => {
-          this.handleClick(employee);
-        }}
-        bsStyle={employee.deleted ? 'success' : 'danger'}
-      >
-        {employee.deleted ? 'Restore' : 'Delete'}
-      </Button>
-    );
+    const { employee } = this.props;
 
     return (
-      <tr className={rowClass}>
+      <tr className={employee.deleted ? 'deleted' : ''}>
         <td>{employee.username}</td>
         <td>{employee.email}</td>
         <td>{employee.firstName}</td>
         <td>{employee.lastName}</td>
         <td>{employee.admin ? 'Yes' : 'No'}</td>
-        <td>{button}</td>
+        <td>
+          <Button onClick={this.handleClick} bsStyle={employee.deleted ? 'success' : 'danger'}>
+            {employee.deleted ? 'Restore' : 'Delete'}
+          </Button>
+        </td>
       </tr>
     );
   }
@@ -469,6 +538,8 @@ class EmployeeRow extends Component {
 
 EmployeeRow.propTypes = {
   employee: PropTypes.object.isRequired,
+  onDelete: PropTypes.func.isRequired,
+  onRestore: PropTypes.func.isRequired
 };
 
 export default EmployeeRow;
@@ -477,8 +548,6 @@ export default EmployeeRow;
 
 </details>
 
-
-> Note: Check out how we can build that **button** variable as jsx and include it in our render method.
 
 &nbsp;
 
@@ -551,5 +620,5 @@ $ yarn start
 
 ```
 git add .
-git commit -m 'I think I know redux now?!'
+git commit -m "I think I know redux now?!"
 ```

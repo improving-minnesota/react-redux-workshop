@@ -5,14 +5,13 @@ index: 6
 
 # Lab Six - Capstone
 
-## `cd` to the sixth lab
+## Switch to Lab06
 
 * In a terminal:
 
-
-```bash
-cd ../ # presuming still in first lab
-cd lab-06-capstone
+```
+cd ../ # presuming still in previous lab
+cd lab-06
 yarn start
 ```
 
@@ -26,7 +25,7 @@ We need to add some security to this app, fast!
 ### What do we need?
 
 We need to restrict access by requiring the user log in using valid credentials.
-The good news is that our server team has put together a nice login/logout capability.
+The good news is that our server team has put together a simple set of Rest services to support a login/logout capability.
 
 **Note**: This is a very naïve login/logout capability as a simple example. Don't use it in production code!
 
@@ -35,6 +34,8 @@ The good news is that our server team has put together a nice login/logout capab
 There aren't any new concepts in this section - we're just applying all the things you've learned from previous labs.
 **Try and implement each step yourself** - don't be afraid to ask questions or collaborate with classmates to work out a solution.
 If you truly get stuck then each section has a code hint you can refer to.
+
+> Note that many of the files you'll be working with don't exist in the baseline yet, so you'll need to create them. In addition, you'll need to keep an eye out for any missing `import` statements and get those fixed. Just another bit of fun in modern JS development 😃
 
 ### Build the Action Types for Auth
 
@@ -78,29 +79,29 @@ Then we need actions:
   <summary>Code hint:</summary>
 
 ```javascript:title=AuthActionCreator.js
-export function setUser(user) {
+export const setUser = user => {
   return {
     type: AuthActionTypes.SET_USER,
     user: user
   };
-}
+};
 
-export function error(error) {
+export const error = error => {
   return {
     type: AuthActionTypes.ERROR,
     error: error
   }
-}
+};
 
 export const login = (credentials) => {
   return dispatch => {
     return Axios.post('/api/login', credentials)
-      .then(function(res) {
-        dispatch(setUser(res.data));
+      .then(response => {
+        dispatch(setUser(response.data));
         console.log('Login successful');
         return true;
       })
-      .catch(function(x) {
+      .catch(err => {
         console.log('There was an error logging in.');
         dispatch(error('Failed to login'));
       });
@@ -110,12 +111,12 @@ export const login = (credentials) => {
 export const logout = () => {
   return dispatch => {
     return Axios.post('/api/logout')
-      .then(function(res) {
+      .then(response => {
         dispatch(setUser(null));
         console.log('Logout successful');
         return true;
       })
-      .catch(function(x) {
+      .catch(err => {
         console.log('There was an error logging out.');
       });
   };
@@ -138,148 +139,132 @@ We need a reducer to handle our actions
   <summary>Code hint:</summary>
 
 ```javascript:title=auth-reducer.js
-switch (action.type) {
+import * as AuthActionTypes from '../actions/AuthActionTypes';
+
+export default (state = { user: {} }, action) => {
+  switch (action.type) {
     case AuthActionTypes.SET_USER:
       return { ...state, user: action.user };
     case AuthActionTypes.ERROR:
       return { ...state, error: action.error };
     default:
       return state;
-}
+  }
+};
 ```
 
 </details>
 
 &nbsp;
 
+* Don't forget to hook up the new reducer in **src/reducers/index.js**
 
 ### Create a Login form
 
 * We need a form that will accept a username and password as well as supply a "Login" button.
+* The form needs validation to ensure that a username and password are provided before enabling the login button.
 * Look at the existing forms in the rest of the app for examples.
 
 <details>
   <summary>Code hint:</summary>
 
 ```jsx:title=Login.js
-class LoginForm extends Component {
-  constructor(props) {
-    super(props);
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Form, Formik } from 'formik';
+import FieldWrapper from '../form/FieldWrapper';
+import FormControls from '../form/FormControls';
 
-    this.state = {
-      username: { value: '', valid: null },
-      password: { value: '', valid: null }
-    };
-  }
+class LoginForm extends React.Component {
 
-  handleSubmit = () => {
-    if (this.validateAll()) {
-      this.props.authActions.login({
-        username: this.state.username.value,
-        password: this.state.password.value
-      });
+  validate = (values) => {
+    const errors = {};
+
+    if (!values.username) {
+      errors.username = 'Required';
     }
-  };
-
-  getUsernameValidationState = () => {
-    if (!this.state) return;
-    if (this.state.username.valid === true) return 'success';
-    else if (this.state.username.valid === false) return 'error';
-  };
-
-  handleUsernameChange = (value) => {
-    let isValid = false;
-    if (value) {
-      isValid = true;
+    if (!values.password) {
+      errors.password = 'Required';
     }
-    return this.setState({ username: { value: value, valid: isValid } });
+
+    return errors;
   };
 
-  getPasswordValidationState = () => {
-    if (!this.state) return;
-    if (this.state.password.valid === true) return 'success';
-    else if (this.state.password.valid === false) return 'error';
-  };
-
-  handlePasswordChange = (value) => {
-    let isValid = false;
-    if (value) {
-      isValid = true;
-    }
-    return this.setState({ password: { value: value, valid: isValid } });
-  };
-
-  validateAll = () => {
-    return (
-      this.state.username.value &&
-      this.state.password.value !== null
-    );
+  login = (values) => {
+    this.props.onLogin({
+      username: values.username,
+      password: values.password
+    });
   };
 
   render() {
+    const { loginError } = this.props;
+
     return (
-      <form>
-        <FormGroup controlId="username" validationState={this.getUsernameValidationState()}>
-          <ControlLabel>Username</ControlLabel>
-          <FormControl
-            type="text"
-            value={this.state.username.value}
-            placeholder="Enter username"
-            onChange={e => this.handleUsernameChange(e.target.value)}
-          />
-          <FormControl.Feedback />
-        </FormGroup>
-        <FormGroup controlId="password" validationState={this.getPasswordValidationState()}>
-          <ControlLabel>Username</ControlLabel>
-          <FormControl
-            type="password"
-            value={this.state.password.value}
-            placeholder="Enter username"
-            onChange={e => this.handlePasswordChange(e.target.value)}
-          />
-          <FormControl.Feedback />
-        </FormGroup>
-        <Button bsStyle="success" onClick={this.handleSubmit} disabled={!this.validateAll()}>
-          Login
-        </Button>&nbsp;
-        {this.props.error && <strong>{this.props.error}</strong>}
-      </form>
+      <div>
+        <Formik
+          validate={this.validate}
+          onSubmit={this.login}
+          initialValues={{
+            username: '',
+            password: ''
+          }}>
+          {({ isValid, errors, touched, handleSubmit, handleReset }) => (
+            <Form>
+              <FieldWrapper type="text" name="username" label="Username" invalid={errors.username} touched={touched.username} />
+              <FieldWrapper type="password" name="password" label="Password" invalid={errors.password} touched={touched.password} />
+
+              <FormControls
+                action="Login"
+                allowSubmit={isValid}
+                onSubmit={handleSubmit}
+                onReset={handleReset}
+              />
+            </Form>
+          )}
+        </Formik>
+        {loginError && (
+          <p style={{ color: 'red' }}>{loginError}</p>
+        )}
+      </div>
     );
   }
 }
 
-LoginForm.defaultProps = {
+LoginForm.propTypes = {
+  onLogin: PropTypes.func.isRequired,
+  loginError: PropTypes.string
 };
 
-LoginForm.propTypes = {
-};
+export default LoginForm;
 ```
 
 </details>
 
 &nbsp;
 
+### Get data for Login Form
 
-* We'll need a function to handle submitting the login info for us, and a way to find out if there was an error on login.
-* These could be passed down as props, but in this instance we'll grab them from Redux so we can practice that.
+* We need to get the `onLogin` and `loginError` props somewhere and pass them down into our Form
+
+* We're going to render our LoginForm in **App.js**, so open that file, get it hooked up to Redux, and grab the following:
+  - Get the async method you created to log the user in
+  - Get the current user and whether there was an error on login from Redux state
 
 <details>
   <summary>Code hint:</summary>
 
-```jsx:title=Login.js
-function mapStateToProps(state) {
-  return {
-    error: state.auth.error
-  };
-}
+```jsx:title=App.js
+const mapStateToProps = state => ({
+  user: state.auth.user,
+  loginError: state.auth.error
+});
 
-function mapDispatchToProps(dispatch) {
-  return {
-    authActions: bindActionCreators(AuthActions, dispatch)
-  };
-}
+const mapDispatchToProps = {
+  login: AuthActionCreators.login
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);
+export default connect(mapStateToProps, mapDispatchToProps)(App);
 ```
 
 </details>
@@ -297,7 +282,7 @@ We want to let the user log out from the navbar, so we'll need to add a new link
   <summary>Code hint:</summary>
 
 ```jsx:title=Navigation.js
-NavBar.propTypes = {
+Navigation.propTypes = {
   onLogout: PropTypes.func.isRequired
 };
 ```
@@ -314,9 +299,9 @@ NavBar.propTypes = {
 
 ```jsx:title=Navigation.js
 <Nav pullRight>
-  <LinkContainer to="/logout">
-    <NavItem eventKey={4} onClick={this.props.onLogout}>Logout</NavItem>
-  </LinkContainer>
+ <NavItem>
+   <Button onClick={this.props.onLogout}>Logout</Button>
+ </NavItem>
 </Nav>
 ```
 
@@ -329,23 +314,21 @@ NavBar.propTypes = {
 
 Now that Navigation needs a 'onLogout' function to call, we need to get that from Redux and pass it in.
 
-* In **app.js**, connect the component to Redux and bind the AuthActions we created earlier
+* In **app.js**, grab the Logout async action method in addition to the bindings we add a few steps ago
 
 <details>
   <summary>Code hint:</summary>
 
 ```jsx:title=App.js
-function mapStateToProps(state) {
-  return {
-    user: state.auth.user
-  };
-}
+const mapStateToProps = state => ({
+  user: state.auth.user,
+  loginError: state.auth.error
+});
 
-function mapDispatchToProps(dispatch) {
-  return {
-    authActions: bindActionCreators(AuthActions, dispatch)
-  };
-}
+const mapDispatchToProps = {
+  login: AuthActionCreators.login,
+  logout: AuthActionCreators.logout
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
 ```
@@ -355,13 +338,13 @@ export default connect(mapStateToProps, mapDispatchToProps)(App);
 &nbsp;
 
 
-* Pass the 'logout' action from our AuthActions into Navigation as the 'onLogout' prop
+* Pass the 'logout' action from our AuthActionCreators into Navigation as the 'onLogout' prop
 
 <details>
   <summary>Code hint:</summary>
 
 ```jsx:title=App.js
-<Navigation onLogout={this.props.authActions.logout}/>
+<Navigation onLogout={this.props.logout}/>
 ```
 
 </details>
@@ -379,12 +362,13 @@ We have all the pieces in place, now we just need to prevent the user from acces
   <summary>Code hint:</summary>
 
 ```jsx:title=App.js
-render() {
-    if (!this.props.user) {
-      return <LoginForm />
-    }
-
+{!this.props.user ? (
+  <LoginForm onLogin={this.props.login} loginError={this.props.loginError} />
+) : (
+  <Switch>
     ...
+  </Switch>
+)}
 ```
 
 </details>
@@ -417,10 +401,6 @@ git commit -m "We are React masters"
 * Unit tests! Our new and changed components need tests.
 
 * Do you think we should test our actions & reducers? Any ideas on how to do it?
-
-* Can you find a way to update the form validation state when login fails so the fields are styled appropriately?
-
-* Is there a way to restructure the Login form as a presentational component?
 
 * Try to figure out a way to tie in `react-router` to provide a `/login` route while still securing the other routes
 

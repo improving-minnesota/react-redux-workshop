@@ -5,22 +5,23 @@ index: 3
 
 # Lab Three - Routing and Components
 
-## `cd` to the third lab
+## Switch to Lab03
 
 * In a terminal:
 
 ```
-cd ../ # presuming still in first lab
-cd lab-03-routing
+cd ../ # presuming still in previous lab
+cd lab-03
 yarn start
 ```
 
 ### Check it out!
 
-* Before doing anything, let's look at the progress that has already been completed on the application by the rest of the team.
-  * Peruse the **src/components** directory and notice that the **Projects** and **Timesheets** modules have been implemented by the team.
+* While we were working on the last lab, the rest of the team was adding lots of new stuff to the app
+* Before proceeding, let's look at the progress that has been made:
+  * Peruse the **src** directory and notice that the **Timesheets** module has been implemented by the team.
   * You will be building out the **Employees** module and adding **Navigation** to the app.
-  * The module files have been stubbed out for you, we just need to add the codez.
+  * The module files have been stubbed out for you, we just need to add the logic.
 
 &nbsp;
 
@@ -30,35 +31,36 @@ yarn start
 * Let's start by importing the component classes that we're going to use as the **Handlers** for our routes:
 
 ```javascript:title=src/App.js
-import Projects from './components/projects/Projects';
-import Employees from './components/employees/Employees';
-import Timesheets from './components/timesheets/Timesheets';
+import Projects from './projects/Projects';
+import Employees from './employees/Employees';
+import Timesheets from './timesheets/Timesheets';
 ```
 
-* Next we'll import some classes from the react router
+* Next we'll import some classes from `react-router-dom` - this library is a way to declare `react-router` rules within JSX
 
 ```javascript
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 ```
 
 * Next let's configure our routes:
-  * We need to wrap the routes in a **BrowserRouter** to handle the routes
+  * We need to wrap the routes in a **BrowserRouter** so the Browser URL is used to determine which Routes match
+  * We only want to render a single segment of the app based on the URL, so we add a **Switch**
   * We need separate sibling routes for **Projects**, **Employees**, and **Timesheets**.
-  * Even though **Timesheets** content is a sibling to **Employees**, we want the route to behave as if it is a child. That way, we'll have access to the `user_id` from the route's params.
-  * If we can't match a route, we want to redirect the user to the **Employees** component.
+  * If no route matches, we want to redirect the user to the **Employees** component.
 
 ```jsx
   render() {
     return (
       <BrowserRouter>
         <div className="App">
-        <Switch>
-          <Route path="/projects" component={Projects}/>
-          <Route exact path="/employees" component={Employees}/>
-          <Route path="/employees/:user_id/timesheets" component={Timesheets}/>
-          <Redirect to="/employees"/>
-        </Switch>
-
+          <div className="container">
+            <Switch>
+              <Route path="/projects" component={Projects}/>
+              <Route path="/employees" component={Employees}/>
+              <Route path="/timesheets" component={Timesheets}/>
+              <Redirect to="/employees"/>
+            </Switch>
+          </div>
         </div>
       </BrowserRouter>
     );
@@ -66,23 +68,30 @@ import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 ```
 
 * Finally, let's add the Navigation component while we're here.
-  * Let's import the **Navigation** component - Then add the component in side the "App" div
+  * Let's import the **Navigation** component - then add the component just inside the "App" div (but outside the "container" div)
 
+```javascript
+import Navigation from './nav/Navigation';
+```
+
+```javascript
+<Navigation />
+```
 
 <details>
   <summary>Click here to see the finished class:</summary>
 
 
 ```javascript
-import React, { Component } from 'react';
+import React from 'react';
 import './App.css';
-import Projects from './components/projects/Projects';
-import Employees from './components/employees/Employees';
-import Timesheets from './components/timesheets/Timesheets';
-import Navigation from './components/nav/Navigation';
+import Projects from './projects/Projects';
+import Employees from './employees/Employees';
+import Timesheets from './timesheets/Timesheets';
+import Navigation from './nav/Navigation';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 
-class App extends Component {
+class App extends React.Component {
   render() {
     return (
       <BrowserRouter>
@@ -90,11 +99,8 @@ class App extends Component {
           <Navigation />
           <Switch>
             <Route path="/projects" component={Projects} />
-            <Route exact path="/employees" component={Employees} />
-            <Route
-              path="/employees/:user_id/timesheets"
-              component={Timesheets}
-            />
+            <Route path="/employees" component={Employees} />
+            <Route path="/timesheets" component={Timesheets} />
             <Redirect to="/employees" />
           </Switch>
         </div>
@@ -109,19 +115,19 @@ export default App;
 
 </details>
 
-
 &nbsp;
 
-## Add the Navbar to our Application
+## Implement the Navigation bar
 
-* Open **src/components/nav/Navigation.js**
+* Open **src/nav/Navigation.js**
 
 * We first need to import the Bootstrap components that we are going to use
-* Also the **LinkContainer** from the react-router-bootstrap library that helps us integrate the router with bootstrap
+* There is also a **NavLink** component from the react-router-dom library that helps us integrate the router
 
-```javascript:title=src/components/nav/Navigation.js
-import { Navbar, Nav, NavItem } from 'react-bootstrap';
-import { LinkContainer } from 'react-router-bootstrap';
+```javascript:title=src/nav/Navigation.js
+import React from 'react';
+import { Nav, Navbar, NavItem } from 'react-bootstrap';
+import { NavLink } from 'react-router-dom';
 ```
 
 * Now we can implement our `render()` method:
@@ -136,55 +142,46 @@ import { LinkContainer } from 'react-router-bootstrap';
           </Navbar.Brand>
         </Navbar.Header>
         <Nav>
-          <LinkContainer to="/projects">
-            <NavItem eventKey={1}>Projects</NavItem>
-          </LinkContainer>
-          <LinkContainer exact to="/employees">
-            <NavItem eventKey={3}>Employees</NavItem>
-          </LinkContainer>
-          <LinkContainer to={`/employees/${this.state.user._id}/timesheets`}>
-            <NavItem eventKey={2}>Timesheets</NavItem>
-          </LinkContainer>
+          <NavItem><NavLink to="/projects">Projects</NavLink></NavItem>
+          <NavItem><NavLink to="/employees">Employees</NavLink></NavItem>
+          <NavItem><NavLink to="/timesheets">Timesheets</NavLink></NavItem>
         </Nav>
       </Navbar>
     );
   }
 ```
 
-* Now, all we need do is add a constructor to set up the initial state to be used within the `render()` method we just implemented:
-
-```javascript
-  constructor(props) {
-    super(props);
-    this.state = {
-      user: {_id: 'all'}
-    };
-  }
-```
+* What did we just do?
+  * We've told Bootstrap to render our application name as a header
+  * We declared a Nav component with three navigation items in it
+  * Each navigation item is a NavLink which, when clicked, will tell react-router to switch the current URL to a new value
 
 &nbsp;
 
 ## Test the Navbar
 
 * Just like in lab 2, we need to test that our component will render without errors.
-* Open **src/components/nav/Navigation.test.js** and add the test suite.
+* Open **src/nav/Navigation.test.js** and add the test suite.
 
 * Add the below code to the **Navigation.test.js**
-  > Note that we need to wrap the Navigation in a **BrowserRouter**, so we use `mount` to render the nested Navigation element here
 
-```javascript:title=src/components/nav/Navigation.test.js
-let nav;
+```javascript:title=src/nav/Navigation.test.js
+import React from 'react';
+import { shallow } from 'enzyme';
+import Navigation from './Navigation';
 
-beforeEach(() => {
-  nav = mount(
-    <BrowserRouter>
+describe('<Navigation />', () => {
+  let wrapper;
+
+  beforeEach(() => {
+    wrapper = shallow(
       <Navigation />
-    </BrowserRouter>
-  );
-});
+    );
+  });
 
-it('should instantiate the Navigation Component', () => {
-  expect(nav).toHaveLength(1);
+  it('should instantiate the Navigation Component', () => {
+    expect(wrapper).toHaveLength(1);
+  });
 });
 ```
 
@@ -192,8 +189,9 @@ it('should instantiate the Navigation Component', () => {
 
 ## Run the tests
 
-* Run `yarn test` and verify that all the tests pass.
+* Run `yarn test` and verify that the Navigation tests pass.
   * Since the rest of your team has already implemented a bunch of tests, you may have to do a little searching to find the tests you just wrote.
+  * Also, the stubbed tests for the employee components will fail since we haven't implemented them yet
 
 &nbsp;
 
@@ -204,7 +202,7 @@ If you haven't already done so,
 * In a terminal window run: `yarn start` to fire off the build.
 * Navigate to [http://localhost:3000](http://localhost:3000) in your favorite browser.
 * You should be able to click around the navbar and see the routes change.
-  * I'm sure it worked fine for **Timesheets** and **Projects**, but we still need to implement **Employees**.
+  * It should work fine for **Timesheets** and **Projects**, but we still need to implement **Employees**.
 
 &nbsp;
 
@@ -212,9 +210,11 @@ If you haven't already done so,
 
 * Now that we have functional routing between our three sections of the application, we need to finish the **Employee** module.
 
+* This is going to be very much like the Projects components you created in the previous lab, so as a challenge we aren't going to give you quite as many hints. Try to implement them by referencing what you did previously. If you get stuck the code is still available at the end.
+
 * We want to display the list of employees when the user clicks the employee link in the navbar.
 * To do this, we need to build three components:
-  * The _Employees_ route handler that acts as our controller component.
+  * The _Employees_ route handler that acts as our container component.
   * The _EmployeeTable_ component to contain our list of employees.
   * The _EmployeeRow_ component that is repeated within our _EmployeeTable_ component for each employee.
 
@@ -222,126 +222,191 @@ If you haven't already done so,
 
 ## Create the EmployeeRow Component
 
-* Open **src/components/employees/EmployeeRow.js**
+* Open **src/employees/EmployeeRow.js**
 * We need to create a component that accepts an employee property (which is an object).
-* The row should contain `<td/>`'s for each of the employee's properties.
-* Add the following to your EmployeeRow React class
+* The row should contain `<td/>`'s for each of the employee's properties (username, email, firstName, lastName, and Yes/No for whether they're an admin)
 
-```javascript:title=src/components/employees/EmployeeRow.js
-  render() {
-    const employee = this.props.employee;
+<details>
+  <summary>When finished, click here to see if your component is similar to the one below:</summary>
 
-    return (
-      <tr>
-        <td>{employee.username}</td>
-        <td>{employee.email}</td>
-        <td>{employee.firstName}</td>
-        <td>{employee.lastName}</td>
-        <td>{employee.admin ? 'Yes' : 'No'}</td>
-      </tr>
-    );
+
+```javascript:title=src/employees/EmployeeRow.js
+  import React from 'react';
+  import PropTypes from 'prop-types';
+  
+  class EmployeeRow extends React.Component {
+    render() {
+      const { employee } = this.props;
+  
+      return (
+        <tr>
+          <td>{employee.username}</td>
+          <td>{employee.email}</td>
+          <td>{employee.firstName}</td>
+          <td>{employee.lastName}</td>
+          <td>{employee.admin ? 'Yes' : 'No'}</td>
+        </tr>
+      );
+    }
   }
+  
+  EmployeeRow.propTypes = {
+    employee: PropTypes.object.isRequired
+  };
+  
+  export default EmployeeRow;
 ```
+
+
+</details>
+
+&nbsp;
 
 * Now, we need to test that our component renders correctly.
-* Open **src/components/employees/EmployeeRow.test.js** and add the tests below.
-  * Feel free to add actual properties to the employee object and test for their existence in a `<td/>`.
+* Verify the row renders without blowing up and that each cell is showing the correct value
 
-```javascript:title=src/components/employees/EmployeeRow.test.js
-it('should instantiate the Employee Table', () => {
-  const employee = {
-    username: 'fflintstone',
-    email: 'fred.flintstone@slatequarry.com',
-    firstName: 'Fred',
-    lastName: 'Flintstone',
-    admin: true,
-  };
 
-  const component = shallow(<EmployeeRow employee={employee} />);
+<details>
+  <summary>When finished, click here to see if your suite is similar to the one below:</summary>
 
-  expect(component).toContainReact(<td>Flintstone</td>);
-  expect(component).toContainReact(<td>fflintstone</td>);
-  expect(component).toContainReact(<td>Yes</td>);
+
+```javascript:title=src/employees/EmployeeRow.test.js
+import React from 'react';
+import EmployeeRow from './EmployeeRow';
+import { shallow } from 'enzyme';
+
+describe('<EmployeeRow />', () => {
+  let wrapper;
+
+  beforeEach(() => {
+    const employee = {
+      username: 'fflintstone',
+      email: 'fred.flintstone@slatequarry.com',
+      firstName: 'Fred',
+      lastName: 'Flintstone',
+      admin: true
+    };
+
+    wrapper = shallow(<EmployeeRow employee={employee} />);
+  });
+
+  it('should render values into expected cells', () => {
+    expect(wrapper.find('td')).toHaveLength(5);
+    expect(wrapper.find('td').at(0).text()).toEqual('fflintstone');
+    expect(wrapper.find('td').at(1).text()).toEqual('fred.flintstone@slatequarry.com');
+    expect(wrapper.find('td').at(2).text()).toEqual('Fred');
+    expect(wrapper.find('td').at(3).text()).toEqual('Flintstone');
+    expect(wrapper.find('td').at(4).text()).toEqual('Yes');
+  });
 });
 ```
+
+
+</details>
+
+&nbsp;
 
 * Run the tests. Did your new one pass?
 
 ## Create the EmployeeTable Component
 
 * Our next move is to create the table that will contain our **EmployeeRow**s.
-* Open **src/components/employees/EmployeeTable.js**
-* First we need to implement our `render()` method that:
-  * Iterates through the list of employees and instantiates a new **EmployeeRow** for each employee.
-  * Collect all the rows into a variable and add that variable to the table body.
+* Build a render method that iterates over a list of employees and builds an EmployeeRow for each
+* Don't forget to add appropriate propTypes
 
-```javascript:title=src/components/employees/EmployeeTable.js
+<details>
+  <summary>When finished, click here to see if your component is similar to the one below:</summary>
+
+
+```javascript:title=src/employees/EmployeeTable.js
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Table } from 'react-bootstrap';
+import EmployeeRow from './EmployeeRow';
+
+class EmployeeTable extends React.Component {
   render() {
-
-    let employeeRows = this.props.employees.map(employee => {
-      return (
-        <EmployeeRow employee={employee} key={employee._id} />
-      );
-    });
+    const { employees } = this.props;
 
     return (
-      <Table striped bordered condensed hover>
+      <Table bordered striped>
         <thead>
-        <tr>
-          <th>Username</th>
-          <th>Email</th>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Admin</th>
-        </tr>
+          <tr>
+            <th>Username</th>
+            <th>Email</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Admin</th>
+          </tr>
         </thead>
         <tbody>
-          {employeeRows}
+          {employees.map(employee => (
+            <EmployeeRow employee={ employee } key={ employee._id }/>
+          ))}
         </tbody>
       </Table>
     );
   }
-```
+}
 
-* We need to declare that the **employees** property should be an array of objects and that it is required.
-* We'll also set the default value to an empty array
-
-```javascript
 EmployeeTable.defaultProps = {
-  employees: [],
+  employees: []
 };
 
 EmployeeTable.propTypes = {
-  employees: PropTypes.array.isRequired,
+  employees: PropTypes.array.isRequired
 };
+
+export default EmployeeTable;
 ```
+
+
+</details>
+
+&nbsp;
 
 * Now let's test that our employee table renders correctly.
 * Can you write a test to check the number of **EmployeeRows** added to our table?
-* Open **src/components/employees/EmployeeTable.test.js**
-* Add the following to the **Employee Table Component** suite:
 
-```javascript:title=src/components/employees/EmployeeTable.test.js
-it('should instantiate the Employee Table', () => {
-  const employees = [
-    {
-      username: 'fflintstone',
-      email: 'fred.flintstone@slatequarry.com',
-      firstName: 'Fred',
-      lastName: 'Flintstone',
-      admin: true,
-      _id: 1,
-    },
-  ];
 
-  const component = mount(<EmployeeTable employees={employees} />);
+<details>
+  <summary>When finished, click here to see if your suite is similar to the one below:</summary>
+  
 
-  expect(component).toContainReact(<th>Last Name</th>);
-  expect(component).toIncludeText('Flintstone');
+```javascript:title=src/employees/EmployeeTable.test.js
+import React from 'react';
+import EmployeeTable from './EmployeeTable';
+import { shallow } from 'enzyme';
+import EmployeeRow from './EmployeeRow';
 
-  expect(component.find('tbody tr')).toHaveLength(1);
+describe('<EmployeeTable />', () => {
+  let wrapper;
+
+  beforeEach(() => {
+    const employees = [
+      {
+        username: 'fflintstone',
+        email: 'fred.flintstone@slatequarry.com',
+        firstName: 'Fred',
+        lastName: 'Flintstone',
+        admin: true,
+        _id: 1
+      }
+    ];
+
+    wrapper = shallow(<EmployeeTable employees={employees} />);
+  });
+
+  it('should render a row for each employee', () => {
+    expect(wrapper.find(EmployeeRow)).toHaveLength(1);
+  });
 });
 ```
+
+
+</details>
+
+&nbsp;
 
 * Run the tests. Did your new one pass?
 
@@ -350,52 +415,132 @@ it('should instantiate the Employee Table', () => {
 ## Create Employees Component
 
 * Last, we need to add the table to our handler for the `/employees` route.
-* Open **src/components/employees/Employees.js**
-* Add the imports for the **EmployeeTable** as well as the **PageHeader, Grid, and Row** from react-bootstrap
-
-```javascript:title=src/components/employees/Employees.js
-import EmployeeTable from './EmployeeTable';
-import { PageHeader, Grid, Row } from 'react-bootstrap';
-```
-
-* Add the render method below to the React class
-
-> The component's `constructor` has been implemented for you so that you'll have mock data.
+* Open **src/employees/Employees.js** and implement the data container
+* To get your started, here's some mock data:
 
 ```javascript
-  render() {
-    return (
-      <Grid>
-        <Row>
-          <PageHeader>Employees</PageHeader>
-        </Row>
-        <Row>
-          <EmployeeTable employees={this.state.pageConfig.data}/>
-        </Row>
-      </Grid>
-    );
+[{
+  _id: 1,
+  username: 'admin',
+  email: 'admin@mixtape.com',
+  password: 'password',
+  admin: true,
+  firstName: 'Admin',
+  lastName: 'User'
+}, {
+  _id: 2,
+  username: 'user',
+  email: 'user@mixtape.com',
+  password: 'password',
+  admin: false,
+  firstName: 'Normal',
+  lastName: 'User'
+}]
+```
+
+&nbsp;
+
+<details>
+  <summary>When finished, click here to see if your component is similar to the one below:</summary>
+  
+
+```javascript
+  import React from 'react';
+  import PropTypes from 'prop-types';
+  import EmployeeTable from './EmployeeTable';
+  
+  class Employees extends React.Component {
+    constructor(props) {
+      super(props);
+      this.state = {
+        employees: [
+          {
+            _id: 1,
+            username: 'admin',
+            email: 'admin@mixtape.com',
+            password: 'password',
+            admin: true,
+            firstName: 'Admin',
+            lastName: 'User'
+          },
+          {
+            _id: 2,
+            username: 'user',
+            email: 'user@mixtape.com',
+            password: 'password',
+            admin: false,
+            firstName: 'Normal',
+            lastName: 'User'
+          }
+        ]
+      };
+    }
+  
+    render() {
+      const { employees } = this.state;
+  
+      return (
+        <div>
+          <h1>Employees</h1>
+          <EmployeeTable employees={ employees }/>
+        </div>
+      );
+    }
   }
+  
+  Employees.propTypes = {
+      employees: PropTypes.arrayOf(PropTypes.object)
+  };
+  
+  export default Employees;
 ```
 
-* Open **src/components/employees/Employees.test.js**
-* Test that our component renders as expected.
-* Add the code below to the **Employees Component** suite
 
-```javascript:title=src/components/employees/Employees.test.js
-it('should instantiate the Employee Component', () => {
-  const component = shallow(<Employees />);
+</details>
 
-  expect(component).toHaveLength(1);
-});
 
-it('should contain a correct employee', () => {
-  const component = mount(<Employees />);
+&nbsp;
 
-  expect(component).toIncludeText('admin@mixtape.com');
+* Open **src/employees/Employees.test.js**
+* Test that our component renders as expected and passes down the expected data to EmployeeTable
+
+
+<details>
+  <summary>When finished, click here to see if your component is similar to the one below:</summary>
+
+
+```javascript:title=src/employees/Employees.test.js
+import React from 'react';
+import Employees from './Employees';
+import { shallow } from 'enzyme';
+import EmployeeTable from './EmployeeTable';
+
+describe('<Employees />', () => {
+  let wrapper;
+
+  beforeEach(() => {
+    wrapper = shallow(<Employees />);
+  });
+
+  it('should instantiate the Employee Component', () => {
+    expect(wrapper).toHaveLength(1);
+  });
+
+  it('should pass employees down to table', () => {
+    wrapper.setState({
+      employees: [{}, {}, {}, {}]
+    });
+    expect(wrapper.find(EmployeeTable).prop('employees')).toHaveLength(4);
+  });
 });
 ```
 
-* Run the tests. Did your new one pass?
+
+</details>
+
+&nbsp;
+
+* Run the tests.
 
 ## Run the application and see your work.
 
@@ -414,5 +559,5 @@ If you haven't already done so,
 
 ```
 git add .
-git commit -m 'We added some routes'
+git commit -m "We added some routes"
 ```

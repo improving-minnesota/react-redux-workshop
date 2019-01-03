@@ -13,9 +13,9 @@ section
       name: string
     }
 
-    export function Hello(props: Props) {
+    export const Hello = (props: Props) => {
       return <h1>{props.name}</h1>
-    }
+    };
 
 
 section
@@ -45,9 +45,9 @@ section
   script(type="text/plain", class="language-flow").
     import { Hello } from './hello';
 
-    function App() {
+    const App = () => {
       return <Hello />; // Error! You did not define a `name` prop
-    }
+    };
 
 section
   h3 Setup?
@@ -70,6 +70,6 @@ section
       name: string;
     }
 
-    export function Hello(props: Props) {
+    export const Hello = (props: Props) => {
       return <h1>{props.name}</h1>;
     }

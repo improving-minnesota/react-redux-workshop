@@ -5,183 +5,222 @@ index: 5
 
 # Lab Five - Forms and Validation
 
-## `cd` to the fifth lab
+## Switch to Lab05
 
 * In a terminal:
 
 ```
-cd ../ # presuming still in first lab
-cd lab-05-form-validation
+cd ../ # presuming still in previous lab
+cd lab-05
 yarn start
 ```
 
 ### Check it out!
 
-* Let's look at the progress that has already been completed on the application by the rest of the team.
+* While we were working on the last lab, the rest of the team was adding lots of new stuff to the app
+* Before proceeding, let's look at the progress that has been made:
   * The component files needed to create and edit employees, timesheets, and timeunits have been created for you. This lab will walk you through the implementation of some of those features.
   * You'll also notice that **React Router** has been added to some of our previous components. More on that later.
 
-### Add the Routes for Creating and Updating
+### Add the Routes for Create/Update
 
 * Before we can do anything, we need to add more routes to our application and tie them together with the appropriate handlers.
-* Open **src/App.js** and add the routes below under the 'Switch' tag (on the same level as your other routes):
+* Open **src/App.js** and update the Routes under the 'Switch' tag to match the following:
 
 ```jsx:title=src/App.js
-<Route path='/employees/detail/:_id' component={EmployeesDetail} />
-<Route path='/employees/create' component={EmployeesCreate} />
+<Route exact path="/projects" component={Projects} />
+<Route exact path="/projects/detail/:_id?" component={ProjectsDetail} />
 
-<Route exact path='/employees/:user_id/timesheets/detail/:_id' component={TimesheetsDetail} />
+<Route exact path="/employees" component={Employees} />
+<Route exact path="/employees/detail/:_id?" component={EmployeeDetail} />
 
-<Route path='/employees/:user_id/timesheets/detail/:timesheet_id/timeunits/create' component={TimeunitsCreate} />
-<Route path='/employees/:user_id/timesheets/detail/:timesheet_id/timeunits/detail/:_id' component={TimeunitsDetail} />
+<Route exact path="/timesheets" component={Timesheets} />
+<Route exact path="/timesheets/detail/:_id?" component={TimesheetsDetail} />
 
-<Route path='/timesheets/create' component={TimesheetsCreate} />
+<Route
+  exact
+  path="/timesheets/detail/:timesheet_id/timeunits/detail/:_id?"
+  component={TimeunitsDetail}
+/>
+
+<Redirect to="/employees" />
 ```
 
 > Take the time to check out the path declarations and how they are adding route params that are dynamically replaced.
 
-### Add Edit Employee Functionality
+### Formik? What's this Formik thing?
+
+If we really wanted to, we could absolutely create our own user input/validation framework from scratch in React, but why reinvent the wheel when there's awesome libraries out there that do the heavy lifting for us.
+In the real world, you'll almost certainly use one of several popular User Input/Form libraries such as [Redux Form](https://redux-form.com), [React Final Form](https://github.com/final-form/react-final-form), or [Formik](https://jaredpalmer.com/formik).
+For this example application, we're using Formik.
+
+Formik is a wrapper around Forms that takes care of some basic considerations like setup/reset/teardown, validation, and state management. It's a very lightweight solution which means it's easy to setup and very fast, but it doesn't do as much for you as others like `redux-form` which can lead to some boilerplate (but way less than you'd have doing it all yourself!)
+
+### Add Create/Edit Employee Functionality
 
 * Now let's set up a way to edit an employee.
 
-###### Before we get started, take the time to look at the custom form components already implemented for us.
-
 * The first component we need is a form to contain all of our employee's properties.
-* Open **src/components/employees/EmployeeForm.js**.
+* Open **src/employees/EmployeeForm.js**.
 
 * Let's review the `props` of this component:
 
   * employee : the employee we will be editing
   * handleSave: the callback to call when the user submits the form
-  * history: provided by `react-router`, this will allow the component to manipulate app's route
 
-* Next we need to act when the user clicks the cancel or save buttons.
-* First, add both buttons to the `render()` method of the EmployeeForm - these should be the final child elements of the `<form>`.
-
-```jsx:title=src/components/employees/EmployeeForm.js
-<Button bsStyle="success" onClick={this.handleSave} disabled={!this.validateAll()}> Save </Button>
-<LinkContainer to="/employees">
-  <Button bsStyle="danger"> Cancel </Button>
-</LinkContainer>
-```
-
-* LinkContainer is a component that will allow us to easily reroute when clicked.
-* The save button will call `this.handleSave`, which is the next function we should define.
-* Here's what `handleSave` should look like:
+* We need to define the Form element and integrate it with Formik so we get all of the helpful validation and support mechanisms.
 
 ```jsx
-handleSave(){
-  if(this.validateAll()) {
-    this.props.handleSave({
-      username: this.state.username.value,
-      email: this.state.email.value,
-      firstName: this.state.firstName.value,
-      lastName: this.state.lastName.value,
-      admin: this.state.admin.value,
-      _id: this.props.employee._id
-    });
-  }
-}
-```
+render() {
+  const { employee } = this.props;
 
-* If all the fields in the form are valid, we're calling the function that was passed down to us as the `handleSave` prop.
-* We haven't defined `validateAll()` yet, so let's do that next. Here's what it should look like:
-
-```jsx
-validateAll(){
   return (
-    this.state.username.value
-    && this.state.email.value
-    && this.state.firstName.value
-    && this.state.lastName.value
-    && this.state.admin.value !== null
+    <Formik
+      initialValues={{}}
+      validate={ this.validate }
+      onSubmit={ this.handleSave }
+    >
+      { ({ isValid, errors, touched, handleReset, handleSubmit }) => (
+        <Form>
+        
+        </Form>
+      )}
+    </Formik>
   );
 }
 ```
 
-* Here, we're simply checking that we have values for all the fields. Our other handler functions will update the state appropriately as the user changes field values. But what if the `EmployeeForm` is being used to edit an existing employee?
-* We already know that this component can receive an `employee` in its props, what we need to do is update the state to reflect that employee's values.
-* The `componentWillReceiveProps` is a nice place to do that. Here's what it should look like:
+> This block defines the `Formik` Higher-Order-Component (HOC) - this is a wrapper around a child `Form` which adds behaviors to make it more capable than it is by itself.
+  This component takes initial values to populate the form with (or reset the form to if the user wants to reset) as well as hooks to call functions for validation and submission.
+  Within the `Formik` component is something called a "render prop" - this is a more advanced pattern that is used by some third-party libraries to allow you to define content
+  to be nested inside third-party components while still retaining the ability to apply custom logic, styles, etc like you could in your own React code.
+  
+> Note the five render props being passed down - 'isValid', 'errors', 'touched', 'handleReset', and 'handleSubmit'. These are all values and functions provided by Formik. The first two give us access
+  to the validation state of the form (true or false) and what errors exist in the form, 'touched' tells us what fields the user has interacted with, and the last two are event handlers that can be called to submit or reset the form. Formik provides
+  a *ton* more props for more advanced scenarios, but we don't need them here.
+  
+* Great! We have an empty form...probably need to add some content in there.
+
+* A helpful member of your team has created a reusable component for Forms that takes care of wrapping an input element with an appropriate label and validation logic. Let's just reuse that! Hooray for reusable shared components!
 
 ```jsx
-componentWillReceiveProps(nextProps) {
-  this.setState({
-    username: {value: nextProps.employee.username, valid: null},
-    email: {value: nextProps.employee.email, valid: null},
-    firstName: {value: nextProps.employee.firstName, valid: null},
-    lastName: {value: nextProps.employee.lastName, valid: null},
-    admin: {value: nextProps.employee.admin, valid: null}
-  });
-}
+<FieldWrapper type="text" name="username" label="Username" invalid={errors.username} touched={touched.username} />
+<FieldWrapper type="text" name="email" label="Email" invalid={errors.email} touched={touched.email} />
+<FieldWrapper type="text" name="firstName" label="First Name" invalid={errors.firstName} touched={touched.firstName} />
+<FieldWrapper type="text" name="lastName" label="Last Name" invalid={errors.lastName} touched={touched.lastName} />
+<FieldWrapper type="checkbox" name="admin" label="Admin" invalid={errors.admin} touched={touched.admin} />
 ```
 
-* This function is called when the parent component updates this component's props. The new props are passed as an argument, so we use that to update the component's state. The component will then render as necessary.
+* Here we're defining five fields - the `FieldWrapper` component takes a few props:
+  * `type` is used to define what type of form field to render - text, checkbox, select menu, etc
+  * `name` is a unique name within the form for the value of each field
+  * `label` is the text to show next to the field so the user knows what it is
+  * `invalid` is a hint to the field whether Formik's validation has any problems with the value in that field. It will be an error message if a validation issue was found
+  * `touched` is a hint to the field as to whether the user has interacted with it yet
 
-* Now it's time to update our `render()` method to include the fields that our coworkers forgot to include! Looks like we don't have fields for email or firstName. Well, if you want something done right... Let's add them:
+* Lastly we need to give the ability for the user to Save or Reset the form.
+
+* At the very bottom of the `Form` element, we can add another nice reusable Form component somebody on our team created - the `FormControls` component. This contains a submit and reset button.
+
+```jsx:title=src/employees/EmployeeForm.js
+<FormControls
+  allowSubmit={isValid}
+  onSubmit={handleSubmit}
+  onReset={handleReset}
+/>
+```
+
+* Note how we're using another Formik-supplied value here `isValid` - this tells us whether the entire form has passed validation. Once it has, we'll enable the save button.
+
+* There, our Form is complete. However, we need to finish implementing what should happen when the Form detects a submission.
+* We've already told the `Formik` component to call `handleSave` in this situation. Here's what the `handleSave` function should look like:
 
 ```jsx
-<FormGroup
-  controlId="email"
-  validationState={this.getEmailValidationState()}
-  >
-  <ControlLabel>Email</ControlLabel>
-  <FormControl
-    type="email"
-    value={this.state.email.value}
-    placeholder="Enter email"
-    onChange={(e) => this.handleEmailChange(e.target.value)}
-  />
-  <FormControl.Feedback />
-</FormGroup>
-
-<FormGroup
-  controlId="firstName"
-  validationState={this.getFirstNameValidationState()}
-  >
-  <ControlLabel>First Name</ControlLabel>
-  <FormControl
-    type="text"
-    value={this.state.firstName.value}
-    placeholder="Enter firstName"
-    onChange={(e) => this.handleFirstNameChange(e.target.value)}
-  />
-  <FormControl.Feedback />
-</FormGroup>
+handleSave = (values) => {
+  this.props.handleSave(values);
+};
 ```
 
 > Notice that we are not actually implementing the save function. That is left for the component that uses this form to implement and pass it in as a prop.
 
+* We haven't defined `validate()` yet, so let's do that next. Here's what it should look like:
+
+```jsx
+validate = (values) => {
+  const errors = {};
+
+  if (!values.username) {
+    errors.username = 'Required';
+  }
+  if (!values.email) {
+    errors.email = 'Required';
+  }
+
+  return errors;
+};
+```
+
+* We're simply checking that we have values for a few fields. Formik will automatically call this as the user inputs data and will reflect those errors back to the user via our **FieldWrapper** components.
+* Until now we've assumed that the user is creating a new employee record. What if the `EmployeeForm` is being used to edit an existing employee?
+* We already know that this component can receive an `employee` in its props, what we need to do is update the form to reflect that employee's values.
+* The `Formik` component gives us the `initialValues` prop to do this. Replace the empty declaration you currently have with the following:
+
+```jsx
+initialValues={ {
+  username: employee.username || '',
+  email: employee.email || '',
+  firstName: employee.firstName || '',
+  lastName: employee.lastName || '',
+  admin: employee.admin || '',
+  _id: employee._id
+} }
+```
+
 ## Add the Form into an Employee Detail Component
 
 * Now let's actually use the form we just built.
-* Open **/src/components/employees/EmployeesDetail.js**
+* Open **/src/employees/EmployeeDetail.js**
 * Let's setup our propTypes, first. We already have the `history` prop, but we need to include an `employee` prop as well, like so:
 
 ```jsx
-EmployeesDetail.propTypes = {
+EmployeeDetail.propTypes = {
   employee: PropTypes.object.isRequired,
   history: PropTypes.object,
 };
+
+EmployeeDetail.defaultProps = {
+  employee: {}
+};
 ```
 
-* Next, let's hook up to the Redux architecture. The only thing we'll need from the Redux state is the employee, like so:
+* Next, let's hook up to Redux. The only thing we'll need from the Redux state is the selected employee, like so:
 
 ```jsx
-const mapStateToProps = state => {
+const mapStateToProps = (state, props) => {
+  const { match } = props;
+  const { _id } = match.params;
   return {
-    employee: state.employees.employee,
+    employee: state.employees.data.find(employee => employee._id === _id)
   };
 };
 ```
+
+* We use react-router to give us the parameters that `match`-ed from the `Route` - in this instance, we'll get the employee ID from the URL. We use that to find the corresponding employee record. If none exists, then we'll get `undefined`
 
 * This component will also need the ability to update the Redux state through using the `EmployeeActions`, like so:
 
 ```jsx
-const mapDispatchToProps = dispatch => {
-  return {
-    actions: bindActionCreators(EmployeeActions, dispatch),
-  };
+const mapDispatchToProps = {
+  onCreate: EmployeeActionCreators.createEmployee,
+  onUpdate: EmployeeActionCreators.updateEmployee,
+  getEmployee: EmployeeActionCreators.getEmployee
 };
+```
+
+* Then we need to **connect** to Redux
+
+```javascript
+export default connect(mapStateToProps, mapDispatchToProps)(EmployeeDetail);
 ```
 
 * Next, let's update the render function to include the `EmployeeForm`, and pass it all the props it needs:
@@ -189,62 +228,56 @@ const mapDispatchToProps = dispatch => {
 ```jsx
 render() {
   return (
-    <Grid>
-      <Row>
-        <PageHeader>Employees Detail</PageHeader>
-      </Row>
-      <Row>
-        <EmployeeForm employee={this.props.employee} actions={this.props.actions} handleSave={this.handleSave}/>
-      </Row>
-    </Grid>
-);
+    <div>
+      <h1>Employee Detail</h1>
+      <EmployeeForm
+        employee={this.props.employee}
+        actions={this.props.actions}
+        handleSave={this.handleSave}
+      />
+    </div>
+  );
 }
 ```
 
 * Notice that we're passing `EmployeeForm` a reference to `this.handleSave`, which we still need to define:
 
 ```jsx
-handleSave(employee){
-  this.props.actions.updateEmployee(employee).then(() => {
-    this.props.history.push('/employees');
+handleSave = (values) => {
+  const { onCreate, onUpdate, history } = this.props;
+
+  const result = values._id ? onUpdate(values) : onCreate(values);
+  result.then(() => {
+    history.push('/employees');
   });
-}
+};
 ```
 
-* Finally, we need to build the constructor. Go ahead and do that now, then we'll look at each part:
-
-```jsx
-constructor(props) {
-  super(props);
-
-  const id = props.match.params._id;
-  props.actions.getEmployee(id);
-
-  this.handleSave = this.handleSave.bind(this);
-}
-```
-
-* `super(props)` must be the first line in any react constructor
-* Then, we grab the employee id from the URL parameter, and use it to retrieve that employee.
-* Finally, we're forcing `this` to always be this component when `handleSave` is called by the child component.
+* When handleSave is called we'll:
+  - Check to see if the record being saved already has an ID - if yes it's an update, if not it's a create.
+  - We call the corresponding handler function to begin the appropriate async action method
+  - Once complete, we'll tell react-router to send the user back to the "/employees" route so they see the Table.
 
 &nbsp;
 
 ## Test the Employee Detail Component
 
-* Open **/src/components/employees/EmployeesDetail.test.js**
-* Update the test labeled `should instantiate the Employees Detail Component`:
+* Open **/src/employees/tail.test.js**
+* Add a test to verify the component renders as expected:
 
 ```jsx
-it('should instantiate the Employees Detail Component', () => {
-  const component = mount(
-    <MemoryRouter>
-      <EmployeesDetail store={mockStore} />
-    </MemoryRouter>
-  );
+it('should instantiate the Employee Detail Component', () => {
+    const mockStore = configureStore();
+    const component = mount(
+      <Provider store={mockStore}>
+        <MemoryRouter>
+          <EmployeeDetail />
+        </MemoryRouter>
+      </Provider>
+    );
 
-  expect(component).toIncludeText('Employees Detail');
-});
+    expect(component.find(EmployeeDetail)).toIncludeText('Employee Detail');
+  });
 ```
 
 * Run the tests and verify that they pass before moving on to the next section.
@@ -254,269 +287,62 @@ it('should instantiate the Employees Detail Component', () => {
 * We have an Employee Detail route, but there's no way to get to it yet.
 * We're going to add functionality so that when you click an **EmployeeRow**, the router will transition to the appropriate detail route for the employee.
 
-- Open **/src/components/employees/EmployeeRow.js**
+- Open **/src/employees/EmployeeRow.js**
 
 - Add the `showDetail()` method to the **EmployeeRow**
 
 ```jsx
-showDetail(employee) {
-  if(employee.deleted) {
-    console.log('You cannot edit a deleted employee.');
-    return;
-  }
+showDetail = () => {
+  const { history, employee } = this.props;
+   
+   if (employee.deleted) {
+     console.log('You cannot edit a deleted employee.');
+     return;
+   }
 
-  this.props.history.push('/employees/detail/' + employee._id);
-}
+   history.push(`/employees/detail/${employee._id}`);
+};
 ```
+
+* This first checks to see if the employee has been deleted and prevents viewing it if so
+* Then it uses the **history** prop provided by `react-router` to change the current URL programmatically (and thus change the matched route)
 
 * Now add an `onClick()` handler to the `<tr/>` in the `render()` method.
 
 ```jsx
-<tr className={rowClass} onClick={() => {this.showDetail(employee)}}>
+<tr className={employee.deleted ? 'deleted' : ''} onClick={this.showDetail}>
 ```
 
 * Open your app and click on an employee... did it work!?!?!?
 
-### Add Edit Timesheet Functionality
+## Add ability to create a new Employee
 
-* Now that we can edit employees, let's try to create and edit timesheets.
-* Click on a timesheet - our routing is in place, and we're correctly navigating to the timesheet page, but it's empty!
-
-###### Now let's take the time to look at the Timesheet form component and give it some new powers.
-
-* The first component we need is a form to contain all of our timesheet's properties.
-* Open **src/components/timesheets/TimesheetForm.js**.
-* You'll notice there are a bunch of validation functions in here. For example:
-* This function will be called when the user selects a new employee. Once the user does so, the field will be marked as valid in the component's state.
-
-```jsx:title=src/components/timesheets/TimesheetForm.js
-handleEmployeeChange(value) {
-  let isValid = false;
-    if(value){
-       isValid = true;
-    }
-  return this.setState({ user_id: {value: value, valid: isValid }});
-}
-```
-
-Let's hook our component up to our validation functions by returning this from our `render()` method
+* Navigate to **src/employees/Employees.js**.
+* Let's add a new Button the user can click to create an Employee. Add this next to the `EmployeeTable`:
 
 ```jsx
-return (
-  <form>
-    <FormGroup controlId="name" validationState={this.getNameValidationState()}>
-      {!this.props.timesheet._id && (
-        <div>
-          <ControlLabel>Username</ControlLabel>
-          <FormControl
-            componentClass="select"
-            onChange={e => this.handleEmployeeChange(e.target.value)}
-          >
-            <option value="" disabled selected>
-              Select an employee
-            </option>
-            {this.props.employees.map(employee => {
-              return <option value={employee._id}>{employee.username}</option>;
-            })}
-          </FormControl>
-        </div>
-      )}
-      <ControlLabel>Name</ControlLabel>
-      <FormControl
-        type="text"
-        value={this.state.name.value}
-        placeholder="Enter name"
-        onChange={e => this.handleNameChange(e.target.value)}
-      />
-      <FormControl.Feedback />
-    </FormGroup>
-    <FormGroup
-      controlId="description"
-      validationState={this.getDescriptionValidationState()}
-    >
-      <ControlLabel>Description</ControlLabel>
-      <FormControl
-        type="text"
-        value={this.state.description.value}
-        placeholder="Enter description"
-        onChange={e => this.handleDescriptionChange(e.target.value)}
-      />
-      <FormControl.Feedback />
-    </FormGroup>
-    <FormGroup
-      controlId="beginDate"
-      validationState={this.getBeginDateValidationState()}
-    >
-      <ControlLabel>Begin Date</ControlLabel>
-      <FormControl
-        type="text"
-        value={this.state.beginDate.value}
-        placeholder="YYYY-MM-DD"
-        onChange={e => this.handleBeginDateChange(e.target.value)}
-      />
-      <FormControl.Feedback />
-    </FormGroup>
-    <FormGroup
-      controlId="endDate"
-      validationState={this.getEndDateValidationState()}
-    >
-      <ControlLabel>End Date</ControlLabel>
-      <FormControl
-        type="text"
-        value={this.state.endDate.value}
-        placeholder="YYYY-MM-DD"
-        onChange={e => this.handleEndDateChange(e.target.value)}
-      />
-      <FormControl.Feedback />
-    </FormGroup>
-    <Button
-      bsStyle="success"
-      onClick={this.handleSave}
-      disabled={!this.validateAll()}
-    >
-      {' '}
-      Save{' '}
-    </Button>&nbsp;
-    <LinkContainer to="/employees/all/timesheets">
-      <Button bsStyle="danger"> Cancel </Button>
-    </LinkContainer>
-  </form>
-);
+<Link to="/employees/detail">
+  <Button bsStyle="primary">
+    New Employee
+  </Button>
+</Link>
 ```
 
-* There are still two functions that need to be implemented: `componentWillReceiveProps` and `handleSave`.
-* Here's what your `componentWillReceiveProps` function should look like:
+* What's going on here? We're using a **react-router** `Link` element which, when clicked, will send the user to the Route that causes the EmployeeDetail component to render. Inside the Link we specify a component to render that is clickable.
 
-```jsx
-componentWillReceiveProps(nextProps) {
-  this.setState({
-    name: {value: nextProps.timesheet.name, valid: null},
-    description: {value: nextProps.timesheet.description, valid: null},
-    beginDate: {value: nextProps.timesheet.beginDate, valid: null},
-    endDate: {value: nextProps.timesheet.endDate, valid: null}
-  });
-}
-```
-
-* And here's the function that runs when the user clicks the save button, `handleSave`:
-
-```jsx
-handleSave(){
- if(this.validateAll()) {
-   this.props.handleSave({
-     name: this.state.name.value,
-     description: this.state.description.value,
-     beginDate: this.state.beginDate.value,
-     endDate: this.state.endDate.value,
-     user_id: this.props.timesheet.user_id ?  this.props.timesheet.user_id : this.state.user_id.value,
-     _id: this.props.timesheet._id
-   });
- }
-}
-```
-
-* What is `this.validateAll()` doing?
-
-## Add the Form into an Timesheet Detail Component
-
-* Now let's actually use the form we just built.
-* Open **src/components/timesheets/TimesheetsDetail.js**
-* Take a look at that cool `constructor` method - how is it retrieving the timesheet to be viewed?
-* We have two jobs to complete here!
-  1.  Implement the dang `render` method
-  2.  Implement the dang `handleSave` method
-* Here's what your `render` method should look like:
-
-```jsx:title=src/components/timesheets/TimesheetsDetail.js
-render() {
-  return (
-    <Grid>
-      <Row>
-        <PageHeader>Timesheet Detail</PageHeader>
-      </Row>
-      <Row>
-        <TimesheetForm timesheet={this.props.timesheet} actions={this.props.actions} handleSave={this.handleSave}/>
-      </Row>
-      { //Show timeunits after the getTimesheet() call finishes loading the timesheet
-        this.props.timesheet && this.props.timesheet._id &&
-        <Row>
-          <Timeunits timesheet={this.props.timesheet} actions={this.props.actions}/>
-        </Row>
-      }
-    </Grid>
-  );
-}
-```
-
-* Notice - we're only displaying a timesheet's timeunits once it's been retrieved.
-* Here's what your `handleSave` method should look like:
-
-```jsx
-handleSave(timesheet){
-  this.props.actions.updateTimesheet(timesheet).then(() => {
-    this.props.history.push(`/employees/all/timesheets`);
-  });
-}
-```
-
-* Things to notice:
-
-  * This looks great
-  * After the `updateTimesheet` action completes, we're just sending the user back to the timesheet list
-
-#### Just one more thing before you can use the `TimesheetsDetail` component
-
-* Just kidding! You should be able to click a timesheet to view its details, and save.
-
-## Add ability to create a new timesheet
-
-* Navigate to **src/components/timesheets/TimesheetsCreate.js**.
-* Let's create a constructor and talk about it:
-
-```jsx:title=src/components/timesheets/TimesheetsCreate.js
-constructor(props) {
-  super(props);
-  this.props.employeeActions.listEmployees();
-  this.handleSave = this.handleSave.bind(this);
-}
-```
-
-* This should all look pretty familiar, although you might be asking yourself... why are we retrieving all the employees? It's because the timesheet will have a select field whose options are all the existing employees!
-* Next, let's implement our `handleSave` method:
-
-```jsx
-handleSave(timesheet){
-  this.props.actions.createTimesheet(timesheet).then(() => {
-    this.props.history.push('/employees/all/timesheets');
-  });
-}
-```
-
-* Finally, let's add our render method:
-* Return to your app - now you should be able to create new timesheets!
-
-```jsx
-render() {
-  return (
-    <Grid>
-      <Row>
-        <PageHeader>Timesheet Create</PageHeader>
-      </Row>
-      <Row>
-        <TimesheetForm employees={this.props.employees} handleSave={this.handleSave}/>
-      </Row>
-    </Grid>
-  );
-}
-```
+* That's it! We already made our EmployeeDetail component smart enough to know that, if it wasn't given an Employee object with an ID set, that we were creating a new one. Cool!
 
 ## Extra credit
 
-Are you a true champion? Make it possible to create a new employee. Hint: look at how it works in timesheets!
+The **ProjectDetail** component has been implemented already. Can you get it hooked up to allow Project create/update? How about adding Delete/Restore to the ProjectTable?
 
-### Commit your changes to Git - congrats, you are a React/Redux Master.
+Are you a true champion? Figure out how to add validation to prevent the user from creating an Employee with the same name or username as an existing Employee.
+
+Hint: You might be tempted to drag data down to use it in child components, but it's sometimes easier to leave data up high and pass down worker functions from a parent to a child component.
+
+### Commit your changes to Git - congrats, you are a Forms Master.
 
 ```
 git add .
-git commit -m 'We are validating forms'
+git commit -m "We are validating forms"
 ```

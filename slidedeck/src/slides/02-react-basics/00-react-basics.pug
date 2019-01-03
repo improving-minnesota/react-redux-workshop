@@ -19,18 +19,18 @@ section
 section
   h3 Our first React component
   script(type="text/plain", class="language-jsx").
-    function Hello(props) {
+    const Hello = props => {
       return (
         <header>
           <h1 className="title">Hello {props.name}!</h1>
         </header>
       );
-    }
+    };
 
 section
   h3 Transpiles (with Babel) to:
   script(type="text/plain", class="language-jsx").
-    function Hello(props) {
+    const Hello = props => {
       return React.createElement(
         'header',
         {},
@@ -40,7 +40,7 @@ section
           `Hello ${props.name}!`
         )
       );
-    }
+    };
 
 section
   p React's JSX uses the upper vs. lower case convention to distinguish between React components vs. HTML tags
@@ -48,13 +48,13 @@ section
     li UpperCase = Component
     li lowercase = HTML tag
   script(type="text/plain", class="language-jsx").
-    function Hello(props) {
+    const Hello = props => {
       return (
         <div>
           <SomeComponent />
         </div>
       );
-    }
+    };
 
 section
   h3 Gotchas!
@@ -93,9 +93,9 @@ section
   script(type="text/plain", class="language-jsx").
     import ReactDOM from 'react-dom';
 
-    function Hello(props) {
+    const Hello = props => {
       return <h1>Hello {props.name}!</h1>;
-    }
+    };
 
     const container = document.getElementById('root');
     ReactDOM.render(<Hello name="Tim" />, container);
@@ -220,13 +220,13 @@ section
   h2.lower props.children
 
   script(type="text/plain", class="language-jsx").
-    function Hello(props) {
+    const Hello = props => {
       return (
         <div>
           {props.children}
         </div>
       );
-    }
+    };
 
     <Hello><h1>Hello World</h1></Hello>
 

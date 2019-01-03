@@ -5,26 +5,26 @@ section
 section
   h3 String values
   script(type="text/plain", class="language-jsx").
-    function Hello(props) {
+    const Hello = props => {
       return (
         <h1>Hello {props.name}</h1>
       );
-    }
+    };
 
 section
   h3 React elements
   script(type="text/plain", class="language-jsx").
-    function Hello(props) {
+    const Hello = props => {
       return (
         <div>
           {props.children}
         </div>
       );
-    }
+    };
 
 section
   script(type="text/plain", class="language-jsx").
-    function List(props) {
+    const List = props => {
       return (
         <ul>
           {
@@ -32,16 +32,16 @@ section
           }
         </ul>
       );
-    }
+    };
 
 section
   h3 Callbacks/events
   script(type="text/plain", class="language-jsx").
-    function Hello(props) {
+    const Hello = props => {
       return (
         <h1 onClick={props.onClick}>Hello {props.name}!</h1>
       );
-    }
+    };
 
 section
   iframe(src="https://codesandbox.io/embed/84mymvzm6l?module=%2Fsrc%2Fcomponents%2Findex.js", style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;", sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin")
