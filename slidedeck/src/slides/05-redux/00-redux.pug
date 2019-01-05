@@ -7,21 +7,85 @@ section
   p ...and a formalized way to modify that data
 
 section
-  h3.lower Three principles
+  h2 Three major concepts
+
+section
+  h3 Store
   ul
-    li Single source of truth - object tree in a single store
-    li State is read-only - can only be changed by dispatching an action
-    li Changes are made with pure functions called <span class="component red">reducers</span>
+    li Single, application-wide data store
+    li Contains all Redux-managed data
+    li Read-only (for consumers)
+
+section
+  h3 Action
+  ul
+    li Trigger to tell Redux that something happened
+    li Actions can be system- or user-generated
+    li Contain a "type" and an optional payload
+    li Best practice to establish a convention or use tools like
+      a(href="https://github.com/redux-utilities/flux-standard-action")  Flux Standard Actions
+
+section
+  h3 Action
+  script(type="text/plain", class="language-jsx", style="width:100%").
+    const anExampleAction = {
+      type: 'USER_LOGIN',
+      payload: {
+        userId: 'blorg'
+      }
+    };
+
+  script(type="text/plain", class="language-jsx", style="width:100%").
+    const anExampleAction = {
+      type: 'USER_LOGIN',
+      userId: 'blorg'
+    };
+
+section
+  h3 Reducer
+  ul
+    li Notified of all actions and decides what (if any) updates to make to Redux State
+    li Returns an updated version of state (or current state if no updates)
+    li Is a "pure function"
 
 section
   h3 What is a pure function?
-
+  p A function that has no interactions outside its own scope
   script(type="text/plain", class="language-js").
     function add(a, b) {
       return a + b;
     }
 
     add(2, 2); // always 4
+
+section
+  h3 Reducer
+  script(type="text/plain", class="language-jsx", style="width:100%").
+    const initialState = {
+      agents: []
+    };
+
+    const agentReducer = (state = initialState, action) => {
+      switch (action.type) {
+        case 'ADD_EMPLOYEE':
+          return {
+            ...state,
+            agents: [...state.agents, ...action.payload]
+          };
+          ...
+        default:
+          return state;
+      }
+    };
+
+section
+  h3 Data Flow
+  h4 Redux follows a strict unidirectional data flow
+
+section
+  img(src="~./images/redux-diagram.png")
+
+  p.attribution https://medium.com/the-web-tub/managing-your-react-state-with-redux-affab72de4b1
 
 section
   h2 Benefits
@@ -50,16 +114,23 @@ section
   p State mutation via Redux ensures safe, predictable changes
 
 section
-  h2 Core Concepts
+  h2 How does Redux fit in?
 
 section
-  h3 Actions
+  h3 How does Redux fit in?
+  p Redux is the third major way to store/pass data in React
   ul
-    li.
-      Plain JavaScript objects that have a <span class="component red">type</span> that describes the action being performed
-    li Objects can contain just about anything else
-    li Best practice to establish a convention or use tools like
-      a(href="https://github.com/redux-utilities/flux-standard-action")  Flux Standard Actions
+    li props: Allow a parent to control a child, hard to share
+    li state: Allow a component to control itself, ephemeral
+    li Redux: Control multiple components at once, easy to share, can be persisted
+
+section
+  h3 Soooo...put everything in Redux?
+  p Redux bloats code and has performance impacts
+  p Rule of thumb: Do as much with props and state as possible
+
+section
+  h2 Working with Redux
 
 section
   h3 Action Creators
@@ -74,24 +145,6 @@ section
       return {
         type: ADD_AGENT,
         payload: agent
-      }
-    }
-
-section
-  h3 Reducers
-  script(type="text/plain", class="language-jsx", style="width:100%").
-    const initialState = {
-      agents: []
-    }
-
-    const agentReducer = (state = initialState, action) => {
-      switch (action.type) {
-        case 'ADD_EMPLOYEE':
-          return {
-            ...state,
-            agents: [...state.agents, ...action.payload]
-          };
-          ...
       }
     }
 

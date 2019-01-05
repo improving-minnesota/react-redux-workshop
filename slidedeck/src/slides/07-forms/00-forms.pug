@@ -25,11 +25,27 @@ section
     <input type="text" name="name" onChange={this.onNameChange} />
 
 section
-  h2 Controlled Components
+  h2 Controlled vs Uncontrolled Components
+
+section
+  h3 Uncontrolled Components
+  ul
+    li State and display are managed outside React
+    li React can be notified when it changes
+
+  script(type="text/plain", class="language-jsx").
+    onCityChange(event) {
+      console.log(`Value changed to ${event.target.value}`);
+    }
+
+    <input type="text" onChange={this.onCityChange} />
+
+section
+  h3 Controlled Components
   ul
     li React controls state and display
-    li Any <span class="component red">&lt;input&gt;</span> with value set is a controlled component
     li Value of the rendered element will always reflect the <span class="component red">value</span> prop
+    li Allows for setting initial state, overriding/transforming changes
   script(type="text/plain", class="language-jsx").
     handleCityChange(event) {
       this.setState({city: {value: event.target.value}});
@@ -54,8 +70,12 @@ section
 
 section
   h2 React Bootstrap
-  ul
-    li Bootstrap Form components for React
+
+section
+  h2 React Bootstrap
+  p Bootstrap styles for form components in React
+  p One of the more basic (but boilerplate-heavy) options
+
   script(type="text/plain", class="language-jsx").
     <FormGroup controlId="firstName">
       <ControlLabel>First Name</ControlLabel>
@@ -74,7 +94,7 @@ section
     li Add <span class="component red">&lt;FormControl.Feedback/></span> inside the FormGroup tag
 
 section
-  h3 Validation
+  h3 React Bootstrap Validation
   script(type="text/plain", class="language-jsx").
     <FormGroup
       controlId="firstName"
@@ -91,6 +111,8 @@ section
     </FormGroup>
 
 section
+  h3 React Bootstrap State
+  p Validation and value state must be managed manually
   script(type="text/plain", class="language-jsx").
     getFirstNameValidationState() {
       if (!this.state) return;
@@ -106,26 +128,69 @@ section
     }
 
 section
-  h3 Uncontrolled Components
-  ul
-    li React does not control the state
-    li Good for co-existing with non-React libraries
-    li Use a <span class="component red">ref</span> function to get input value from DOM
-  script(type="text/plain", class="language-jsx").
-    <form onSubmit={this.handleSubmit}>
-      <input type="text" ref={(input) => this.name = input} />
-    </form>
+  a(href="https://github.com/jaredpalmer/formik", target="_blank", rel="noopener")
+    img(src="~./images/formik.png")
 
-    handleSubmit(event) {
-      console.log(`Input value: ${this.name}`)
-    }
+section
+  h2 Formik
+  p No styling but handles more Form logic
+
+  script(type="text/plain", class="language-jsx").
+    <Formik
+      initialValues={{ firstName: 'Bob' }}
+      validate={this.validate}
+      onSubmit={this.submit}
+    >
+      {() => (
+        <Form>
+          <Field type="text" name="firstName" />
+          <ErrorMessage name="firstName" />
+
+          <button type="submit">Submit</button>
+        </Form>
+      )}
+    </Formik>
+
+
+section
+  h2 Formik Validation
+  ul
+    li Validate the whole form when any field changes
+    li Sends any validation failures back to form
+
+section
+  h3 Formik Validation
+  script(type="text/plain", class="language-jsx").
+    <Formik
+      ...
+      validate={this.validate}
+    >
+
+    const validate = (values) => {
+      const errors = {};
+      if (!values.firstName) {
+        errors.firstName = 'Required!';
+      }
+      return errors;
+    };
+
+section
+  h3 Formik State
+  p Formik handles tracking form values for us (no 'handle' functions)
+  p We'll get a copy of all values on validation & submission
+
+  script(type="text/plain", class="language-jsx").
+    <Formik
+      ...
+      onSubmit={this.submit}
+    >
+
+    const submit = (values) => {
+      // Do stuff to submit the form here
+    };
 
 section
   h3 Other libraries
-
-section
-  a(href="https://github.com/jaredpalmer/formik", target="_blank", rel="noopener")
-    img(src="~./images/formik.png")
 
 section
   a(href="https://github.com/final-form/react-final-form", target="_blank", rel="noopener")
