@@ -1,0 +1,70 @@
+section
+  h2 Advanced Testing
+
+section
+  h3 Don't try to test library code!
+  p Third-party libs like Redux and React-Router are already well-tested
+  p Focus on *your* code
+
+section
+  h3 A very simple component can be wrapped in many layers
+  script(type="text/plain", class="language-jsx").
+    const MyAwesomeComponent = (props) => ...;
+    const mapStateToProps = ...;
+    const mapDispatchToProps = ...;
+    export default withRouter(connect(mapStateToProps, mapDispatchToProps)(MyAwesomeComponent));
+
+  script(type="text/plain", class="language-jsx").
+    const wrapper = mount(
+      <Provider store={mockStore}>
+        <MemoryRouter>
+          <MyAwesomeComponent />
+        </MemoryRouter>
+      </Provider>
+    );
+
+section
+  h3 Peeling those layers back can make testing a lot simpler
+  script(type="text/plain", class="language-jsx").
+    export const _MyAwesomeComponent = (props) => ...;
+    export const mapStateToProps = ...;
+    export const mapDispatchToProps = ...;
+    export default withRouter(connect(mapStateToProps, mapDispatchToProps)(MyAwesomeComponent));
+
+  script(type="text/plain", class="language-jsx").
+    test('my awesome component', () => {
+      const wrapper = shallow(<_MyAwesomeComponent />);
+      wrapper.setProps({ ... });
+    });
+
+    test('mapStateToProps', () => { ... ]);
+    test('mapDispatchToProps', () => { ... ]);
+
+section
+  h2 Modularize!
+
+section
+  h3 Big modules === big tests
+  p Testing get exponentially more difficult as your file increases in size
+  p Split into multiple modules, let Webpack manage the complexity for you!
+
+section
+  h3 Jest Module Mocks
+  script(type="text/plain", class="language-jsx").
+    import { doComplexStuff } from './utilities';
+
+    export const functionBeingTested = doComplexStuff(123, 456);
+
+  script(type="text/plain", class="language-jsx").
+    import * as Utilities from './utilities';
+
+    jest.mock('./utilities');
+
+    test('verify fn is called', () => {
+      Utilities.doComplexStuff.mockReturnValue(111111);
+
+      const result = functionBeingTested();
+      expect(Utilities.doComplexStuff).toHaveBeenCalledTimes(1);
+      expect(Utilities.doComplexStuff).toHaveBeenCalledWith(123, 456);
+      expect(result).toEqual(111111);
+    });
