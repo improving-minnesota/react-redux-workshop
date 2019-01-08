@@ -1,0 +1,20 @@
+section
+  h3 How do I use Redux?
+  p Once you have Redux set up most interactions are managed with react-redux (coming up next)
+
+section
+  h3 Store instantiation
+  script(type="text/plain", class="language-jsx", style="width:100%").
+    import { createStore } from 'redux';
+    import reducer from './reducers';
+
+    const store = createStore(reducer);
+
+  script(type="text/plain", class="language-jsx", style="width:100%").
+    import { Provider } from 'react-redux';
+
+    return (
+      <Provider store={store}>
+        <MyApplication />
+      </Provider>
+    );

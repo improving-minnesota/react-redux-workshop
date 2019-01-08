@@ -1,100 +1,43 @@
 section
-  h3 How do I work with Redux?
-  p We'll briefly go over the API
-  p Normally React-Redux (coming later) handles all this for you
-
-section
-  h3 Store
-  ul
-    li Contains the current State value
-    li Actions are dispatched to it
-    li Reducers accept Actions and update State
-    li Only one store in a Redux application
-
-section
-  h3 Store instantiation
-  script(type="text/plain", class="language-jsx", style="width:100%").
-    import { createStore } from 'redux'
-    import agentReducer from './reducers'
-
-    const store = createStore(agentReducer)
-
-section
-  h3 Store API
-  ul
-    li.
-      <span class="component red">getState()</span> - allows access to the state
-    li.
-      <span class="component red">dispatch(action)</span> - allows state to be updated
-    li.
-      <span class="component red">subscribe(listener)</span> - registers a listener to the state and returns a function that will allow the listener to unsubscribe
-
-section
-  h3 A store in action
-  script(type="text/plain", class="language-jsx").
-    import {addEmployee} from './actions'
-    import { createStore } from 'redux'
-    import employeeReducer from './reducers'
-
-    // Create the store from the reducer from before
-    const store = createStore(employeeReducer)
-
-    // Start listening to state changes
-    // It will print out the state when it changes
-    const unsubscribe = store.subscribe(() =>
-      console.log(store.getState())
-    )
-
-    // Dispatch some actions
-    // These will go through the reducer to update the store
-    store.dispatch(addEmployee({name: 'Sterling Archer', title: 'Agent'})
-    store.dispatch(addEmployee({name: 'Lana Kane', title: 'Agent'})
-    store.dispatch(addEmployee({name: 'Cyril Figgis', title: 'Comptroller'})
-
-    // Stop listening to state changes
-    unsubscribe()
-
-section
-  h3 Data Flow
-  h4 Redux follows a strict unidirectional data flow
-
-section
-  ol
-    li Action is created and sent via store.dispatch(action)
-    li.fragment Reducer function accepts Action and generates State update(s)
-    li.fragment Store saves the result from the reducer
-    li.fragment The store notifies subscribers
-
-section
-  img(src="~./images/redux-diagram.png")
-
-  p.attribution https://medium.com/the-web-tub/managing-your-react-state-with-redux-affab72de4b1
-
-section
   h2 Advanced Topics
+
+section
+  h2 Combining Reducers
+
+section
+  h3 Combining Reducers
+  p Redux accepts a single root reducer
+  p As applications get big this reducer becomes unwieldy
+
+section
+  script(type="text/plain", class="language-jsx", style="width:100%").
+    import data from './data.reducer.js';
+    import user from './user.reducer.js';
+
+    const reducer = combineReducers(data, user);
+
+  script(type="text/plain", class="language-jsx", style="width:100%").
+    {
+      data: { ... },
+      user: { ... }
+    }
 
 section
   h2 Middleware
 
 section
   h3 Middleware
+  h5 Think of it as a Redux Interceptor
   ul
     li Used to run code after an action is dispatched but before it gets to the reducer
-    li Applies configured middleware in a chain that will get run in order
-    li Can inspect both actions and state, modify action data, send other actions, stop actions completely, etc.
+    li Multiple middlewares can be applied at once (chained)
+    li Can inspect actions and state, modify/swallow actions in-flight, trigger secondary actions, etc.
 
 section
   h3 Middleware
   ul
-    li.
-      Usually in the form of <span class="component red">middleware = store => next => action</span>
-  ul
-    li.
-      <span class="component red">store</span> - the store
-    li.
-      <span class="component red">next</span> - the next piece of middleware in the chain
-    li.
-      <span class="component red">action</span> - the current action
+    li You can create your own middleware if you want
+    li ...but normally you'll just be applying popular third-party middlware libraries
 
 section
   h3 Middleware - Simple Logger
@@ -106,7 +49,7 @@ section
       return result
     }
 
-    export default logger
+    export default logger;
 
 section
   h3 Middleware in action
@@ -171,7 +114,7 @@ section
   h3 Async Action Creators
   ul
     li.
-      Standard way to create an async action creator is to use a <span class="component red">thunk</span>
+      One popular way to create an async action creator is to use a <span class="component red">thunk</span>
       using the <span class="component red">react-thunk</span> middleware
     li Alternate mechanisms exist
       ul

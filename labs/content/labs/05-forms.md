@@ -262,22 +262,30 @@ handleSave = (values) => {
 
 ## Test the Employee Detail Component
 
-* Open **/src/employees/tail.test.js**
+* Open **/src/employees/EmployeeDetail.test.js**
 * Add a test to verify the component renders as expected:
 
 ```jsx
-it('should instantiate the Employee Detail Component', () => {
-    const mockStore = configureStore();
-    const component = mount(
-      <Provider store={mockStore}>
-        <MemoryRouter>
-          <EmployeeDetail />
-        </MemoryRouter>
-      </Provider>
-    );
+let wrapper;
 
-    expect(component.find(EmployeeDetail)).toIncludeText('Employee Detail');
-  });
+beforeEach(() => {
+  const mockStore = configureStore();
+  wrapper = mount(
+    <Provider store={mockStore}>
+      <MemoryRouter>
+        <EmployeeDetail
+          match={{
+            params: {}
+          }}
+        />
+      </MemoryRouter>
+    </Provider>
+  );
+});
+
+it('should instantiate the Employee Detail Component', () => {
+  expect(wrapper.find(EmployeeDetail)).toIncludeText('Employee Detail');
+});
 ```
 
 * Run the tests and verify that they pass before moving on to the next section.
