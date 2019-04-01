@@ -180,48 +180,26 @@ initialValues={ {
 
 * Now let's actually use the form we just built.
 * Open **/src/employees/EmployeeDetail.js**
-* Let's setup our propTypes, first. We already have the `history` prop, but we need to include an `employee` prop as well, like so:
+* Let's setup our local state, first. We will need to set the initial state of our employee object, like so:
 
 ```jsx
-EmployeeDetail.propTypes = {
-  employee: PropTypes.object.isRequired,
-  history: PropTypes.object,
-};
-
-EmployeeDetail.defaultProps = {
-  employee: {}
-};
-```
-
-* Next, let's hook up to Redux. The only thing we'll need from the Redux state is the selected employee, like so:
-
-```jsx
-const mapStateToProps = (state, props) => {
-  const { match } = props;
-  const { _id } = match.params;
-  return {
-    employee: state.employees.data.find(employee => employee._id === _id)
+  state = {
+    employee: null
   };
-};
 ```
 
-* We use react-router to give us the parameters that `match`-ed from the `Route` - in this instance, we'll get the employee ID from the URL. We use that to find the corresponding employee record. If none exists, then we'll get `undefined`
-
-* This component will also need the ability to update the Redux state through using the `EmployeeActions`, like so:
+* Next, let's fetch the employee data. We'll want to call the API when the component mounts and set the local state with the employee object. We can use the `axios` library to help us make HTTP requests.
 
 ```jsx
-const mapDispatchToProps = {
-  onCreate: EmployeeActionCreators.createEmployee,
-  onUpdate: EmployeeActionCreators.updateEmployee,
-  getEmployee: EmployeeActionCreators.getEmployee
-};
+  async componentDidMount() {
+    const { match } = this.props;
+    const { _id } = match.params;
+    const { data: employee } = await Axios.get(url(_id));
+    this.setState({ employee });
+  }
 ```
 
-* Then we need to **connect** to Redux
-
-```javascript
-export default connect(mapStateToProps, mapDispatchToProps)(EmployeeDetail);
-```
+* We use react-router to give us the parameters that `match`-ed from the `Route` - in this instance, we'll get the employee ID from the URL. We use that to fetch the corresponding employee record.
 
 * Next, let's update the render function to include the `EmployeeForm`, and pass it all the props it needs:
 
@@ -232,7 +210,6 @@ render() {
       <h1>Employee Detail</h1>
       <EmployeeForm
         employee={this.props.employee}
-        actions={this.props.actions}
         handleSave={this.handleSave}
       />
     </div>
@@ -244,47 +221,56 @@ render() {
 
 ```jsx
 handleSave = (values) => {
-  const { onCreate, onUpdate, history } = this.props;
+    const { history } = this.props;
 
-  const result = values._id ? onUpdate(values) : onCreate(values);
-  result.then(() => {
-    history.push('/employees');
-  });
+    const result = values._id ? this.onUpdate(values) : this.onCreate(values);
+    result.then(() => {
+      history.push('/employees');
+    });
 };
 ```
 
 * When handleSave is called we'll:
   - Check to see if the record being saved already has an ID - if yes it's an update, if not it's a create.
-  - We call the corresponding handler function to begin the appropriate async action method
-  - Once complete, we'll tell react-router to send the user back to the "/employees" route so they see the Table.
+  - We call the corresponding handler function to begin the appropriate async function
+  - Once complete, we'll tell react-router to send the user back to the "/employees" route so they see the table.
+
+* Finally, we'll implement the `onUpdate` and `onCreate` functions, to persist the employee with our PUT and POST APIs.
+
+```jsx
+ onUpdate = async employee => {
+    const response = await Axios.put(url(employee._id), employee);
+    return response.data;
+  };
+
+  onCreate = async employee => {
+    const response = await Axios.post(url(employee._id), employee);
+    return response.data;
+  };
+```
 
 &nbsp;
 
 ## Test the Employee Detail Component
 
 * Open **/src/employees/EmployeeDetail.test.js**
+* Use jest.mock to mock our API calls
 * Add a test to verify the component renders as expected:
 
 ```jsx
-let wrapper;
+jest.mock('axios', () => ({
+  get: jest.fn(),
+  put: jest.fn(),
+  post: jest.fn()
+}));
 
-beforeEach(() => {
-  const mockStore = configureStore();
-  wrapper = mount(
-    <Provider store={mockStore}>
-      <MemoryRouter>
-        <EmployeeDetail
-          match={{
-            params: {}
-          }}
-        />
-      </MemoryRouter>
-    </Provider>
-  );
-});
+describe('<EmployeeDetail />', () => {
+  it('should instantiate the Employee Detail Component', () => {
+    const component = mount(<EmployeeDetail />);
+    component.setState({ employee: { _id: 1 } });
 
-it('should instantiate the Employee Detail Component', () => {
-  expect(wrapper.find(EmployeeDetail)).toIncludeText('Employee Detail');
+    expect(component).toIncludeText('Employee Detail');
+  });
 });
 ```
 
