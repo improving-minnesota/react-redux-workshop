@@ -69,87 +69,48 @@ section
   p Lots of options, simple (basic) to complex (highly capable)
 
 section
-  h2 React Bootstrap
-
-section
-  h2 React Bootstrap
-  p Bootstrap styles for form components in React
-  p One of the more basic (but boilerplate-heavy) options
-
-  script(type="text/plain", class="language-jsx").
-    <FormGroup controlId="firstName">
-      <ControlLabel>First Name</ControlLabel>
-      <FormControl
-        type="text"
-        value={this.state.firstName.value}
-        placeholder="Enter firstName"
-        onChange={(e) => this.handleFirstNameChange(e.target.value)}
-      />
-    </FormGroup>
-
-section
-  h2 React Bootstrap Validation
-  ul
-    li Add a validationState function to return one of success, warning, or error
-    li Add <span class="component red">&lt;FormControl.Feedback/></span> inside the FormGroup tag
-
-section
-  h3 React Bootstrap Validation
-  script(type="text/plain", class="language-jsx").
-    <FormGroup
-      controlId="firstName"
-      validationState={this.getFirstNameValidationState()}
-    >
-      <ControlLabel>First Name</ControlLabel>
-      <FormControl
-        type="text"
-        value={this.state.firstName.value}
-        placeholder="Enter firstName"
-        onChange={(e) => this.handleFirstNameChange(e.target.value)}
-      />
-      <FormControl.Feedback />
-    </FormGroup>
-
-section
-  h3 React Bootstrap State
-  p Validation and value state must be managed manually
-  script(type="text/plain", class="language-jsx").
-    getFirstNameValidationState() {
-      if (!this.state) return;
-      if (this.state.firstName.valid === true) return 'success';
-      else if (this.state.firstName.valid === false) return 'error';
-    }
-
-    handleFirstNameChange(value) {
-      const isValid = value ? true : false;
-      return this.setState(
-        { firstName: {value: value, valid: isValid }}
-      );
-    }
-
-section
   a(href="https://github.com/jaredpalmer/formik", target="_blank", rel="noopener")
     img(src="~./images/formik.png")
 
 section
   h2 Formik
-  p No styling but handles more Form logic
 
   script(type="text/plain", class="language-jsx").
     <Formik
       initialValues={{ firstName: 'Bob' }}
-      validate={this.validate}
-      onSubmit={this.submit}
-    >
-      {() => (
+      validate={validate}
+      onSubmit={submit}
+      render={({ values, errors, handleChange }) => (
+        <form>
+          <input 
+            type="text" 
+            name="firstName" 
+            value={values.firstName} 
+            onChange={handleChange} />
+          {errors.firstName && <div className="error">{errors.firstName}</div>}
+
+          <button type="submit">Submit</button>
+        </form>
+      )}
+    />
+
+section
+  h2 Formik
+  p Helper functions to make the controlled inputs less verbose
+
+  script(type="text/plain", class="language-jsx").
+    <Formik
+      initialValues={{ firstName: 'Bob' }}
+      validate={validate}
+      onSubmit={submit}
+      render={() => (
         <Form>
           <Field type="text" name="firstName" />
-          <ErrorMessage name="firstName" />
-
+          <ErrorMessage name="firstName" className="error" component="div" />
           <button type="submit">Submit</button>
         </Form>
       )}
-    </Formik>
+    />
 
 
 section
@@ -159,13 +120,8 @@ section
     li Sends any validation failures back to form
 
 section
-  h3 Formik Validation
+  h3 Formik Validation - Manual
   script(type="text/plain", class="language-jsx").
-    <Formik
-      ...
-      validate={this.validate}
-    >
-
     const validate = (values) => {
       const errors = {};
       if (!values.firstName) {
@@ -174,23 +130,52 @@ section
       return errors;
     };
 
+    <Formik
+      ...
+      validate={validate}
+    >
+
+section
+  h2 Formik Validation - Yup
+  ul
+    li Yup is a JavaScript object schema validator and object parser
+    li Easy to configure common validation rules(required, min, max, etc.)
+
+section
+  h3 Formik Validation - Yup
+  script(type="text/plain", class="language-jsx").
+
+    const validationSchema = Yup.object().shape({
+      firstName: Yup.string().required('Required!')
+    });
+
+    <Formik
+      ...
+      validationSchema={validationSchema}
+    >
+
 section
   h3 Formik State
-  p Formik handles tracking form values for us (no 'handle' functions)
+  p Formik handles tracking form values for us
   p We'll get a copy of all values on validation & submission
 
   script(type="text/plain", class="language-jsx").
-    <Formik
-      ...
-      onSubmit={this.submit}
-    >
-
     const submit = (values) => {
       // Do stuff to submit the form here
     };
 
+    <Formik
+      ...
+      onSubmit={submit}
+    >
+
 section
   h3 Other libraries
+
+section
+  h2 Redux Form
+  a(href="https://github.com/erikras/redux-form", target="_blank", rel="noopener")
+    img(src="~./images/redux-form.png")
 
 section
   a(href="https://github.com/final-form/react-final-form", target="_blank", rel="noopener")
