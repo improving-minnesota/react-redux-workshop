@@ -1,0 +1,127 @@
+section
+  h1 Context
+
+section
+  h3 What is Context?
+  p A pure-React mechanism to share data between multiple components
+  p Can be used to replace many use cases of Redux
+
+section
+  h3 What makes up a Context?
+  p A context is composed of three elements
+  ul
+    li The Context object
+    li A Provider that establishes bounds for the Context
+    li One or more Consumers within those bounds that use the Context
+
+section
+  h2 How do I use Context?
+
+section
+  h2 Step One
+  h3 Create a Context
+
+  script(type="text/plain", class="language-jsx").
+    export const WeatherContext = React.createContext({
+      current: 'sunny',
+      tomorrow: 'rainy'
+    });
+
+section
+  h2 Step Two
+  h3 Create a Provider
+
+  script(type="text/plain", class="language-jsx").
+    class WeatherController extends React.Component {
+      constructor() {
+        this.state = {
+          current: 'Raining',
+          tomorrow: 'Pouring'
+        };
+      }
+
+      render() {
+        return (
+          <WeatherContext.Provider value={this.state.weather}>
+            ...
+          </WeatherContext.Provider>
+        );
+      }
+    }
+
+section
+  h2 Step Three
+  h3 Create a Consumer
+
+  script(type="text/plain", class="language-jsx").
+    class WeatherDisplay extends React.Component {
+      render() {
+        return (
+          <WeatherContext.Consumer>
+            {weather => (
+              <p>The weather is currently {weather.current},
+              but will be {weather.tomorrow} tomorrow</p>
+            )}
+          </WeatherContext.Consumer>
+        );
+      }
+    }
+
+section
+  h3 Okay...what's so great about that?
+  p A Provider and a Consumer can be 1, 5, or 500 levels apart in your component tree
+  p No more prop drilling!
+
+section
+  h3 Passing data down via Context is easy
+  h3 ...but what about updating from a child?
+
+section
+  h3 Lots of patterns
+  p Drill event listeners down into child components
+  p Rely on a Redux-style Action/Reducer pattern
+  p >> Provide mutators in the context itself <<
+
+section
+  script(type="text/plain", class="language-jsx").
+    constructor(props) {
+      this.state = {
+        current: 'sunny',
+        tomorrow: 'rainy',
+        setWeather: (day, value) => {
+          this.setState({
+            [day]: value
+          });
+        }
+      };
+    }
+
+    <WeatherContext.Provider value={this.state.weather}>
+      ...
+    </WeatherContext.Provider>
+
+section
+  h3 Even easier with Functional Components
+  script(type="text/plain", class="language-jsx").
+    export default props => {
+      const weather = useContext(WeatherContext);
+      return <p>It is currently { weather.current }</p>
+    };
+
+section
+  h3 Gotchas
+  p Many of the best-practices for Redux still apply
+  ul
+    li Flat contexts are happy contexts
+    li Contexts are cheap - lots of small ones are easier than one big one
+    li Resist putting data into a Context until it really makes sense
+    li Immutability often helps
+
+section
+  h3 What's missing?
+  p Devtools are still lacking
+  p Harder to emulate an 'event bus' architecture
+  p No time-travel
+
+section
+  iframe(src="https://codesandbox.io/embed/w2y6jknwjw", style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;", sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin")
