@@ -33,12 +33,10 @@ section
 
   script(type="text/plain", class="language-jsx").
     class WeatherController extends React.Component {
-      constructor() {
-        this.state = {
-          current: 'Raining',
-          tomorrow: 'Pouring'
-        };
-      }
+      state = {
+        current: 'Raining',
+        tomorrow: 'Pouring'
+      };
 
       render() {
         return (
@@ -84,17 +82,15 @@ section
 
 section
   script(type="text/plain", class="language-jsx").
-    constructor(props) {
-      this.state = {
-        current: 'sunny',
-        tomorrow: 'rainy',
-        setWeather: (day, value) => {
-          this.setState({
-            [day]: value
-          });
-        }
-      };
-    }
+    state = {
+      current: 'sunny',
+      tomorrow: 'rainy',
+      setWeather: (day, value) => {
+        this.setState({
+          [day]: value
+        });
+      }
+    };
 
     <WeatherContext.Provider value={this.state.weather}>
       ...

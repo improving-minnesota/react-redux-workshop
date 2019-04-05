@@ -256,31 +256,28 @@ class Projects extends React.Component {
 export default Projects;
 ```
 
-* Now we need to give the component some data to render. A good holding place is the component's *state*. We need to initialize state with the data in a constructor. Add this constructor at the top of the class:
+* Now we need to give the component some data to render. A good holding place is the component's *state*. We need to initialize state with the data in the state property. Add this property at the top of the class:
 
 ```javascript
-constructor(props) {
-  super(props);
-  this.state = {
-    projects: [
-      {
-        _id: 1,
-        name: 'Project1',
-        description: 'This is your first project'
-      },
-      {
-        _id: 2,
-        name: 'Project2',
-        description: 'This is your second project'
-      },
-      {
-        _id: 3,
-        name: 'Project3',
-        description: 'This is the third project'
-      }
-    ]
-  };
-}
+state = {
+  projects: [
+    {
+      _id: 1,
+      name: 'Project1',
+      description: 'This is your first project'
+    },
+    {
+      _id: 2,
+      name: 'Project2',
+      description: 'This is your second project'
+    },
+    {
+      _id: 3,
+      name: 'Project3',
+      description: 'This is the third project'
+    }
+  ]
+};
 ```
 
 * Now we have to get that data into our table
@@ -309,24 +306,21 @@ import React from 'react';
 import ProjectTable from './ProjectTable';
 
 class Projects extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      projects: [
-        {
-          _id: 1,
-          name: 'Project1',
-          description: 'This is your first project'
-        },
-        {
-          _id: 2,
-          name: 'Project2',
-          description: 'This is your second project'
-        },
-        { _id: 3, name: 'Project3', description: 'This is the third project' }
-      ]
-    };
-  }
+  state = {
+    projects: [
+      {
+        _id: 1,
+        name: 'Project1',
+        description: 'This is your first project'
+      },
+      {
+        _id: 2,
+        name: 'Project2',
+        description: 'This is your second project'
+      },
+      { _id: 3, name: 'Project3', description: 'This is the third project' }
+    ]
+  };
 
   render() {
     const { projects } = this.state;
