@@ -1,4 +1,7 @@
 section
+  h2 React@next
+
+section
   h3 Helpful newer top-level APIs
 
 section
@@ -12,39 +15,6 @@ section
         </React.Fragment>
       );
     }
-
-section
-  h3 React Context
-  p New way to pass data from higher components down to nested children without "prop drilling"
-
-section
-  script(type="text/plain", class="language-jsx").
-    const ThemeContext = React.createContext('light');
-
-    export class ThemeProvider extends React.Component {
-      constructor(props) {
-        super(props);
-
-        this.state = { theme: 'light' };
-      }
-
-      render() {
-        return (
-          <ThemeContext.Provider value={this.state.theme}>
-            {this.props.children}
-          </ThemeContext.Provider />
-        );
-      }
-    }
-
-    export const ThemeConsumer = ThemeContext.Consumer;
-
-section
-  h3 Context does not kill Redux
-  p It does, however, let you share data to deeply nested children cleanly and easily
-
-section
-  iframe(src="https://codesandbox.io/embed/w2y6jknwjw", style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;", sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin")
 
 section
   h3 React.createRef
@@ -93,5 +63,10 @@ section
 
 section
   h3 Hooks
-  p Functional components will be gaining the ability to have State
-  p No real feature change, some people just prefer Functional Component style
+  p Can be thought of as reusable higher-order wrappers for Functional Components
+  p Mostly syntactic sugar - cleaner, simpler way to do things you can already do
+
+  ul
+    li Add State or lifecycle
+    li Connect to Context
+    li Create your own!
