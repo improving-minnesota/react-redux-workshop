@@ -20,13 +20,10 @@ section
 section
   h3 Given this state initialization
   script(type="text/plain", class="language-jsx").
-    constructor(props) {
-      super(props);
-      this.state = {
-        posts: ['First'],
-        comments: ['No Comments']
-      };
-    }
+    state = {
+      posts: ['First'],
+      comments: ['No Comments']
+    };
 
 section
   h3 Merges with the existing state

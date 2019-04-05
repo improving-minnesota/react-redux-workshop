@@ -387,7 +387,7 @@ const mapDispatchToProps = {
 export default connect(mapStateToProps, mapDispatchToProps)(Employees);
 ```
 
-* Next, we can replace previously hard-coded state data in the constructor with a call to the **listEmployees** action in a lifecycle method to retrieve the employees from the server. Replace the constructor with the following:
+* Next, we can replace previously hard-coded state data with a call to the **listEmployees** action in a lifecycle method to retrieve the employees from the server. Replace the state initialization with the following:
 
 ```javascript
   componentDidMount() {

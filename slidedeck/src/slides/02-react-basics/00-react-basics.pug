@@ -129,31 +129,12 @@ section
   ul
     li methods
       ul
-        li <span class="component red">constructor()</span>
         li <span class="component red">render()</span>
         li lifecycle methods
     li properties
       ul
         li <span class="component red">props</span>, <span class="component red">defaultProps</span>, & <span class="component red">propTypes</span>
         li <span class="component red">state</span> & <span class="component red">setState()</span>
-
-section
-  h2.lower constructor()
-  ul
-    li Invoked at object creation
-    li Receives "props"
-    li This is a great place to setup your initial state
-
-section
-  script(type="text/plain", class="language-jsx").
-    constructor(props) {
-      super(props)
-      this.state = {
-        saveText: 'Update',
-        employee: {},
-        errors: {}
-      }
-    }
 
 section
   h2.lower render()
@@ -271,6 +252,17 @@ section
     li should never be mutated directly, use <span class="component red">setState()</span> instead
 
 section
+  h2 Initializing state
+  script(type="text/plain", class="language-jsx").
+    class EmployeeForm extends React.Component {
+      state = {
+        saveText: 'Update',
+        employee: {},
+        errors: {}
+      };
+    }
+
+section
   h2.lower setState()
   ul
     li batches changes to <span class="component red">state</span>, tells React that the component and its children must be re-rendered
@@ -281,11 +273,7 @@ section
     import React from 'react';
 
     export class Counter extends React.Component {
-      constructor(props) {
-        super(props);
-
-        this.state = { count: 0 };
-      }
+      state = { count: 0 };
 
       decrement() {
         this.setState(state => ({
