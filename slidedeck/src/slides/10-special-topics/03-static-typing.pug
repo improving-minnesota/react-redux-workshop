@@ -1,0 +1,25 @@
+section
+  h2 Static typing
+  h4 Build-time type checking for React applications
+
+section
+  h3 TypeScript
+
+section
+  script(type="text/plain", class="language-typescript").
+    import * as React from 'react';
+
+    interface Props {
+      name: string;
+    }
+
+    export const Hello = (props: Props) => {
+      return <h1>{props.name}</h1>;
+    }
+
+section
+  h3 Setup?
+
+  h4 create-react-app supports it 
+    a(href="https://facebook.github.io/create-react-app/docs/adding-typescript") out of the box 
+  

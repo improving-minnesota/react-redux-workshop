@@ -1,0 +1,139 @@
+section
+  h1 Hooks
+
+section
+  h2 Hooks
+  p New addition in React 16.8. They let you use state and other React features without writing a class.
+  p Hooks make functional components much more powerful
+
+section
+  h2 Hooks
+  ul
+    li Add State or lifecycle
+    li Connect to Context
+    li Create your own!
+
+section
+  h2 How do we use Hooks?
+
+section
+  h3 First, a class component
+  script(type="text/plain", class="language-jsx").
+    export class Counter extends Component {
+      state = { count: 0 }
+
+      decrement() {
+        this.setState(state => ({
+          count: state.count - 1
+        }));
+      }
+
+      increment() {
+        this.setState(state => ({
+          count: state.count + 1
+        }));
+      }
+
+      render() {
+        return (
+          <div>
+            <h1>{this.state.count}</h1>
+            <button onClick={this.decrement}>-</button>
+            <button onClick={this.increment}>+</button>
+          </div>
+        );
+      }
+    }
+section
+  h3 Now, with Hooks
+  script(type="text/plain", class="language-jsx").
+    export const Counter = () => {
+      const [count, setCount] = useState(0);
+      return (
+        <div>
+          <h1>{count}</h1>
+          <button onClick={() => setCount(count - 1)}>-</button>
+          <button onClick={() => setCount(count + 1)}>+</button>
+        </div>
+      );
+    }
+
+section
+  h3 What about lifecycle methods?
+  script(type="text/plain", class="language-jsx").
+    export const Profile = () => {
+      const [firstName, setFirstName] = useState(null);
+      const [lastName, setLastName] = useState(null);
+
+      const fetchData = async () => {
+        const { data } = await axios.get("/profile/me");
+        setFirstName(data.firstName);
+        setLastName(data.lastName);
+      }
+
+      useEffect(() => {
+        fetchData();
+      }, []); // <-- Pass in [] here, to only trigger on mount!
+
+      if (!firstName) {
+        return <div>Loading...</div>;
+      }
+
+      return (
+        <div>
+          <h1>{`${firstName} ${lastName}`}</h1>
+        </div>
+      );
+    }
+
+section
+  h3 And Context?
+  script(type="text/plain", class="language-jsx").
+    export const Weather = () => {
+      const weatherData = useContext(WeatherContext);
+      return <p>It is currently { weatherData.current }</p>
+    };
+
+section
+  h3 Now, customize it
+  script(type="text/plain", class="language-jsx").
+    //A reusable hook
+    const useName = () => {
+      const [firstName, setFirstName] = useState(null);
+      const [lastName, setLastName] = useState(null);
+
+      const fetchData = async () => {
+        const { data } = await axios.get("/profile/me");
+        setFirstName(data.firstName);
+        setLastName(data.lastName);
+      }
+
+      useEffect(() => {
+        fetchData();
+      }, []); // <-- Pass in [] here, to only trigger on mount!
+
+      return {
+        firstName,
+        lastName
+      }
+    }
+
+    export const Profile = () => {
+      const { firstName, lastName } = useName();
+
+      if (!firstName) {
+        return <div>Loading...</div>;
+      }
+
+      return (
+        <div>
+          <h1>{`${firstName} ${lastName}`}</h1>
+        </div>
+      );
+    }
+
+section
+  h3 Rules of Hooks
+  ul
+    li Only Call Hooks at the Top Level
+    li Only Call Hooks from React Functions
