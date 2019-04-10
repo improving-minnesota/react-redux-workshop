@@ -1,0 +1,28 @@
+section
+  h2 Component Lifecycle
+  ul
+    li Mounting
+    li Updating
+    li Unmounting
+
+section
+  h2 Mounting
+  p These methods are called when an instance of a component is being created and inserted into the DOM:
+  ol
+    li <span class="component red">constructor()</span>
+    li <span class="component red">render()</span>
+    li <span class="component red">componentDidMount()</span>
+
+section
+  h2 Updating:
+  p An update can be caused by changes to props or state.
+  ol
+    li <span class="component red">shouldComponentUpdate()</span>
+    li <span class="component red">render()</span>
+    li <span class="component red">componentDidUpdate()</span>
+
+section
+  h2 Unmounting:
+  p This method is called when an instance of a component is being destroyed and removed from the DOM:
+  ol
+    li <span class="component red">componentWillUnmount()</span>
