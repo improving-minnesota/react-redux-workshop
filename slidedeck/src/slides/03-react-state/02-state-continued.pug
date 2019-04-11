@@ -8,6 +8,12 @@ section
     }
 
 section
+  h2.lower Updating State
+  ul
+    li contains data specific to the component that may change over time
+    li should never be mutated directly, use <span class="component red">setState()</span> instead
+
+section
   h2 Updating State
   h3 The right way
   script(type="text/plain", class="language-jsx").
@@ -20,7 +26,37 @@ section
     this.state.name = 'Tim';
 
 section
-  h2 Lifting State Up
+  h2.lower setState()
+  ul
+    li batches changes to <span class="component red">state</span>, tells React that the component and its children must be re-rendered
+    li executes asynchronously, a callback may be provided that will execute on update
 
 section
-  iframe(src="https://codesandbox.io/embed/rr8nvr5vqn?module=%2Fsrc%2Fcomponents%2Findex.js", style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;", sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin")
+  script(type="text/plain", class="language-jsx").
+    import React from 'react';
+
+    export class Counter extends React.Component {
+      state = { count: 0 };
+
+      decrement = () => {
+        this.setState(state => ({
+          count: state.count - 1
+        }));
+      }
+
+      increment = () =>  {
+        this.setState(state => ({
+          count: state.count + 1
+        }));
+      }
+
+      render() {
+        return (
+          <div>
+            <h1>{this.state.count}</h1>
+            <button onClick={this.decrement}>-</button>
+            <button onClick={this.increment}>+</button>
+          </div>
+        );
+      }
+    }

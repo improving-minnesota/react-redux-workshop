@@ -1,0 +1,17 @@
+section
+  h2 Bootstrapping your App
+
+  script(type="text/plain", class="language-jsx").
+    import ReactDOM from 'react-dom';
+    import SomeOtherComponent from './SomeOtherComponent';
+
+    const App = props => {	
+      return (
+        <div>
+          <h1>Hello!</h1>
+          <SomeOtherComponent />
+        </div>
+    };
+
+    const container = document.getElementById('root');	
+    ReactDOM.render(<App />, container);

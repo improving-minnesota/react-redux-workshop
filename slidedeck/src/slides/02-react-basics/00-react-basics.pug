@@ -91,130 +91,127 @@ section
 
 section
   script(type="text/plain", class="language-jsx").
-    import ReactDOM from 'react-dom';
-
-    const Hello = props => {
-      return <h1>Hello {props.name}!</h1>;
+    const Hello = () => {
+      return <h1>Hello World!</h1>;
     };
-
-    const container = document.getElementById('root');
-    ReactDOM.render(<Hello name="Tim" />, container);
 
 section
   h2 Class Component
   ul
     li Is an ES6 class that extends <span class="component red">React.Component</span>
     li Implements a <span class="component red">render()</span> method that returns a React element
-    li Can have state
+    li Can have state (we'll come back to this!)
 
 section
   script(type="text/plain", class="language-jsx").
     import React from 'react';
-    import ReactDOM from 'react-dom';
 
     class Hello extends React.Component {
       render() {
-        return <h1>Hello {this.props.name}!</h1>;
+        return <h1>Hello World!</h1>;
       }
     }
 
-    const container = document.getElementById('root');
-    ReactDOM.render(<Hello name="Tim" />, container);
-
-section
-  h2 Component Specifications
-
-section
-  p Component Features:
-  ul
-    li methods
-      ul
-        li <span class="component red">render()</span>
-        li lifecycle methods
-    li properties
-      ul
-        li <span class="component red">props</span>, <span class="component red">defaultProps</span>, & <span class="component red">propTypes</span>
-        li <span class="component red">state</span> & <span class="component red">setState()</span>
-
 section
   h2.lower render()
   ul
-    li Required
     li Returns child element(s) to display (which can be other components)
     li Or returns null or false to render nothing
-
-section
-  h2.lower render()
-  ul
-    li Does not mutate component state
     li Should return the same result each time it is invoked (rendering consistency!)
     li Should not read from or write to the DOM
 
 section
+  h2.lower render()
   script(type="text/plain", class="language-jsx").
     render() {
       return (
         <div>
-          <p>Can use props and state here</p>
-          <small>(but can't change them)</small>
+          <p>You can render HTML elements</p>
+          <OrCustomComponents/>
+          <p>But remember, this runs over and over</p>
+          <div>{callAPI("So don't do this")}</div>
         </div>
       );
     }
 
 section
-  h2 Component Lifecycle
-  ul
-    li Mounting
-    li Updating
-    li Unmounting
-
-section
-  h2 Mounting
-  p These methods are called when an instance of a component is being created and inserted into the DOM:
-  ol
-    li <span class="component red">constructor()</span>
-    li <span class="component red">render()</span>
-    li <span class="component red">componentDidMount()</span>
-
-section
-  h2 Updating:
-  p An update can be caused by changes to props or state.
-  ol
-    li <span class="component red">shouldComponentUpdate()</span>
-    li <span class="component red">render()</span>
-    li <span class="component red">componentDidUpdate()</span>
-
-section
-  h2 Unmounting:
-  p This method is called when an instance of a component is being destroyed and removed from the DOM:
-  ol
-    li <span class="component red">componentWillUnmount()</span>
-
-section
   h2.lower props
   ul
-    li contains the props that were defined by the caller of the component
-    li has a special prop, <span class="component red">props.children</span>, defined by the child tags in the JSX
+    li an object containing the parameters that were defined by the caller of the component
     li should never be modified by consuming component
 
 section
-  h2.lower props.children
+  h2.lower props
+  script(type="text/plain", class="language-jsx").
+    class MyParentComponent extends React.Component {
+      render() {
+        return (
+          <MyNameComponent firstName="John" lastName="Smith"/> 
+        )
+      }
+    }
 
   script(type="text/plain", class="language-jsx").
-    const Hello = props => {
+    class MyNameComponent extends React.Component {
+      render() (
+        <div>
+          <p>{this.props.firstName}</p>
+          <p>{this.props.lastName}</p>
+        </div>
+      )
+    }
+
+section
+  h2.lower props
+  script(type="text/plain", class="language-jsx").
+    render() {
       return (
         <div>
-          {props.children}
+          <p>Use props here!</p>
+          <small>(but dont't change them)</small>
         </div>
       );
-    };
+    }
 
-    <Hello><h1>Hello World</h1></Hello>
+section
+  h2.lower props
+  i with functional components
+  script(type="text/plain", class="language-jsx").
+    const MyParentComponent = () => (
+      <MyNameComponent firstName="John" lastName="Smith"/> 
+    )
+
+  script(type="text/plain", class="language-jsx").
+    const MyNameComponent = (props) => {
+      return (
+        <div>
+          <p>{props.firstName}</p>
+          <p>{props.lastName}</p>
+        </div>
+      )
+    }
+
+section
+  h2.lower propTypes: {}
+  ul
+    li The <span class="component red">propTypes</span> object allows you to validate props being passed to your components
+    li Think of it like your component's API!
+
+section
+  script(type="text/plain", class="language-jsx").
+    import PropTypes from ‘prop-types’;
+    ...
+    Foo.propTypes: {
+      max:        PropTypes.number.isRequired,
+      maxVisible: PropTypes.number,
+      onChange:   PropTypes.func.isRequired
+    };
 
 section
   h2.lower defaultProps
   ul
     li Prop defaults (as name would imply) will be set if not explicitly passed by parent component
+    li Defined in a similar manner to <span class="component red">propTypes</span>
 
 section
   script(type="text/plain", class="language-jsx").
@@ -229,73 +226,21 @@ section
     };
 
 section
-  h2.lower propTypes: {}
-  ul
-    li The <span class="component red">propTypes</span> object allows you to validate props being passed to your components
-    li Defined in a similar manner to <span class="component red">defaultProps</span>
-    li Think of it like your component's API!
+  h2.lower props.children
+  i A special prop, contains any nested JSX content
 
-section
+
   script(type="text/plain", class="language-jsx").
-    import PropTypes from ‘prop-types’;
-    ...
-    Foo.propTypes: {
-      max:        PropTypes.number.isRequired,
-      maxVisible: PropTypes.number,
-      onChange:   PropTypes.func.isRequired
+    const StrengthenChildren = props => {
+      return (
+        <strong>
+          {props.children}
+        </strong>
+      );
     };
-
-section
-  h2.lower state
-  ul
-    li contains data specific to the component that may change over time
-    li should never be mutated directly, use <span class="component red">setState()</span> instead
-
-section
-  h2 Initializing state
-  script(type="text/plain", class="language-jsx").
-    class EmployeeForm extends React.Component {
-      state = {
-        saveText: 'Update',
-        employee: {},
-        errors: {}
-      };
-    }
-
-section
-  h2.lower setState()
-  ul
-    li batches changes to <span class="component red">state</span>, tells React that the component and its children must be re-rendered
-    li executes asynchronously, a callback may be provided that will execute on update
-
-section
-  script(type="text/plain", class="language-jsx").
-    import React from 'react';
-
-    export class Counter extends React.Component {
-      state = { count: 0 };
-
-      decrement() {
-        this.setState(state => ({
-          count: state.count - 1
-        }));
-      }
-
-      increment() {
-        this.setState(state => ({
-          count: state.count + 1
-        }));
-      }
-
-      render() {
-        return (
-          <div>
-            <h1>{this.state.count}</h1>
-            <button onClick={this.decrement}>-</button>
-            <button onClick={this.increment}>+</button>
-          </div>
-        );
-      }
-    }
+    
+    <StrengthenChildren>
+      <h1>Hello World</h1>
+    </StrengthenChildren>
 
 //- TODO: add a live example here

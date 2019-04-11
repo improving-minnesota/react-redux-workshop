@@ -22,13 +22,13 @@ section
     export class Counter extends Component {
       state = { count: 0 }
 
-      decrement() {
+      decrement = () =>  {
         this.setState(state => ({
           count: state.count - 1
         }));
       }
 
-      increment() {
+      increment = () =>  {
         this.setState(state => ({
           count: state.count + 1
         }));

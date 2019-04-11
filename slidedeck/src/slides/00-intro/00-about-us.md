@@ -1,6 +1,6 @@
 import PersonList from '../../components/person-list';
 import Person from '../../components/person';
-import jake from './images/jake-partusch.jpeg';
+import jake from './images/jake-partusch.jpg';
 import jeff from './images/jeff-sheets.jpeg';
 import mike from './images/mike-plummer.jpeg'
 import travis from './images/travis-martensen.jpeg';
