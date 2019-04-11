@@ -79,6 +79,7 @@ render() {
       initialValues={{}}
       validate={ this.validate }
       onSubmit={ this.handleSave }
+      enableReinitialize
     >
       { ({ isValid, errors, touched, handleReset, handleSubmit }) => (
         <Form>
@@ -92,6 +93,7 @@ render() {
 
 > This block defines the `Formik` Higher-Order-Component (HOC) - this is a wrapper around a child `Form` which adds behaviors to make it more capable than it is by itself.
   This component takes initial values to populate the form with (or reset the form to if the user wants to reset) as well as hooks to call functions for validation and submission.
+  `enableReinitialize` is a hint for Formik to refresh when we give it new data.
   Within the `Formik` component is something called a "render prop" - this is a more advanced pattern that is used by some third-party libraries to allow you to define content
   to be nested inside third-party components while still retaining the ability to apply custom logic, styles, etc like you could in your own React code.
   
@@ -166,7 +168,7 @@ validate = (values) => {
 * The `Formik` component gives us the `initialValues` prop to do this. Replace the empty declaration you currently have with the following:
 
 ```jsx
-initialValues={ {
+initialValues={ employee && {
   username: employee.username || '',
   email: employee.email || '',
   firstName: employee.firstName || '',
