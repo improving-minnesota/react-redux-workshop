@@ -144,9 +144,11 @@ section
   h2.lower props
   script(type="text/plain", class="language-jsx").
     class MyParentComponent extends React.Component {
-      render() (
-        <MyNameComponent firstName="John" lastName="Smith"/> 
-      )
+      render() {
+        return (
+          <MyNameComponent firstName="John" lastName="Smith"/> 
+        )
+      }
     }
 
   script(type="text/plain", class="language-jsx").
@@ -193,7 +195,6 @@ section
   h2.lower propTypes: {}
   ul
     li The <span class="component red">propTypes</span> object allows you to validate props being passed to your components
-    li Defined in a similar manner to <span class="component red">defaultProps</span>
     li Think of it like your component's API!
 
 section
@@ -210,6 +211,7 @@ section
   h2.lower defaultProps
   ul
     li Prop defaults (as name would imply) will be set if not explicitly passed by parent component
+    li Defined in a similar manner to <span class="component red">propTypes</span>
 
 section
   script(type="text/plain", class="language-jsx").
@@ -225,7 +227,7 @@ section
 
 section
   h2.lower props.children
-  i A special prop, defined by the child tags in the JSX
+  i A special prop, contains any nested JSX content
 
 
   script(type="text/plain", class="language-jsx").
