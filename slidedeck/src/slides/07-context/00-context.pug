@@ -32,7 +32,7 @@ section
   h3 Create a Provider
 
   script(type="text/plain", class="language-jsx").
-    class WeatherController extends React.Component {
+    class WeatherProvider extends React.Component {
       state = {
         current: 'Raining',
         tomorrow: 'Pouring'
@@ -40,8 +40,8 @@ section
 
       render() {
         return (
-          <WeatherContext.Provider value={this.state.weather}>
-            ...
+          <WeatherContext.Provider value={this.state}>
+            {this.props.children}
           </WeatherContext.Provider>
         );
       }
@@ -78,23 +78,29 @@ section
   h3 Lots of patterns
   p Drill event listeners down into child components
   p Rely on a Redux-style Action/Reducer pattern
-  p >> Provide mutators in the context itself <<
+  b Provide mutators in the context itself
 
 section
   script(type="text/plain", class="language-jsx").
-    state = {
-      current: 'sunny',
-      tomorrow: 'rainy',
-      setWeather: (day, value) => {
-        this.setState({
-          [day]: value
-        });
-      }
-    };
+    class WeatherProvider extends React.Component {
+      state = {
+        current: 'sunny',
+        tomorrow: 'rainy',
+        setWeather: (day, value) => {
+          this.setState({
+            [day]: value
+          });
+        }
+      };
 
-    <WeatherContext.Provider value={this.state.weather}>
-      ...
-    </WeatherContext.Provider>
+      render() {
+        return (
+          <WeatherContext.Provider value={this.state}>
+            {this.props.children}
+          </WeatherContext.Provider>
+        );
+      }
+    }
 
 section
   h3 Even easier with Functional Components
