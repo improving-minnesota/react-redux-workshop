@@ -28,10 +28,9 @@ section
     });
 
 section
-  h1 axios / moxios
+  h1 axios
   ul
     li axios is a promise based HTTP client for the browser and node.js
-    li moxios is for mocking axios requests while testing
 
 section
   h2 Promises?
@@ -45,15 +44,5 @@ section
       .then(response => console.log(response))
       .catch(error => console.log(error));
 
-section
-  p Stubbing a request
-  script(type="text/plain", class="language-jsx").
-    moxios.stubRequest('/api/users', {
-      status: 200,
-      response: [
-        { id: 1, firstName: 'Fred', lastName: 'Flintstone' },
-        { id: 2, firstName: 'Wilma', lastName: 'Flintstone' }
-      ]
-    });
 
 
