@@ -1,3 +1,3 @@
-import Counter from '../../components/counter';
+import LightSwitch from '../../components/lightswitch/LightSwitch';
 
-<Counter />
+<LightSwitch />

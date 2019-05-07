@@ -14,6 +14,36 @@ section
     li <span class="component red">componentDidMount()</span>
 
 section
+  script(type="text/plain", class="language-jsx").
+    import React from 'react';
+    import axios from 'axios';
+
+    export default class TodoList extends React.Component {
+      state = { 
+        todos: [],
+        loading: false 
+      };
+
+      async componentDidMount() {
+        this.setState({ loading: true });
+        const { data: todos } = await axios.get('https://myapi.com/api/todos');
+        this.setState({ todos, loading: false });
+      }
+
+      render() {
+        const { todos, loading } = this.state;
+        if(loading) {
+          return <div>Loading...</div>
+        }
+        return (
+          <ul>
+            {todos.map(todo => <li>{todo.description}</li>)}
+          </ul>
+        );
+      }
+    }
+
+section
   h2 Updating:
   p An update can be caused by changes to props or state.
   ol
