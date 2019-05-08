@@ -31,7 +31,7 @@ Check if you have node installed. `$ node --version`
 
 #### Windows
 
-* Install Node using the installer [hhttps://nodejs.org/en/download/](https://nodejs.org/en/download/
+* Install Node using the installer [https://nodejs.org/en/download/](https://nodejs.org/en/download/
 * You may need to install Python 2.7.x+ and Microsoft Visual Studio to build node native libraries.
   * [https://www.python.org/downloads/](https://www.python.org/downloads/)
   * [https://www.visualstudio.com/downloads/](https://www.visualstudio.com/downloads/)
