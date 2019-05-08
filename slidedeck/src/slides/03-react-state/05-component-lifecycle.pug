@@ -21,11 +21,10 @@ section
     export default class TodoList extends React.Component {
       state = { 
         todos: [],
-        loading: false 
+        loading: true 
       };
 
       async componentDidMount() {
-        this.setState({ loading: true });
         const { data: todos } = await axios.get('https://myapi.com/api/todos');
         this.setState({ todos, loading: false });
       }
@@ -37,7 +36,7 @@ section
         }
         return (
           <ul>
-            {todos.map(todo => <li>{todo.description}</li>)}
+            {todos.map(todo => <li key={todo.id}>{todo.description}</li>)}
           </ul>
         );
       }
