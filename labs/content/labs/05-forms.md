@@ -5,6 +5,8 @@ index: 5
 
 # Lab Five - Forms and Validation
 
+> If your workshop did not do Lab 04 please go back and run the "Checkout the API repository" section of Lab 04 to start up the Rest API
+
 ## Switch to Lab05
 
 * In a terminal:
@@ -206,17 +208,13 @@ initialValues={ employee && {
 * Next, let's update the render function to include the `EmployeeForm`, and pass it all the props it needs:
 
 ```jsx
-render() {
-  return (
-    <div>
-      <h1>Employee Detail</h1>
-      <EmployeeForm
-        employee={this.props.employee}
-        handleSave={this.handleSave}
-      />
-    </div>
-  );
-}
+<div>
+  <h1>Employee Detail</h1>
+  <EmployeeForm
+    employee={employee}
+    handleSave={this.handleSave}
+  />
+</div>
 ```
 
 * Notice that we're passing `EmployeeForm` a reference to `this.handleSave`, which we still need to define:
