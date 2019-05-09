@@ -34,28 +34,26 @@ section
 section
   script(type="text/plain", class="language-jsx").
     import React from 'react';
+    import Lightbulb from './Lightbulb';
 
-    export class Counter extends React.Component {
-      state = { count: 0 };
+    export default class LightSwitch extends React.Component {
+      state = { isOn: false };
 
-      decrement = () => {
-        this.setState(state => ({
-          count: state.count - 1
-        }));
+      turnOff = () => {
+        this.setState({ isOn: false });
       }
 
-      increment = () =>  {
-        this.setState(state => ({
-          count: state.count + 1
-        }));
+      turnOn = () =>  {
+        this.setState({ isOn: true });
       }
 
       render() {
+        const { isOn } = this.state;
         return (
           <div>
-            <h1>{this.state.count}</h1>
-            <button onClick={this.decrement}>-</button>
-            <button onClick={this.increment}>+</button>
+            <Lightbulb on={isOn} />
+            <button onClick={this.turnOff}>Off</button>
+            <button onClick={this.turnOn}>On</button>
           </div>
         );
       }

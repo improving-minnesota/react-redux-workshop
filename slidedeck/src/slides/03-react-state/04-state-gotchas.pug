@@ -2,17 +2,38 @@ section
   h2 State updates may be asynchronous
 
 section
-  h3 Good
+  h3 Light Switch Toggle
   script(type="text/plain", class="language-jsx").
-    this.setState(prevState => ({
-      counter: prevState.counter + 1
-    }));
+    toggleSwitch = () =>  {
+      //TODO
+    }
 
-  h3 Bad
+    render() {
+      const { isOn } = this.state
+      return (
+        <div>
+          <Lightbulb on={isOn}/>
+          <button onClick={this.toggleSwitch}>Toggle</button>
+        </div>
+      );
+    }
+
+section
+  h3 Works sometimes
   script(type="text/plain", class="language-jsx").
-    this.setState({
-      counter: this.state.counter + 1
-    });
+    toggleSwitch = () => {
+      this.setState({
+        isOn: !this.state.isOn
+      })
+    }
+
+  h3 Works always
+  script(type="text/plain", class="language-jsx").
+    toggleSwitch = () => {
+      this.setState(previousState => ({
+        isOn: !previousState.isOn
+      }))
+    }
 
 section
   h2 State updates are merged
@@ -37,6 +58,3 @@ section
       posts: ['First'],
       comments: ['Hello', 'Another one']
     };
-
-section
-  iframe(src="https://codesandbox.io/embed/w6n7lw3957?module=%2Fsrc%2Fcomponents%2Findex.js", style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;", sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin")
