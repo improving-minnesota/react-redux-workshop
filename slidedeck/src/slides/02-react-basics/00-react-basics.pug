@@ -19,10 +19,10 @@ section
 section
   h3 Our first React component
   script(type="text/plain", class="language-jsx").
-    const Hello = props => {
+    const Hello = () => {
       return (
         <header>
-          <h1 className="title">Hello {props.name}!</h1>
+          <h1 className="title">Hello World!</h1>
         </header>
       );
     };
@@ -30,14 +30,14 @@ section
 section
   h3 Transpiles (with Babel) to:
   script(type="text/plain", class="language-jsx").
-    const Hello = props => {
+    function Hello() {
       return React.createElement(
         'header',
         {},
         React.createElement(
           'h1',
           { className: 'title' },
-          `Hello ${props.name}!`
+          'Hello World!'
         )
       );
     };
@@ -153,20 +153,25 @@ section
 
   script(type="text/plain", class="language-jsx").
     class MyNameComponent extends React.Component {
-      render() (
-        <div>
-          <p>{this.props.firstName}</p>
-          <p>{this.props.lastName}</p>
-        </div>
-      )
+      render() {
+        const { firstName, lastName } = this.props;
+        return (
+          <div>
+            <p>{firstName}</p>
+            <p>{lastName}</p>
+          </div>
+        )
+      }
     }
 
 section
   h2.lower props
   script(type="text/plain", class="language-jsx").
     render() {
+      const { firstName } = this.props;
       return (
         <div>
+          <h1>{firstName}</h1>
           <p>Use props here!</p>
           <small>(but dont't change them)</small>
         </div>
@@ -182,11 +187,12 @@ section
     )
 
   script(type="text/plain", class="language-jsx").
-    const MyNameComponent = (props) => {
+    const MyNameComponent = props => {
+      const { firstName, lastName } = props;
       return (
         <div>
-          <p>{props.firstName}</p>
-          <p>{props.lastName}</p>
+          <p>{firstName}</p>
+          <p>{lastName}</p>
         </div>
       )
     }
@@ -224,23 +230,3 @@ section
     Hello.defaultProps = {
       name: 'World'
     };
-
-section
-  h2.lower props.children
-  i A special prop, contains any nested JSX content
-
-
-  script(type="text/plain", class="language-jsx").
-    const StrengthenChildren = props => {
-      return (
-        <strong>
-          {props.children}
-        </strong>
-      );
-    };
-    
-    <StrengthenChildren>
-      <h1>Hello World</h1>
-    </StrengthenChildren>
-
-//- TODO: add a live example here

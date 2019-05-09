@@ -1,5 +1,5 @@
 section
-  h1.lower Test Helpers
+  h1.lower Testing React
 
 section
   h2.lower Enzyme
@@ -66,23 +66,6 @@ section
     expect(shallow(<Hello />)).toIncludeText('Howdy')
 
 section
-  h4.lower toContainReact(jsx)
-  ul
-    li Returns true if the JSX element is in the component
-  script(type="text/plain", class="language-jsx").
-    expect(shallow(<Hello />)).toContainReact(<td>Howdy</td>)
-
-section
-  h4.lower toHaveProp(propName, value)
-  ul
-    li To verify that shallow rendered children have correct values passed into them
-  script(type="text/plain", class="language-jsx").
-    //Find first Route in rendered App
-    const route = shallow(<App />).find('Route').at(0)
-
-    expect(route).toHaveProp('path', '/projects')
-
-section
   h2 DOM Query Methods
 
 section
@@ -92,3 +75,26 @@ section
   script(type="text/plain", class="language-jsx").
     //Finds all rows with css class 'odd'
     expect(comp.find('tr.odd')).toHaveLength(1)
+
+section
+  h2.lower react-testing-library
+  i Simple and complete React DOM testing utilities that encourage good testing practices.
+
+section
+  h2.low react-testing-library
+  ul
+    li All components are "mounted" (no shallow rendering)
+    li DOM query methods query only on rendered html
+    li These limitations are by design
+
+section
+  script(type="text/plain", class="language-jsx").
+    const HelloWorld = props => (
+      <h1>Hello {props.name}</h1>
+    )
+
+  script(type="text/plain", class="language-jsx").
+    it('should render the correct text', () => {
+      const { queryByText } = render(<HelloWorld name="Test"/>)
+      expect(queryByText("Hello Test")).not.toBeNull()
+    })
