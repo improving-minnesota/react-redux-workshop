@@ -22,9 +22,8 @@ section
   h3 Create a Context
 
   script(type="text/plain", class="language-jsx").
-    export const WeatherContext = React.createContext({
-      current: 'sunny',
-      tomorrow: 'rainy'
+    export const SortContext = React.createContext({
+      sort: 'asc'
     });
 
 section
@@ -32,17 +31,16 @@ section
   h3 Create a Provider
 
   script(type="text/plain", class="language-jsx").
-    class WeatherProvider extends React.Component {
+    class SortProvider extends React.Component {
       state = {
-        current: 'Raining',
-        tomorrow: 'Pouring'
+        sort: 'asc'
       };
 
       render() {
         return (
-          <WeatherContext.Provider value={this.state}>
-            {this.props.children}
-          </WeatherContext.Provider>
+          <SortContext.Provider value={this.state}>
+            <Sortable />
+          </SortContext.Provider>
         );
       }
     }
@@ -52,15 +50,14 @@ section
   h3 Create a Consumer
 
   script(type="text/plain", class="language-jsx").
-    class WeatherDisplay extends React.Component {
+    class Sortable extends React.Component {
       render() {
         return (
-          <WeatherContext.Consumer>
-            {weather => (
-              <p>The weather is currently {weather.current},
-              but will be {weather.tomorrow} tomorrow</p>
+          <SortContext.Consumer>
+            {ctx => (
+              <p>Sort order: {ctx.sort}</p>
             )}
-          </WeatherContext.Consumer>
+          </SortContext.Consumer>
         );
       }
     }
@@ -82,22 +79,22 @@ section
 
 section
   script(type="text/plain", class="language-jsx").
-    class WeatherProvider extends React.Component {
+    class SortProvider extends React.Component {
       state = {
-        current: 'sunny',
-        tomorrow: 'rainy',
-        setWeather: (day, value) => {
+        sort: 'asc',
+        setSort: (newValue) => {
           this.setState({
-            [day]: value
+            sort: newValue
           });
         }
       };
 
       render() {
         return (
-          <WeatherContext.Provider value={this.state}>
-            {this.props.children}
-          </WeatherContext.Provider>
+          <SortContext.Provider value={this.state}>
+            <Sorter />
+            <Sortable />
+          </SortContext.Provider>
         );
       }
     }
@@ -105,9 +102,9 @@ section
 section
   h3 Even easier with Functional Components
   script(type="text/plain", class="language-jsx").
-    export default props => {
-      const weather = useContext(WeatherContext);
-      return <p>It is currently { weather.current }</p>
+    export const Sorter = props => {
+      const { setSort } = React.useContext(SortContext);
+      return <button onClick={() => setSort('dsc')}>Switch Sort</button>
     };
 
 section
@@ -124,6 +121,3 @@ section
   p Devtools are still lacking
   p Harder to emulate an 'event bus' architecture
   p No time-travel
-
-section
-  iframe(src="https://codesandbox.io/embed/w2y6jknwjw", style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;", sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin")

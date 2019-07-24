@@ -1,0 +1,130 @@
+section
+  h2.lower props
+  ul
+    li an object containing the parameters that were defined by the caller of the component
+    li should never be modified by consuming component
+
+section
+  h2.lower props
+  script(type="text/plain", class="language-jsx").
+    class MyParentComponent extends React.Component {
+      render() {
+        return (
+          <MyNameComponent firstName="John" lastName="Smith"/>
+        )
+      }
+    }
+
+  script(type="text/plain", class="language-jsx").
+    class MyNameComponent extends React.Component {
+      render() {
+        const { firstName, lastName } = this.props;
+        return (
+          <div>
+            <p>{firstName}</p>
+            <p>{lastName}</p>
+          </div>
+        )
+      }
+    }
+
+section
+  h2.lower props
+  script(type="text/plain", class="language-jsx").
+    render() {
+      const { firstName } = this.props;
+      return (
+        <div>
+          <h1>{firstName}</h1>
+          <p>Use props here!</p>
+          <small>(but dont't change them)</small>
+        </div>
+      );
+    }
+
+section
+  h2.lower props
+  i with functional components
+  script(type="text/plain", class="language-jsx").
+    const MyParentComponent = () => (
+      <MyNameComponent firstName="John" lastName="Smith"/>
+    )
+
+  script(type="text/plain", class="language-jsx").
+    const MyNameComponent = props => {
+      const { firstName, lastName } = props;
+      return (
+        <div>
+          <p>{firstName}</p>
+          <p>{lastName}</p>
+        </div>
+      )
+    }
+
+section
+  h2 Special props
+  p React has certain props that are unique
+
+section
+  h2.lower children
+  script(type="text/plain", class="language-jsx").
+    <MyComponent>
+      <p>nested content</p>
+      <a>Moar nested content</a>
+    </MyComponent>
+
+  script(type="text/plain", class="language-jsx").
+    const MyComponent = ({ children }) => (
+      <div>
+        {children}
+      </div>
+    );
+
+section
+  h2.lower className
+  script(type="text/plain", class="language-jsx").
+    <div className="cssA cssB"></div>
+
+section
+  h2.lower style
+  script(type="text/plain", class="language-jsx").
+    <div
+      style={{
+        margin: '1px',
+        fontSize: '2rem'
+      }}
+    />
+
+section
+  h2.lower propTypes: {}
+  ul
+    li The <span class="component red">propTypes</span> object allows you to validate props being passed to your components
+    li Think of it like your component's API!
+
+section
+  script(type="text/plain", class="language-jsx").
+    import PropTypes from ‘prop-types’;
+    ...
+    Foo.propTypes: {
+      max:        PropTypes.number.isRequired,
+      maxVisible: PropTypes.number,
+      onChange:   PropTypes.func.isRequired
+    };
+
+section
+  h2.lower defaultProps
+  ul
+    li Prop defaults (as name would imply) will be set if not explicitly passed by parent component
+    li Defined in a similar manner to <span class="component red">propTypes</span>
+
+section
+  script(type="text/plain", class="language-jsx").
+    class Hello extends React.Component {
+      render() {
+        return <h1>Hello {this.props.name}</h1>;
+      }
+    }
+
+    Hello.defaultProps = {
+      name: 'World'
+    };

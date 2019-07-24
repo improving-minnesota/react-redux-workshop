@@ -31,7 +31,7 @@ module.exports = function webpackConfig() {
     module: {
       rules: [
         {
-          test: /\.js$/,
+          test: /\.jsx?$/,
           include: [path.join(__dirname, 'src')],
           use: ['babel-loader']
         },
@@ -85,6 +85,7 @@ module.exports = function webpackConfig() {
       ])
     ],
     resolve: {
+      extensions: ['.js', '.jsx'],
       alias: {
         resources: path.join(__dirname, 'resources')
       }
