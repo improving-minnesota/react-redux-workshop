@@ -9,12 +9,10 @@ const agents = ['Sterling Archer', 'Lana Kane', 'Cyril Figgis'];
 const agentReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'ADD_EMPLOYEE':
-      return Object.assign({}, state, {
-return {
-  ...state, 
-  agents: state.agents.concat(action.payload)
-}
-      });
+      return {
+        ...state,
+        agents: state.agents.concat(action.payload)
+      };
     default:
       return state;
   }
