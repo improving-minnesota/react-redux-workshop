@@ -129,7 +129,7 @@ We've reached the end! One last lab to cover the breadth of the covered topics. 
 
 ---
 
-Lab 5 - Capstone
+Lab 6 - Capstone
 
 ---
 
