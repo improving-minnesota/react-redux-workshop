@@ -1,11 +1,17 @@
 section
-  h2 Bootstrapping your App
+  h2 How does React "start"?
+  p We know how to write components now, but how do those components actually "run"?
 
+section
+  h2 Bootstrapping your App
+  p The "entry point" of our application needs to initialize React and tell it what component to start rendering and where to render it
+
+section
   script(type="text/plain", class="language-jsx").
     import ReactDOM from 'react-dom';
     import SomeOtherComponent from './SomeOtherComponent';
 
-    const App = props => {	
+    const App = props => {
       return (
         <div>
           <h1>Hello!</h1>
@@ -13,5 +19,5 @@ section
         </div>
     };
 
-    const container = document.getElementById('root');	
+    const container = document.getElementById('root');
     ReactDOM.render(<App />, container);

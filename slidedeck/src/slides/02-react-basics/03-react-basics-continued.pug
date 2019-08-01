@@ -43,3 +43,17 @@ section
         <h1 onClick={props.onClick}>Hello {props.name}!</h1>
       );
     };
+
+section
+  h3 Conditional Rendering
+  p Can use JS operators like && and ternary to decide whether to include/exclude JSX
+
+  script(type="text/plain", class="language-jsx").
+    const Hello = props => {
+      return (
+        <div>
+          {props.wave && <p>Wave!</p>}
+          {props.friendly ? <p>Smile!</p> : <p>Scowl</p>}
+        </div>
+      );
+    };

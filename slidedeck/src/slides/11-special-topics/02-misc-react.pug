@@ -1,0 +1,88 @@
+section
+  h2 Miscellaneous React Features
+
+section
+  h3 React.Fragment
+  p A JSX expression must have a single top-level element
+  small This is not ok, two top-level elements
+
+  script(type="text/plain", class="language-jsx").
+    const App = () => {
+      return (
+        <h1>Hello World</h1>
+        <h2>Another one</h2>
+      );
+    }
+
+
+section
+  h3 React.Fragment
+  p Common fix is to use a wrapper div, but that bloats the DOM
+  p Fragment is a transparent component that just renders its children, no wrapper element in the DOM
+  script(type="text/plain", class="language-jsx").
+    const App = () => {
+      return (
+        <React.Fragment>
+          <h1>Hello World</h1>
+          <h2>Another one</h2>
+        </React.Fragment>
+      );
+    }
+
+section
+  h3 React.createRef
+
+  script(type="text/plain", class="language-jsx").
+    class Hello extends React.Component {
+      inputRef = React.createRef();
+
+      componentDidMount() {
+        this.inputRef.current.focus();
+      }
+
+      render() {
+        return <input type={text} ref={this.inputRef} />
+      }
+    }
+
+section
+  h3 ReactDOM.createPortal(child, container)
+
+  script(type="text/plain", class="language-jsx").
+    class Tooltip extends React.Component {
+      render() {
+        return ReactDOM.createPortal(
+          this.props.children,
+          document.getElementById('tooltip')
+        );
+      }
+    }
+
+section
+  h3 Advanced Async Patterns
+
+section
+  h3 React.Suspense
+  p Special component that can render a fallback until a child is finished doing something
+  ul
+    li Loading spinner while loading data
+    li Progressive enhancement during feature/support checks
+    li Code-splitting
+
+section
+  h3 React.lazy
+  p Lazy is a hint not retrieve/execute code until React needs it
+  p Ideal for async fetches of data, can be used to delay download of React components (code-splitting)
+
+section
+  h3 Code Splitting
+  p Results in multiple bundles: one for the "base" application, others are loaded on-demand as the user moves around
+
+  script(type="text/plain", class="language-jsx").
+    const LazyAdminSection = React.lazy(() => import('./adminSection.jsx'));
+
+    export const AsyncAdminSection = props => (
+      <React.Suspense fallback={<LoadingSpinner />}>
+        <LazyAdminSection {...props} />
+      </React.Suspense>
+    );

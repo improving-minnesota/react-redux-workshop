@@ -62,6 +62,13 @@ section
     }
 
 section
+  h3 Gotchas!
+  p Since JSX is a superset of JavaScript, identifiers like 'class' and 'for' are discouraged
+  ul
+    li <span class="component red">htmlFor</span> instead of <span class="component red">for</span>
+    li <span class="component red">className</span> instead of  <span class="component red">class</span>
+
+section
   h2 Special props
   p React has certain props that are unique
 
@@ -81,6 +88,11 @@ section
     );
 
 section
+  h2.lower key
+  p Gives a component a unique identifier within a list of items
+  p We'll see how to do this and discuss a bit more in a few slides
+
+section
   h2.lower className
   script(type="text/plain", class="language-jsx").
     <div className="cssA cssB"></div>
@@ -94,6 +106,9 @@ section
         fontSize: '2rem'
       }}
     />
+
+section
+  h2 How do we know what props a component expects?
 
 section
   h2.lower propTypes: {}
@@ -128,3 +143,9 @@ section
     Hello.defaultProps = {
       name: 'World'
     };
+
+section
+  h3 What does this buy us?
+  ul
+    li IDE's generally support using propTypes and defaultProps for code-completion and style checking. YMMV
+    li Provide runtime checks/warnings when in Development to flag improper/missing props

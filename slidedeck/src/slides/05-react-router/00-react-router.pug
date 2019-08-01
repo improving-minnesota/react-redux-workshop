@@ -53,14 +53,26 @@ section
   h2 react-router components we'll be covering...
 
 section
-  h2.lower.component BrowserRouter
-  p A type of <span class="component red">Router</span> that uses the HTML5 history API to keep your UI in sync with the URL.<br/><br/>
-  p One of 5 different types of Routers available in the react-router library.
+  h2.lower.component Router
+  p Connects navigation (back, forward, lateral) and location logic with the runtime environment
+  ul
+    li Five different implementations depending on environment your app will run in
+    li Single instance, typically directly underneath the application root
+    li All other react-router components have to render within a Router
 
+section
+  h2.lower Common Router Implementations
+  h3.lower.component BrowserRouter
+  p Uses the HTML5 history API to keep your UI in sync with the URL - acts as interface with user's Browser
+  h3.lower.component MemoryRouter
+  p Manages navigation & location in-memory, no linkage with runtime environment (ideal for unit tests)
 
 section
   h2.lower.component Route
-  p The core path routing component. Renders some UI when the location matches the Route path.
+  ul
+    li Defines a segment of the UI that should be rendered when the Router location matches a specific value
+    li Can have sibling & nested Routes
+    li Can pass down path/query params & state into rendered components ('/app/project/1234' => projectId={1234})
 
 section
   h3.plain Route config properties we'll cover
@@ -72,7 +84,7 @@ section
 section
   h3.lower path
   ul
-    li Pattern used to match this route against the URL
+    li Pattern used to match this Route against the current location
     li Based on Express-style path strings
       ul
         li e.g. <span class="component red">/employees/:id</span>
@@ -87,11 +99,22 @@ section
 section
   h3.lower component
   ul
-    li The React component to be rendered when the route is active
-    li Alternative render properties (not covered today):
-      ul
-        li <span class="component red">render</span> - quick inline function rendering
-        li <span class="component red">children</span> - for complex rendering logic needs
+    li Specify a single React component to render
+    li Passes down all available route props
+  script(type="text/plain", class="language-jsx").
+    <Route exact path="/employees" component={Employees}/>
+
+section
+  h3.lower render
+  p Alternative to 'component', define inline function that decides what to render or transform props
+  script(type="text/plain", class="language-jsx").
+    <Route
+      path="/employees/detail/:id"
+      render={(props) => {
+        const { id } = props.match;
+        return id ? <EmployeesDetail employeeId={id} /> : null;
+      }}
+    />
 
 section
   h3.lower exact &amp; strict
@@ -100,19 +123,24 @@ section
       <span class="component red">exact</span> - only matches if an
       <span style="font-style:italic">exact</span> match
     li.
+      If <span class="component red">exact</span> is omitted, a route path of <span class="component red">/employees</span>
+      will match a URL of <span class="component red">/employees/**</span>
+    li.
       <span class="component red">strict</span> - requires the trailing slash
       <span style="font-style:italic">exact</span> match
-    li.
-      If <span class="component red">exact</span> is omitted, a route path of <span class="component red">/employees</span>
-      will match a URL of <span class="component red">/employees/anything</span>
     li.
       Check the <a href="https://reacttraining.com/react-router/web/api/Route/exact-bool">docs</a> for more info
 
 section
   h2.lower.component Redirect
-  p Navigates to a new location. <br/><br/>
-  script(type="text/plain", class="language-jsx").
-    <Redirect from='/employee-list' to='/employees'/>
+  p Navigates to a new location.
+  ul
+    li Can use to handle legacy links, invalid/forbidden access, etc
+    li ...or as a fallback , like for a bad URL (usually using "switch")
+    script(type="text/plain", class="language-jsx").
+      <Redirect from='/employee-list' to='/employees' />
+      {!userAuthenticated && <Redirect to='/login' />}
+      {invalidEmployeeId && <Redirect to='/employees' />}
 
 section
   h2.lower.component Switch
@@ -121,31 +149,19 @@ section
     <Switch>
       <Redirect from='/employee-list' to='/employees'/>
 
-      <Route path="/employees" component={Employees}/>
+      <Route exact path="/employees" component={Employees}/>
       <Route path='/employees/details/:_id' component={EmployeeDetail} />
 
-      {/* Unreachable: inside Switch && /employees is not exact */}
-      <Route path="/employees/depts" component={EmployeesByDept}/>
-
-      {/* If nothing above matched then redirect */}
+      {/* If nothing above matched then redirect (default) */}
       <Redirect to="/" />
     </Switch>
 
 section
   h2.lower.component Link
-  p Declarative navigation integrated with the router.
-
-section
+  p Special <span class="component red">&lt;a&gt;</span> tag that integrates with the Router
   ul
-    li Renders an <span class="component red">&lt;a&gt;</span> tag
-    li Links to a route in the application
-    li.
-      <span class="component red">NavLink</span> is a specialized version of <span class="component red">Link</span>
-    ul
-      li Knows when the route it links to is active
-      li Dynamic
-        span.component.red  activeClassName/activeStyle
-      li Has exact and strict params like a Route
+    li Notifies the Router of the new desired location
+    li Router will re-evaluate Routes to decide which ones to show/hide
 
 section
   h3.lower Link Examples
@@ -160,6 +176,14 @@ section
     }}>Timesheets</Link>
 
 section
+  h2.lower.component NavLink
+  ul
+    li Specialized version of <span class="component red">Link</span>
+    li Knows when the route it links to is active
+    li Dynamic
+      span.component.red  activeClassName/activeStyle
+
+section
   h2 Using react-router in your components
   script(type="text/plain", class="language-jsx").
     class MyComponent extends Component {
@@ -170,7 +194,7 @@ section
     export default withRouter(MyComponent);
 
 section
-  h2.lower Route Props
+  h2.lower withRouter Props
   p Components receive the following props from Router
   ul
     li
@@ -224,10 +248,6 @@ section
   p Where we are going
   script(type="text/plain", class="language-jsx").
     <Link to={location}>link to whatever</Link>
-
-section
-  h3 Lab Prep
-  p Show Projects and Timesheets implementation
 
 section
   h1
