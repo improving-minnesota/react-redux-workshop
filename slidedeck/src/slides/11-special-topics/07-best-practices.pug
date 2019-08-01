@@ -36,9 +36,10 @@ section
   blockquote Use React for ephemeral state that doesn't matter to the app globally and doesn't mutate in complex ways. For example, a toggle in some UI element, a form input state. Use Redux for state that matters globally or is mutated in complex ways. For example, cached users, or a post draft.
 
 section
-  h3 Minimize ties to Redux
+  h3 Minimize ties to Redux & Router
 
-  h4 Not every component should be `connect`-ed to Redux
+  p Not every component should be `connect`-ed to Redux or `withRouter`-ed to React Router
+  p Try to use the "container component" pattern
 
 section
   h3 Leverage the babel ecosystem

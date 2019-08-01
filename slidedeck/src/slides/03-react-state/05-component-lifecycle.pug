@@ -55,3 +55,16 @@ section
   p This method is called when an instance of a component is being destroyed and removed from the DOM:
   ol
     li <span class="component red">componentWillUnmount()</span>
+
+section
+  h2 Errors:
+  p This method is called when the render() function or another lifecycle method throws an error
+  ol
+    li <span class="component red">componentDidCatch(error, stack)</span>
+
+section
+  h2 Gotchas
+  ul
+    li Mutating state in componentDidUpdate will yield an infinite loop
+    li There are deprecated lifecycle methods (likely to be dropped in React v17)
+    li Be sure you know when/how your components mount/unmount before using those methods for API calls

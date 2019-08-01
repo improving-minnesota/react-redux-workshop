@@ -2,25 +2,30 @@ section
   h2 React Native
 
 section
-  h3 Remember react-dom?
-
-  h4 Swap out the renderer
+  h3 React Native
+  p Create a React application that generates native iOS and Android app bundles
+  p Share utils, constants, state management, and more between web & mobile version of app
 
 section
+  h3 Power of JSX
+  p JSX looks like HTML but doesn't have to *become* HTML
+  br
+  p Swap out the 'react-dom' renderer to one that translates JSX into something else
+
+section
+  h3 JSX renderers
   a(href="https://github.com/chentsulin/awesome-react-renderer", target="_blank", rel="noopener")
     img(src="~./images/awesome-react-renderer.png")
 
 section
-  h3 This is JSX's key abstraction
-
-section
-  h3 Has a native bridge that instantiates native components
+  h4 React Native is a JSX renderer that creates native mobile UI components
 
 section
   script(type="text/plain", class="language-jsx").
     import React from 'react';
     import { Button, StyleSheet, View } from 'react-native';
 
+    // Write familiar React components using special 'react-native' UI elements
     export const App = () => {
       return (
         <View style={styles.container}>
@@ -29,6 +34,7 @@ section
       );
     };
 
+    // Use familiar CSS styles
     const styles = StyleSheet.create({
       container: {
         flex: 1
@@ -36,8 +42,13 @@ section
     });
 
 section
+  h3 More tools for React Native
   a(href="https://github.com/jondot/awesome-react-native", target="_blank", rel="noopener")
     img(src="~./images/awesome-react-native.png")
 
 section
-  h3 Use create-react-native-app
+  h3 Tips
+  ul
+    li Use create-react-native-app
+    li Great for quick/minimum-effort projects, POC's
+    li Not so great for highly-complex or platform-customized apps

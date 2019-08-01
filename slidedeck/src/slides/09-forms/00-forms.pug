@@ -26,12 +26,14 @@ section
 
 section
   h2 Controlled vs Uncontrolled Components
+  p Forms are comprised of inputs, each input needs to know who is responsible for managing its value
 
 section
   h3 Uncontrolled Components
   ul
     li State and display are managed outside React
-    li React can be notified when it changes
+    li By default, a browser manages the state/value of input/select elements
+    li React can be notified of changes
 
   script(type="text/plain", class="language-jsx").
     onCityChange(event) {
@@ -45,7 +47,7 @@ section
   ul
     li React controls state and display
     li Value of the rendered element will always reflect the <span class="component red">value</span> prop
-    li Allows for setting initial state, overriding/transforming changes
+    li More complex, but allows for setting initial state, overriding/transforming changes
   script(type="text/plain", class="language-jsx").
     handleCityChange(event) {
       this.setState({city: {value: event.target.value}});

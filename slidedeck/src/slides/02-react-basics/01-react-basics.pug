@@ -1,10 +1,4 @@
 section
-  h1 React
-  p See
-    a(href="http://facebook.github.io/react/index.html")  website
-    |  for Documentation
-
-section
   h3 A JavaScript library for building user interfaces
 
 section
@@ -13,7 +7,7 @@ section
 section
   ul
     li JavaScript syntax extension that looks similar to HTML
-    li HTML-like syntax compiles to JavaScript function calls with
+    li Compiles to JavaScript function calls with
       a(href="https://babeljs.io")  Babel
 
 section
@@ -43,25 +37,19 @@ section
     };
 
 section
-  p React's JSX uses the upper vs. lower case convention to distinguish between React components vs. HTML tags
+  h3 Naming Conventions
+  p React's JSX uses upper vs. lower case to distinguish between React components vs. HTML tags
   ul
     li UpperCase = Component
     li lowercase = HTML tag
   script(type="text/plain", class="language-jsx").
-    const Hello = props => {
+    const Hello = () => {
       return (
         <div>
           <SomeComponent />
         </div>
       );
     };
-
-section
-  h3 Gotchas!
-  p Since JSX is a superset of JavaScript, identifiers like 'class' and 'for' as attributes (or props!) is discouraged
-  ul
-    li <span class="component red">htmlFor</span> instead of <span class="component red">for</span>
-    li <span class="component red">className</span> instead of  <span class="component red">class</span>
 
 section
   h1 Virtual DOM
@@ -81,7 +69,8 @@ section
   p Components let you split the UI into independent, reusable pieces
   ul
     li Accept arbitrary inputs
-    li Return React elements to display in the UI
+    li Return elements to be rendered that make up part of the UI
+    li Can return HTML elements or other React components
 
 section
   h2 Functional Component
@@ -116,8 +105,8 @@ section
   h2.lower render()
   ul
     li Returns child element(s) to display (which can be other components)
-    li Or returns null or false to render nothing
-    li Should return the same result each time it is invoked (rendering consistency!)
+    li Can return null or false to render nothing
+    li Idempotent - Should return the same result each time it is invoked (rendering consistency!)
     li Should not read from or write to the DOM
 
 section

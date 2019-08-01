@@ -6,7 +6,7 @@ import './react-logo.css';
 export default function ReactLogo() {
   return (
     <div className="react-logo-container">
-      <img className="react-logo" src={logo} />;
+      <img className="react-logo" src={logo} width="50%" height="50%" />
     </div>
   );
 }
