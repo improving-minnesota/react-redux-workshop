@@ -53,7 +53,15 @@ module.exports = function webpackConfig() {
         },
         {
           test: /\.(pug|jade)$/,
-          use: ['html-loader', 'pug-html-loader']
+          use: [
+            {
+              loader: 'html-loader',
+              options: {
+                attrs: ['img:src', 'video:src']
+              }
+            },
+            'pug-html-loader'
+          ]
         },
         {
           test: /\.(md|markdown)$/,
