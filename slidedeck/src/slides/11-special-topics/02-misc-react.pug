@@ -4,7 +4,6 @@ section
 section
   h3 React.Fragment
   p A JSX expression must have a single top-level element
-  small This is not ok, two top-level elements
 
   script(type="text/plain", class="language-jsx").
     const App = () => {
@@ -13,7 +12,7 @@ section
         <h2>Another one</h2>
       );
     }
-
+  small (This is not ok, two top-level elements)
 
 section
   h3 React.Fragment
@@ -59,7 +58,7 @@ section
     }
 
 section
-  h3 Advanced Async Patterns
+  h2 Advanced Async Patterns
 
 section
   h3 React.Suspense
@@ -71,8 +70,11 @@ section
 
 section
   h3 React.lazy
-  p Lazy is a hint not retrieve/execute code until React needs it
-  p Ideal for async fetches of data, can be used to delay download of React components (code-splitting)
+  p Lazy is a hint to delay get/run of resources until needed by React
+  p Ideal for:
+  ul
+    li Async data fetching
+    li On-demand download of portions of your app (code-splitting)
 
 section
   h3 Code Splitting
@@ -86,3 +88,42 @@ section
         <LazyAdminSection {...props} />
       </React.Suspense>
     );
+
+section
+  h2 Render got you down?
+
+section
+  h3 Re-rendering
+  p
+  ul
+    li Most components re-render anytime a prop or state update occurs
+    li You can control whether "render" is called, but it's tricky sometimes
+
+section
+  h3 Optimizing re-render
+  ul
+    li shouldComponentUpdate
+      br
+      small Optionally abort re-render
+      script(type="text/plain", class="language-jsx").
+        shouldComponentUpdate(nextProps) {
+          return this.props !== nextProps;
+        }
+    li React.PureComponent
+      br
+      small Use shallow prop/state comparison to decide
+      script(type="text/plain", class="language-jsx").
+        class MyComponent extends React.PureComponent { ... }
+    li React.memo()
+      br
+      small Same, but for functional components
+      script(type="text/plain", class="language-jsx").
+        const MemoizedComponent = React.memo((props) => { ... });
+
+section
+  h3 Guidelines for Optimized Render
+  ul
+    li Don't prematurely optimize - React is already super efficient
+    li See whether your render function is doing work it doesn't need to
+    li Render optimizations should start at leaf nodes and work upwards
+    li These are optimizations only, they are not guaranteed to always prevent a render

@@ -42,6 +42,9 @@ section
   blockquote The term “render prop” refers to a simple technique for sharing code between React components using a prop whose value is a function.
 
   script(type="text/plain", class="language-jsx").
+    <Timer render={value => <p>{value}</p>} />
+
+  script(type="text/plain", class="language-jsx").
     <MouseTracker>
       ({ position }) => (
         <p>Mouse is at {position.x} by {position.y}</p>
