@@ -31,7 +31,7 @@ section
   h3 Create a Provider
 
   script(type="text/plain", class="language-jsx").
-    class SortProvider extends React.Component {
+    class SortContainer extends React.Component {
       state = {
         sort: 'asc'
       };
@@ -73,13 +73,15 @@ section
 
 section
   h3 Lots of patterns
-  p Drill event listeners down into child components
-  p Rely on a Redux-style Action/Reducer pattern
-  b Provide mutators in the context itself
+  ol
+    li Drill event listeners down into child components
+    li Rely on a Redux-style Action/Reducer pattern
+    li
+      b Provide mutators in the context itself
 
 section
   script(type="text/plain", class="language-jsx").
-    class SortProvider extends React.Component {
+    class SortContainer extends React.Component {
       state = {
         sort: 'asc',
         setSort: (newValue) => {
