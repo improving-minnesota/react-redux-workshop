@@ -45,7 +45,7 @@
   },
   "dependencies": {
     "@objectpartners/revealjs-theme": "~0.0.3",
-    "prismjs": "~1.15.0",
+    "prismjs": "~1.21.0",
     "react": "~16.8.4",
     "react-dom": "~16.8.4",
     "react-icons": "~3.5.0",
